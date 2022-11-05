@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/launchfragment">
+
+    <fragment
+        android:id="@+id/bluetoothFragment"
+        android:name="com.example.t3100.ui.main.BluetoothFragment"
+        android:label="MainFragment" >
+        <argument
+            android:name="plantList"
+            app:argType="com.example.t3100.data.Plant[]" />
+        <action
+            android:id="@+id/action_bluetoothFragment_to_plantListFragment"
+            app:destination="@id/plantListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/launchfragment"
+        android:name="com.example.t3100.ui.main.LaunchFragment"
+        android:label="SecondFragment" >
+        <action
+            android:id="@+id/action_secondFragment_to_plantListFragment"
+            app:destination="@id/plantListFragment" />
+        <action
+            android:id="@+id/action_launchfragment_to_bluetoothFragmentManualWatering"
+            app:destination="@id/bluetoothFragmentManualWatering" />
+    </fragment>
+    <fragment
+        android:id="@+id/plantListFragment"
+        android:name="com.example.t3100.ui.main.PlantListFragment"
+        android:label="PlantListFragment" >
+        <action
+            android:id="@+id/action_plantListFragment_to_bluetoothFragment"
+            app:destination="@id/bluetoothFragment" />
+        <action
+            android:id="@+id/action_plantListFragment_to_addPlantFragment"
+            app:destination="@id/addPlantFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bluetoothFragmentManualWatering"
+        android:name="com.example.t3100.ui.main.BluetoothFragmentManualWatering"
+        android:label="BluetoothFragmentManualWatering" />
+    <fragment
+        android:id="@+id/addPlantFragment"
+        android:name="com.example.t3100.ui.main.AddPlantFragment"
+        android:label="AddPlantFragment" >
+        <action
+            android:id="@+id/action_addPlantFragment_to_plantListFragment"
+            app:destination="@id/plantListFragment" />
+    </fragment>
+
+
+</navigation>

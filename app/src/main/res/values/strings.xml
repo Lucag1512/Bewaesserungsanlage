@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">T3100</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pflanzenliste_einsehen">Pflanzenliste einsehen</string>
+
+    <string name="plant_list_key">plantListKey</string>
+</resources>
