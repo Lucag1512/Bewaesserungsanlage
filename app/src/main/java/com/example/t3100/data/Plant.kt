@@ -7,14 +7,14 @@ import com.google.gson.annotations.SerializedName
 data class Plant(
 
     @SerializedName("n")var name: String?,
-    @SerializedName("w")var water: Int,
+    @SerializedName("w")var water: Double,
     @SerializedName("v")var valve: Int,
     @SerializedName("h")var hour: Int,
     @SerializedName("m")var minute: Int
 ): Parcelable{
     constructor(parcel: Parcel) : this(
         parcel.readString(),
-        parcel.readInt(),
+        parcel.readDouble(),
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt()
@@ -23,7 +23,7 @@ data class Plant(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
-        parcel.writeInt(water)
+        parcel.writeDouble(water)
         parcel.writeInt(valve)
         parcel.writeInt(hour)
         parcel.writeInt(minute)

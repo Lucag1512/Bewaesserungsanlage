@@ -24,7 +24,7 @@ class PlantAdapter(
     override fun onBindViewHolder(holder: PlantViewHolder, position: Int) {
         holder.binding.apply {
             tvName.text = "Pflanzenname: ${plants[position].name}"
-            tvWater.text = "Tägliche Wassermenge: ${plants[position].water}mL"
+            tvWater.text = "Tägliche Wassermenge: ${((plants[position].water)*0.018).toInt()}mL"
             tvValve.text = "Ventil: ${plants[position].valve}"
             if(plants[position].minute < 10 && plants[position].hour < 10){
                 tvWateringTime.text ="Bewässerungszeitpunkt: 0${plants[position].hour}:0${plants[position].minute}"

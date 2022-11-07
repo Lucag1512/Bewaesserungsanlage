@@ -8,10 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.t3100.R
 import com.example.t3100.databinding.FragmentLaunchBinding
-import com.example.t3100.viewmodel.PlantViewModel
 
 class LaunchFragment : Fragment() {
 
@@ -19,12 +17,10 @@ class LaunchFragment : Fragment() {
         fun newInstance() = LaunchFragment()
     }
 
-    private lateinit var viewModel: PlantViewModel
     private lateinit var binding: FragmentLaunchBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PlantViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

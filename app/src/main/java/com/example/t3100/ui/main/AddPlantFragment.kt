@@ -13,12 +13,10 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.t3100.R
 import com.example.t3100.data.Plant
 import com.example.t3100.databinding.FragmentAddplantBinding
-import com.example.t3100.viewmodel.PlantViewModel
 import com.example.t3100.viewmodel.SharedViewModel
 import com.google.gson.Gson
 import java.util.*
@@ -93,7 +91,7 @@ class AddPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
             }
 
             val title = binding.etNewPlantName.text.toString().trim()
-            val water = (binding.seekBarWater.progress)*100
+            val water : Double = (binding.seekBarWater.progress)*100/0.018
             val valve = binding.spinnerValve.selectedItemPosition + 1
             val plant = Plant(title, water, valve, savedHour, savedMinute)
             addAndSavePlant(plant)
