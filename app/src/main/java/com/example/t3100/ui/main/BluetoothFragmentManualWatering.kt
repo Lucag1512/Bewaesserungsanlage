@@ -1,5 +1,6 @@
 package com.example.t3100.ui.main
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
@@ -48,7 +49,10 @@ class BluetoothFragmentManualWatering : Fragment() {
         //Deklaration welche Permissions bei welcher SDK benötigt werden
         private val REQUIRED_PERMISSIONS =
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.BLUETOOTH_CONNECT,android.Manifest.permission.BLUETOOTH_SCAN)
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.BLUETOOTH_CONNECT,
+                    android.Manifest.permission.BLUETOOTH_SCAN,
+                    android.Manifest.permission.NEARBY_WIFI_DEVICES)
             }else{
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
             }
