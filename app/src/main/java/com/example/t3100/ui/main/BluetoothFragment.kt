@@ -1,5 +1,6 @@
 package com.example.t3100.ui.main
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
@@ -47,14 +48,18 @@ class BluetoothFragment : Fragment() {
     companion object {
         fun newInstance() = BluetoothFragment()
 
-        private val REQUEST_ENABLE_BT = 1
+        private const val REQUEST_ENABLE_BT = 1
 
         //Deklaration welche Permissions bei welcher SDK benötigt werden
         private val REQUIRED_PERMISSIONS =
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.BLUETOOTH_CONNECT,android.Manifest.permission.BLUETOOTH_SCAN)
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.BLUETOOTH_CONNECT,
+                    Manifest.permission.BLUETOOTH_SCAN,
+                    Manifest.permission.NEARBY_WIFI_DEVICES)
             }else{
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
             }
 
         /* Aktuell nicht verwendet
@@ -79,7 +84,7 @@ class BluetoothFragment : Fragment() {
     //Permissions für Appfunktionalität anfordern
     private val permissionRequest = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
         val granted = permissions.entries.all{
-            it.value == true
+            it.value
         }
         //Sind alle Permissions gegeben wird setupBT gestartet
         if(granted){
@@ -170,7 +175,7 @@ class BluetoothFragment : Fragment() {
         binding.rvBluetoothDevices.layoutManager = LinearLayoutManager(requireContext())
         val dividerItemDecoration = DividerItemDecoration(
             requireContext(),
-            (binding.rvBluetoothDevices.layoutManager as LinearLayoutManager).getOrientation()
+            (binding.rvBluetoothDevices.layoutManager as LinearLayoutManager).orientation
         )
         binding.rvBluetoothDevices.addItemDecoration(dividerItemDecoration)
 

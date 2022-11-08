@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace 'com.example.t3100'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.t3100"
         minSdk 24
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
