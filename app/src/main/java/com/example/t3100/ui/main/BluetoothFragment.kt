@@ -41,6 +41,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class BluetoothFragment : Fragment() {
 
@@ -345,6 +346,7 @@ class BluetoothFragment : Fragment() {
         // Call this from the main activity to send data to the remote device.
         fun write(bytes: ByteArray) {
             try {
+                TimeUnit.SECONDS.sleep(1L)
                 mmOutStream.write(bytes)
 
             } catch (e: IOException) {
