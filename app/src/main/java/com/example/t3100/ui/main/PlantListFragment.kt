@@ -53,6 +53,7 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
 
         //Buttons ausblenden
 
+        //TODO: Einblenden wenn wenn Pfalnze gelöscht
         //Daten übetragen ausblenden wenn keine Plfanze angelegt ist
         if(sharedViewModel.plantList.size == 0){
             binding.btnShareData.visibility = View.GONE
@@ -132,6 +133,13 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
             binding.btnShareData.visibility = View.GONE
         } else{
             binding.btnShareData.visibility = View.VISIBLE
+        }
+
+        //Pflanze hinzufügen ausblenden wenn bereits 3 Elemente angelegt wurden
+        if(sharedViewModel.plantList.size == 3){
+            binding.btnAddPlant.visibility = View.INVISIBLE
+        } else{
+            binding.btnAddPlant.visibility = View.VISIBLE
         }
     }
 

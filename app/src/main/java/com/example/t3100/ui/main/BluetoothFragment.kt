@@ -57,8 +57,7 @@ class BluetoothFragment : Fragment() {
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.BLUETOOTH_CONNECT,
-                    Manifest.permission.BLUETOOTH_SCAN,
-                    Manifest.permission.NEARBY_WIFI_DEVICES)
+                    Manifest.permission.BLUETOOTH_SCAN)
             }else{
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
             }
@@ -140,8 +139,12 @@ class BluetoothFragment : Fragment() {
             BluetoothDevicesAdapter.ItemClickListener {
             override fun onItemClick(device: BluetoothDevice){
 
-                binding.main.visibility = View.GONE
-                binding.loadingBarSearch.visibility = View.VISIBLE
+                //TODO: Wird nicht eingeblendet
+                binding.textView.visibility = View.INVISIBLE
+                binding.rvBluetoothDevices.visibility = View.INVISIBLE
+                binding.btnEndSearch.visibility = View.INVISIBLE
+                binding.btnStartSearch.visibility = View.INVISIBLE
+                binding.loadingBarSendingData.visibility = View.VISIBLE
 
                 var calendar = Calendar.getInstance()
                 var parsedDate = ParsedDate(
@@ -286,6 +289,8 @@ class BluetoothFragment : Fragment() {
         public fun connectAndSend(message: String){
             // Cancel discovery because it otherwise slows down the connection.
             bluetoothAdapter?.cancelDiscovery()
+            binding.btnStartSearch.visibility = View.VISIBLE
+            binding.loadingBarSearch.visibility = View.GONE
 
             mmSocket?.let { socket ->
                 // Connect to the remote device through the socket. This call blocks
@@ -299,8 +304,11 @@ class BluetoothFragment : Fragment() {
 
                 }catch (e: IOException){
                     Toast.makeText(requireContext(),"Verbindung nicht erfolgreich", Toast.LENGTH_LONG).show()
-                    binding.main.visibility = View.VISIBLE
-                    binding.loadingBarSearch.visibility = View.GONE
+                    binding.textView.visibility = View.VISIBLE
+                    binding.rvBluetoothDevices.visibility = View.VISIBLE
+                    binding.btnEndSearch.visibility = View.VISIBLE
+                    binding.btnStartSearch.visibility = View.VISIBLE
+                    binding.loadingBarSendingData.visibility = View.GONE
                 }
             }
         }
@@ -360,8 +368,11 @@ class BluetoothFragment : Fragment() {
                 writeErrorMsg.data = bundle
                 handler.sendMessage(writeErrorMsg)*/
                 Toast.makeText(requireContext(), "Couldn't send data to the other device", Toast.LENGTH_LONG).show()
-                binding.main.visibility = View.VISIBLE
-                binding.loadingBarSearch.visibility = View.GONE
+                binding.textView.visibility = View.VISIBLE
+                binding.rvBluetoothDevices.visibility = View.VISIBLE
+                binding.btnEndSearch.visibility = View.VISIBLE
+                binding.btnStartSearch.visibility = View.VISIBLE
+                binding.loadingBarSendingData.visibility = View.GONE
                 return
             }
 
@@ -377,13 +388,20 @@ class BluetoothFragment : Fragment() {
         fun closeBluetoothSocket() {
             try {
                 mmSocket.close()
-                binding.main.visibility = View.VISIBLE
-                binding.loadingBarSearch.visibility = View.GONE
+                binding.textView.visibility = View.VISIBLE
+                binding.rvBluetoothDevices.visibility = View.VISIBLE
+                binding.btnEndSearch.visibility = View.VISIBLE
+                binding.btnStartSearch.visibility = View.VISIBLE
+                binding.loadingBarSendingData.visibility = View.GONE
             } catch (e: IOException) {
                 Log.e("geu", "Could not close the connect socket", e)
-                binding.main.visibility = View.VISIBLE
-                binding.loadingBarSearch.visibility = View.GONE
+                binding.textView.visibility = View.VISIBLE
+                binding.rvBluetoothDevices.visibility = View.VISIBLE
+                binding.btnEndSearch.visibility = View.VISIBLE
+                binding.btnStartSearch.visibility = View.VISIBLE
+                binding.loadingBarSendingData.visibility = View.GONE
             }
+
         }
     }
 

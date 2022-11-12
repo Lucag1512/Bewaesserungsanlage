@@ -52,8 +52,7 @@ class BluetoothFragmentManualWatering : Fragment() {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.BLUETOOTH_CONNECT,
-                    android.Manifest.permission.BLUETOOTH_SCAN,
-                    android.Manifest.permission.NEARBY_WIFI_DEVICES)
+                    android.Manifest.permission.BLUETOOTH_SCAN)
             }else{
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
             }
