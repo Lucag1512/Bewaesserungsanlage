@@ -49,8 +49,6 @@ class BluetoothFragment : Fragment() {
     companion object {
         fun newInstance() = BluetoothFragment()
 
-        private const val REQUEST_ENABLE_BT = 1
-
         //Deklaration welche Permissions bei welcher SDK benötigt werden
         private val REQUIRED_PERMISSIONS =
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
@@ -146,8 +144,8 @@ class BluetoothFragment : Fragment() {
                 binding.btnStartSearch.visibility = View.INVISIBLE
                 binding.loadingBarSendingData.visibility = View.VISIBLE
 
-                var calendar = Calendar.getInstance()
-                var parsedDate = ParsedDate(
+                val calendar = Calendar.getInstance()
+                val parsedDate = ParsedDate(
                     calendar.get(Calendar.SECOND),
                     calendar.get(Calendar.MINUTE),
                     calendar.get(Calendar.HOUR_OF_DAY),
@@ -218,7 +216,7 @@ class BluetoothFragment : Fragment() {
 
     private fun setupBluetooth(){
         //Adapter anlegen, entspricht BT Adapter des lokalen Gerätes
-        var bluetoothManager: BluetoothManager? = requireActivity().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
+        val bluetoothManager: BluetoothManager? = requireActivity().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
         bluetoothAdapter = bluetoothManager?.adapter
 
         if(bluetoothAdapter == null){
@@ -286,7 +284,7 @@ class BluetoothFragment : Fragment() {
             device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"))
         }
 
-        public fun connectAndSend(message: String){
+        fun connectAndSend(message: String){
             // Cancel discovery because it otherwise slows down the connection.
             bluetoothAdapter?.cancelDiscovery()
             binding.btnStartSearch.visibility = View.VISIBLE

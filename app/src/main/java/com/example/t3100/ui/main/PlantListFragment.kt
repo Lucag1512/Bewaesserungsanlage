@@ -32,11 +32,6 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
 
     private lateinit var adapter: PlantAdapter
 
-    var hour = 12
-    var minute = 0
-
-    var savedHour = 12
-    var savedMinute = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

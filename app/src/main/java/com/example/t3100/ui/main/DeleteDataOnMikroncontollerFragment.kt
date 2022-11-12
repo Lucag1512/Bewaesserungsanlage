@@ -42,7 +42,6 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
     companion object {
         fun newInstance() = DeleteDataOnMikroncontollerFragment()
 
-        private val REQUEST_ENABLE_BT = 1
 
         //Deklaration welche Permissions bei welcher SDK benötigt werden
         private val REQUIRED_PERMISSIONS =
@@ -129,7 +128,7 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
             override fun onItemClick(device: BluetoothDevice){
                 stopSearchDevices()
 
-                var delete = ParsedDelete(true)
+                val delete = ParsedDelete(true)
 
                 val gson = Gson()
                 val manualWateringElementsJson = gson.toJson(delete)
@@ -195,7 +194,7 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
 
     private fun setupBluetooth(){
         //Adapter anlegen, entspricht BT Adapter des lokalen Gerätes
-        var bluetoothManager: BluetoothManager? = requireActivity().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
+        val bluetoothManager: BluetoothManager? = requireActivity().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
         bluetoothAdapter = bluetoothManager?.adapter
 
         if(bluetoothAdapter == null){
@@ -263,7 +262,7 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
             device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"))
         }
 
-        public fun connectAndSend(message: String){
+        fun connectAndSend(message: String){
             // Cancel discovery because it otherwise slows down the connection.
             bluetoothAdapter?.cancelDiscovery()
 
