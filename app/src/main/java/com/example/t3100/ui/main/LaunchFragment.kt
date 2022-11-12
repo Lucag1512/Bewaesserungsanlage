@@ -38,6 +38,10 @@ class LaunchFragment : Fragment() {
             findNavController().navigate(LaunchFragmentDirections.actionLaunchfragmentToBluetoothFragmentManualWatering())
         }
 
+        binding.btnForwardDeleteData.setOnClickListener{
+            findNavController().navigate(LaunchFragmentDirections.actionLaunchfragmentToDeleteDataOnMikroncontollerFragment())
+        }
+
         //binding.tvMessage.text = args.data2
 
         //findNavController().popBackStack()

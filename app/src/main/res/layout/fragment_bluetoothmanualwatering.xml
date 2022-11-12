@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="Ventil 3 öffnen"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@id/loadingBarValve3Open"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnValve2" />
@@ -167,8 +167,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/loadingBarValve2Open"
                 />
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </layout>

@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_launchfragment_to_bluetoothFragmentManualWatering"
             app:destination="@id/bluetoothFragmentManualWatering" />
+        <action
+            android:id="@+id/action_launchfragment_to_deleteDataOnMikroncontollerFragment"
+            app:destination="@id/deleteDataOnMikroncontollerFragment" />
     </fragment>
     <fragment
         android:id="@+id/plantListFragment"
@@ -49,6 +52,14 @@
         <action
             android:id="@+id/action_addPlantFragment_to_plantListFragment"
             app:destination="@id/plantListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/deleteDataOnMikroncontollerFragment"
+        android:name="com.example.t3100.ui.main.DeleteDataOnMikroncontollerFragment"
+        android:label="DeleteDataOnMikroncontollerFragment" >
+        <action
+            android:id="@+id/action_deleteDataOnMikroncontollerFragment_to_launchfragment"
+            app:destination="@id/launchfragment" />
     </fragment>
 
 
