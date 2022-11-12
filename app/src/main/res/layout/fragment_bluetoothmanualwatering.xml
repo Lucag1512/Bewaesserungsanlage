@@ -80,13 +80,13 @@
                 app:layout_constraintTop_toBottomOf="@id/btnEndSearch" />
 
             <Button
-                android:id="@+id/btnPumpOn"
+                android:id="@+id/btnPump"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Pumpe ein"
+                android:text="Pumpe einschalten"
                 android:visibility="invisible"
-                app:layout_constraintEnd_toStartOf="@+id/btnPumpOff"
+                app:layout_constraintEnd_toStartOf="@+id/loadingBarPumpOn"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvConnected" />
 
@@ -95,121 +95,78 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@+id/btnPumpOff"
-                app:layout_constraintStart_toStartOf="parent"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnPump"
                 app:layout_constraintTop_toBottomOf="@id/tvConnected"
                 />
 
             <Button
-                android:id="@+id/btnPumpOff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pumpe aus"
-                android:layout_marginTop="24dp"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnPumpOn"
-                app:layout_constraintTop_toBottomOf="@id/tvConnected" />
-
-            <Button
-                android:id="@+id/btnValve1Open"
+                android:id="@+id/btnValve1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="Ventil 1 öffnen"
                 android:visibility="invisible"
-                app:layout_constraintEnd_toStartOf="@id/btnValve1Close"
+                app:layout_constraintEnd_toStartOf="@id/loadingBarValve1Open"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnPumpOn" />
+                app:layout_constraintTop_toBottomOf="@+id/btnPump" />
 
             <ProgressBar
                 android:id="@+id/loadingBarValve1Open"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginTop="24dp"
-                app:layout_constraintEnd_toStartOf="@id/btnValve1Close"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnPumpOn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btnValve1"
+                app:layout_constraintTop_toBottomOf="@+id/loadingBarPumpOn"
                 />
 
             <Button
-                android:id="@+id/btnValve1Close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Ventil 1 schließen"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btnValve1Open"
-                app:layout_constraintTop_toBottomOf="@+id/btnPumpOff" />
-
-            <Button
-                android:id="@+id/btnValve2Open"
+                android:id="@+id/btnValve2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="Ventil 2 öffnen"
                 android:visibility="invisible"
-                app:layout_constraintEnd_toStartOf="@id/btnValve2Close"
+                app:layout_constraintEnd_toStartOf="@id/loadingBarValve2Open"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnValve1Open" />
+                app:layout_constraintTop_toBottomOf="@+id/btnValve1" />
 
             <ProgressBar
                 android:id="@+id/loadingBarValve2Open"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@id/btnValve2Close"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnValve1Open"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btnValve2"
+                app:layout_constraintTop_toBottomOf="@+id/loadingBarValve1Open"
                 />
 
             <Button
-                android:id="@+id/btnValve2Close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Ventil 2 schließen"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btnValve2Open"
-                app:layout_constraintTop_toBottomOf="@+id/btnValve1Close" />
-
-            <Button
-                android:id="@+id/btnValve3Open"
+                android:id="@+id/btnValve3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="Ventil 3 öffnen"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toStartOf="@id/btnValve3Close"
+                android:visibility="visible"
+                app:layout_constraintEnd_toStartOf="@id/loadingBarValve3Open"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnValve2Open" />
+                app:layout_constraintTop_toBottomOf="@+id/btnValve2" />
 
             <ProgressBar
                 android:id="@+id/loadingBarValve3Open"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@id/btnValve3Close"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnValve2Open"
-                />
-
-            <Button
-                android:id="@+id/btnValve3Close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Ventil 3 schließen"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btnValve3Open"
-                app:layout_constraintTop_toBottomOf="@+id/btnValve2Close" />
+                app:layout_constraintStart_toEndOf="@id/btnValve3"
+                app:layout_constraintTop_toBottomOf="@+id/loadingBarValve2Open"
+                />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

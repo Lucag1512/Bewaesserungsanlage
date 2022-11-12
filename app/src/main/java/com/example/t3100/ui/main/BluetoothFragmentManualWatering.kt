@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -139,120 +140,123 @@ class BluetoothFragmentManualWatering : Fragment() {
 
                 //Benötigten Buttons sichtbar machen und Gerätesuche beenden
                 binding.tvConnected.visibility = View.VISIBLE
-                binding.btnPumpOn.visibility = View.VISIBLE
-                binding.btnPumpOff.visibility = View.VISIBLE
-                binding.btnValve1Open.visibility = View.VISIBLE
-                binding.btnValve1Close.visibility = View.VISIBLE
-                binding.btnValve2Open.visibility = View.VISIBLE
-                binding.btnValve2Close.visibility = View.VISIBLE
-                binding.btnValve3Open.visibility = View.VISIBLE
-                binding.btnValve3Close.visibility = View.VISIBLE
+                binding.btnPump.visibility = View.VISIBLE
+                binding.btnValve1.visibility = View.VISIBLE
+                binding.btnValve2.visibility = View.VISIBLE
+                binding.btnValve3.visibility = View.VISIBLE
+                binding.btnValve1.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
+                binding.btnValve1.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
+                binding.btnValve2.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
+                binding.btnValve3.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
                 stopSearchDevices()
 
-                binding.btnPumpOn.setOnClickListener {
+                binding.btnPump.setOnClickListener {
 
-                    pump = 255
-                    manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
+                    if(pump == 0){
+                        pump = 255
+                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
 
-                    val gson = Gson()
-                    val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                    ConnectThread(device).connectAndSend(manualWateringElementsJson)
+                        val gson = Gson()
+                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
 
-                    binding.btnPumpOn.visibility = View.INVISIBLE
-                    binding.loadingBarPumpOn.visibility = View.VISIBLE
+                        binding.btnPump.text = "Pumpe Ausschalten"
+                        binding.btnPump.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
+                        binding.loadingBarPumpOn.visibility = View.VISIBLE
+                    } else if(pump == 255){
+                        pump = 0
+                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
+
+                        val gson = Gson()
+                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
+
+                        binding.btnPump.text = "Pumpe Einschalten"
+                        binding.btnPump.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
+                        binding.loadingBarPumpOn.visibility = View.INVISIBLE
+                    }
+
                 }
 
-                binding.btnPumpOff.setOnClickListener {
 
-                    pump = 0
-                    manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
+                binding.btnValve1.setOnClickListener {
+                    if(valve1 == 0){
+                        valve1 = 1
+                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
 
-                    val gson = Gson()
-                    val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                    ConnectThread(device).connectAndSend(manualWateringElementsJson)
+                        val gson = Gson()
+                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
 
-                    binding.btnPumpOn.visibility = View.VISIBLE
-                    binding.loadingBarPumpOn.visibility = View.GONE
+                        binding.btnValve1.text = "Ventil 1 schließen"
+                        binding.btnValve1.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
+                        binding.loadingBarValve1Open.visibility = View.VISIBLE
+                    }else if(valve1 == 1){
+                        valve1 = 0
+                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
+
+                        val gson = Gson()
+                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
+
+                        binding.btnValve1.text = "Ventil 1 öffnen"
+                        binding.btnValve1.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
+                        binding.loadingBarValve1Open.visibility = View.INVISIBLE
+                    }
                 }
 
-                binding.btnValve1Open.setOnClickListener {
+                binding.btnValve2.setOnClickListener {
+                    if(valve2 == 0){
+                        valve2 = 1
+                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
 
-                    valve1 = 1
-                    manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
+                        val gson = Gson()
+                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
 
-                    val gson = Gson()
-                    val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                    ConnectThread(device).connectAndSend(manualWateringElementsJson)
+                        binding.btnValve2.text = "Ventil 2 schließen"
+                        binding.btnValve2.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
+                        binding.loadingBarValve2Open.visibility = View.VISIBLE
+                    }else if(valve2 == 1){
+                        valve2 = 0
+                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
 
-                    binding.btnValve1Open.visibility = View.INVISIBLE
-                    binding.loadingBarValve1Open.visibility = View.VISIBLE
+                        val gson = Gson()
+                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
+
+                        binding.btnValve2.text = "Ventil 2 öffnen"
+                        binding.btnValve2.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
+                        binding.loadingBarValve2Open.visibility = View.INVISIBLE
+                    }
                 }
 
-                binding.btnValve1Close.setOnClickListener {
+                binding.btnValve3.setOnClickListener {
 
-                    valve1 = 0
-                    manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
+                    if(valve3 == 0){
+                        valve3 = 1
+                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
 
-                    val gson = Gson()
-                    val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                    ConnectThread(device).connectAndSend(manualWateringElementsJson)
+                        val gson = Gson()
+                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
 
-                    binding.btnValve1Open.visibility = View.VISIBLE
-                    binding.loadingBarValve1Open.visibility = View.GONE
+                        binding.btnValve3.text = "Ventil 3 schließen"
+                        binding.btnValve3.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
+                        binding.loadingBarValve3Open.visibility = View.VISIBLE
+                    }else if(valve3 == 1){
+                        valve3 = 0
+                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
+
+                        val gson = Gson()
+                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
+
+                        binding.btnValve3.text = "Ventil 3 öffnen"
+                        binding.btnValve3.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
+                        binding.loadingBarValve3Open.visibility = View.INVISIBLE
+                    }
                 }
-
-                binding.btnValve2Open.setOnClickListener {
-
-                    valve2 = 1
-                    manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
-
-                    val gson = Gson()
-                    val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                    ConnectThread(device).connectAndSend(manualWateringElementsJson)
-
-                    binding.btnValve2Open.visibility = View.INVISIBLE
-                    binding.loadingBarValve2Open.visibility = View.VISIBLE
-                }
-
-                binding.btnValve2Close.setOnClickListener {
-
-                    valve2 = 0
-                    manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
-
-                    val gson = Gson()
-                    val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                    ConnectThread(device).connectAndSend(manualWateringElementsJson)
-
-                    binding.btnValve2Open.visibility = View.VISIBLE
-                    binding.loadingBarValve2Open.visibility = View.GONE
-                }
-
-                binding.btnValve3Open.setOnClickListener {
-
-                    valve3 = 1
-                    manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
-
-                    val gson = Gson()
-                    val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                    ConnectThread(device).connectAndSend(manualWateringElementsJson)
-
-                    binding.btnValve3Open.visibility = View.INVISIBLE
-                    binding.loadingBarValve3Open.visibility = View.VISIBLE
-                }
-
-                binding.btnValve3Close.setOnClickListener {
-
-                    valve3 = 0
-                    manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
-
-                    val gson = Gson()
-                    val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                    ConnectThread(device).connectAndSend(manualWateringElementsJson)
-
-                    binding.btnValve3Open.visibility = View.VISIBLE
-                    binding.loadingBarValve3Open.visibility = View.GONE
-                }
-
             }
         })
 
