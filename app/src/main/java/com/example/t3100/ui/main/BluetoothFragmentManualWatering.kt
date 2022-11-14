@@ -1,6 +1,5 @@
 package com.example.t3100.ui.main
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
@@ -21,7 +20,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -48,8 +46,6 @@ class BluetoothFragmentManualWatering : Fragment() {
     //Companion object verwendung der Variablen in Klasse
     companion object {
         fun newInstance() = BluetoothFragmentManualWatering()
-
-        private val REQUEST_ENABLE_BT = 1
 
         //Deklaration welche Permissions bei welcher SDK benötigt werden
         private val REQUIRED_PERMISSIONS =
@@ -325,7 +321,7 @@ class BluetoothFragmentManualWatering : Fragment() {
 
     private fun setupBluetooth(){
         //Adapter anlegen, entspricht BT Adapter des lokalen Gerätes
-        var bluetoothManager: BluetoothManager? = requireActivity().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
+        val bluetoothManager: BluetoothManager? = requireActivity().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
         bluetoothAdapter = bluetoothManager?.adapter
 
         if(bluetoothAdapter == null){
@@ -393,7 +389,7 @@ class BluetoothFragmentManualWatering : Fragment() {
             device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"))
         }
 
-        public fun connectAndSend(message: String){
+        fun connectAndSend(message: String){
             // Cancel discovery because it otherwise slows down the connection.
             bluetoothAdapter?.cancelDiscovery()
 
