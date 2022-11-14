@@ -2,9 +2,11 @@ package com.example.t3100.ui.main
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -53,7 +55,6 @@ class LaunchFragment : Fragment() {
         if(granted){
             setupBluetooth()
         } else{
-
         }
     }
 
@@ -110,12 +111,13 @@ class LaunchFragment : Fragment() {
 
         //Prüfung ist BT auf dem Gerät eingeschaltet, wenn nicht über Intent anfordern
         if (bluetoothAdapter?.isEnabled == true) {
+            //TODO: Vor Veröffentlichung entfernen
             Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
         } else{
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             bluetoothRequest.launch(enableBtIntent)
-            //TODO: Schleife falls Nutzer BT nicht einschaltet
-        }
+            //TODO While Schleife falls Benutzer ablehnt
+            }
     }
 
     //Prüfung sind alle Permissions gegeben

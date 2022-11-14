@@ -97,7 +97,19 @@ class BluetoothFragment : Fragment() {
         if(granted){
             setupBluetooth()
         } else{
-            //TODO: Schleife falls Nutzer Permissions ablehnt
+            //TODO: Schöner??
+            AlertDialog.Builder(requireContext()).create().apply {
+                setTitle("Information")
+                setMessage("Berechtigungen für Appfunktionalität benötigt")
+                setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    object : DialogInterface.OnClickListener {
+                        override fun onClick(p0: DialogInterface?, p1: Int) {
+                            p0?.dismiss()
+                            findNavController().popBackStack()
+                        }
+                    })
+                show()
+            }
         }
     }
 
@@ -106,7 +118,19 @@ class BluetoothFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
             } else {
-                //TODO: BT wird für APP benötigt
+                //TODO: Schöner??
+                AlertDialog.Builder(requireContext()).create().apply {
+                    setTitle("Information")
+                    setMessage("Bluetooth für Appfunktionalität benötigt")
+                    setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        object : DialogInterface.OnClickListener {
+                            override fun onClick(p0: DialogInterface?, p1: Int) {
+                                p0?.dismiss()
+                                findNavController().popBackStack()
+                            }
+                        })
+                    show()
+                }
             }
     }
 
@@ -130,13 +154,6 @@ class BluetoothFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        //Prüfung sind alle Permissions gegeben wenn nicht User auffordern
-        if(checkPermissionsGranted()){
-            setupBluetooth()
-        }else{
-            permissionRequest.launch(REQUIRED_PERMISSIONS)
-        }
 
         viewModel.plantList = args.plantList.toList()
         binding.lifecycleOwner = this
@@ -207,6 +224,12 @@ class BluetoothFragment : Fragment() {
 
         //Verfügbare BT Geräte in der Nähe suchen
         binding.btnStartSearch.setOnClickListener {
+            //Prüfung sind alle Permissions gegeben wenn nicht User auffordern
+            if(checkPermissionsGranted()){
+                setupBluetooth()
+            }else{
+                permissionRequest.launch(REQUIRED_PERMISSIONS)
+            }
             startSearchDevices()
         }
 
@@ -258,7 +281,6 @@ class BluetoothFragment : Fragment() {
         } else{
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             bluetoothRequest.launch(enableBtIntent)
-            //TODO: Schleife falls Nutzer BT nicht einschaltet
         }
     }
 
