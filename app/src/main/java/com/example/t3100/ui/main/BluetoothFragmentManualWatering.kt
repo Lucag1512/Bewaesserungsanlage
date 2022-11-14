@@ -110,8 +110,6 @@ class BluetoothFragmentManualWatering : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this) {
 
             lastDevice?.let {
-
-                //TODO: Loadingbar
                 val manualWateringElements = ParsedDateManual(ManualWateringElements(0,0,0,0))
                 val gson = Gson()
                 val manualWateringElementsJson = gson.toJson(manualWateringElements)

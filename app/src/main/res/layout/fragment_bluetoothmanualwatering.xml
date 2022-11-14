@@ -9,164 +9,159 @@
         <import type="android.view.View"/>
     </data>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/main"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.main.BluetoothFragment">
+
+        <TextView
+            android:id="@+id/tvChoose"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".ui.main.BluetoothFragment">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:text="Mirkocontroller für manuelle\nSteuerung auswählen"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="24dp"
-                android:text="Mirkocontroller für manuelle\nSteuerung auswählen"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvBluetoothDevices"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvChoose" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvBluetoothDevices"
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+        <Button
+            android:id="@+id/btnStartSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Suche starten"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnEndSearch"
+            app:layout_constraintTop_toBottomOf="@+id/rvBluetoothDevices" />
 
-            <Button
-                android:id="@+id/btnStartSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Suche starten"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnEndSearch"
-                app:layout_constraintTop_toBottomOf="@+id/rvBluetoothDevices" />
+        <ProgressBar
+            android:id="@+id/loadingBarSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnEndSearch"
+            app:layout_constraintTop_toBottomOf="@+id/rvBluetoothDevices" />
 
-            <ProgressBar
-                android:id="@+id/loadingBarSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnEndSearch"
-                app:layout_constraintTop_toBottomOf="@+id/rvBluetoothDevices"
-            />
+        <Button
+            android:id="@+id/btnEndSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Suche beenden"
+            app:layout_constraintEnd_toStartOf="@id/btnStartSearch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvBluetoothDevices" />
 
-            <Button
-                android:id="@+id/btnEndSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Suche beenden"
-                app:layout_constraintEnd_toStartOf="@id/btnStartSearch"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rvBluetoothDevices" />
+        <TextView
+            android:id="@+id/tvConnected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Mit Mikrocontroller verbunden"
+            android:textSize="24sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnEndSearch" />
 
-            <TextView
-                android:id="@+id/tvConnected"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="Mit Mikrocontroller verbunden"
-                android:textSize="24sp"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnEndSearch" />
+        <Button
+            android:id="@+id/btnPump"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Pumpe einschalten"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/loadingBarPumpOn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvConnected" />
 
-            <Button
-                android:id="@+id/btnPump"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Pumpe einschalten"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toStartOf="@+id/loadingBarPumpOn"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvConnected" />
+        <ProgressBar
+            android:id="@+id/loadingBarPumpOn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnPump"
+            app:layout_constraintTop_toBottomOf="@id/tvConnected" />
 
-            <ProgressBar
-                android:id="@+id/loadingBarPumpOn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnPump"
-                app:layout_constraintTop_toBottomOf="@id/tvConnected"
-                />
+        <Button
+            android:id="@+id/btnValve1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Ventil 1 öffnen"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@id/loadingBarValve1Open"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnPump" />
 
-            <Button
-                android:id="@+id/btnValve1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Ventil 1 öffnen"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toStartOf="@id/loadingBarValve1Open"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnPump" />
+        <ProgressBar
+            android:id="@+id/loadingBarValve1Open"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnValve1"
+            app:layout_constraintTop_toBottomOf="@+id/loadingBarPumpOn" />
 
-            <ProgressBar
-                android:id="@+id/loadingBarValve1Open"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:layout_marginTop="24dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btnValve1"
-                app:layout_constraintTop_toBottomOf="@+id/loadingBarPumpOn"
-                />
+        <Button
+            android:id="@+id/btnValve2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Ventil 2 öffnen"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@id/loadingBarValve2Open"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnValve1" />
 
-            <Button
-                android:id="@+id/btnValve2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Ventil 2 öffnen"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toStartOf="@id/loadingBarValve2Open"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnValve1" />
+        <ProgressBar
+            android:id="@+id/loadingBarValve2Open"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnValve2"
+            app:layout_constraintTop_toBottomOf="@+id/loadingBarValve1Open" />
 
-            <ProgressBar
-                android:id="@+id/loadingBarValve2Open"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btnValve2"
-                app:layout_constraintTop_toBottomOf="@+id/loadingBarValve1Open"
-                />
+        <Button
+            android:id="@+id/btnValve3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Ventil 3 öffnen"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@id/loadingBarValve3Open"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnValve2" />
 
-            <Button
-                android:id="@+id/btnValve3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Ventil 3 öffnen"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toStartOf="@id/loadingBarValve3Open"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnValve2" />
+        <ProgressBar
+            android:id="@+id/loadingBarValve3Open"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnValve3"
+            app:layout_constraintTop_toBottomOf="@+id/loadingBarValve2Open" />
 
-            <ProgressBar
-                android:id="@+id/loadingBarValve3Open"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btnValve3"
-                app:layout_constraintTop_toBottomOf="@+id/loadingBarValve2Open"
-                />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
