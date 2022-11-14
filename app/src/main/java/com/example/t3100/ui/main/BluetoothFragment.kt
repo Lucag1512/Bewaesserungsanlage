@@ -20,6 +20,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -30,6 +31,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.t3100.MainActivity
 import com.example.t3100.R
 import com.example.t3100.adapter.BluetoothDevicesAdapter
 import com.example.t3100.data.ParsedDate
@@ -37,6 +39,10 @@ import com.example.t3100.data.PlantHeader
 import com.example.t3100.databinding.FragmentBluetoothBinding
 import com.example.t3100.viewmodel.BluetoothViewModel
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -50,7 +56,7 @@ class BluetoothFragment : Fragment() {
         fun newInstance() = BluetoothFragment()
 
         //Deklaration welche Permissions bei welcher SDK benötigt werden
-        private val REQUIRED_PERMISSIONS =
+        val REQUIRED_PERMISSIONS =
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
@@ -69,6 +75,9 @@ class BluetoothFragment : Fragment() {
         */
 
     }
+
+    val job = Job()
+    val uiScope = CoroutineScope(Dispatchers.Main + job)
 
     private lateinit var viewModel: BluetoothViewModel
     private lateinit var binding: FragmentBluetoothBinding
@@ -104,8 +113,6 @@ class BluetoothFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(BluetoothViewModel::class.java)
-        activity?.title = "Verfügbare Mikrocontroller"
-        // TODO: Use the ViewModel
     }
 
     //Binding für einfacheren Zugriff auf Buttons, TV aus xml File
@@ -113,9 +120,11 @@ class BluetoothFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        activity?.title = "Verfügbare Mikrocontroller"
+        (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_bluetooth, container, false)
-
-
         return binding.root
     }
 
@@ -137,41 +146,56 @@ class BluetoothFragment : Fragment() {
             BluetoothDevicesAdapter.ItemClickListener {
             override fun onItemClick(device: BluetoothDevice){
 
-                //TODO: Wird nicht eingeblendet
-                binding.textView.visibility = View.INVISIBLE
-                binding.rvBluetoothDevices.visibility = View.INVISIBLE
-                binding.btnEndSearch.visibility = View.INVISIBLE
-                binding.btnStartSearch.visibility = View.INVISIBLE
-                binding.loadingBarSendingData.visibility = View.VISIBLE
+                AlertDialog.Builder(requireContext()).create().apply {
+                    setTitle("Achtung")
+                    setMessage("Möchten sie die Daten übertragen")
+                    setButton(AlertDialog.BUTTON_NEGATIVE, "Abbrechen"){ dialog, p1 ->
+                        dialog.dismiss()
+                    }
+                    setButton(AlertDialog.BUTTON_POSITIVE, "OK") { p0, p1 ->
+                        p0.dismiss()
 
-                val calendar = Calendar.getInstance()
-                val parsedDate = ParsedDate(
-                    calendar.get(Calendar.SECOND),
-                    calendar.get(Calendar.MINUTE),
-                    calendar.get(Calendar.HOUR_OF_DAY),
-                    calendar.get(Calendar.DAY_OF_MONTH) ,
-                    calendar.get(Calendar.MONTH) +1,
-                    calendar.get(Calendar.YEAR)
-                )
+                        binding.textView.visibility = View.INVISIBLE
+                        binding.rvBluetoothDevices.visibility = View.INVISIBLE
+                        binding.btnEndSearch.visibility = View.INVISIBLE
+                        binding.btnStartSearch.visibility = View.INVISIBLE
+                        binding.loadingBarSendingData.visibility = View.VISIBLE
 
-                val plantHeader = PlantHeader(viewModel.plantList , parsedDate)
-                val gson = Gson()
-                val plantString = gson.toJson(plantHeader)
-                ConnectThread(device).connectAndSend(plantString)
+                        val calendar = Calendar.getInstance()
+                        val parsedDate = ParsedDate(
+                            calendar.get(Calendar.SECOND),
+                            calendar.get(Calendar.MINUTE),
+                            calendar.get(Calendar.HOUR_OF_DAY),
+                            calendar.get(Calendar.DAY_OF_MONTH),
+                            calendar.get(Calendar.MONTH) + 1,
+                            calendar.get(Calendar.YEAR)
+                        )
 
-                val alertDialog = AlertDialog.Builder(requireContext()).create()
-                alertDialog.setTitle("Information")
-                alertDialog.setMessage("Daten erfolgreich übertragen")
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                        object: DialogInterface.OnClickListener{
-                            override fun onClick(p0: DialogInterface?, p1: Int) {
-                                p0?.dismiss()
-                                findNavController().navigate(BluetoothFragmentDirections.actionBluetoothFragmentToPlantListFragment())
-                            }
-                        })
-                alertDialog.show()
+                        val plantHeader = PlantHeader(viewModel.plantList, parsedDate)
+                        val gson = Gson()
+                        val plantString = gson.toJson(plantHeader)
+                        ConnectThread(device).connectAndSend(plantString)
+
+                        AlertDialog.Builder(requireContext()).create().apply {
+                            setTitle("Information")
+                            setMessage("Daten erfolgreich übertragen")
+                            setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                object : DialogInterface.OnClickListener {
+                                    override fun onClick(p0: DialogInterface?, p1: Int) {
+                                        p0?.dismiss()
+                                        findNavController().popBackStack()
+                                    }
+                                })
+                            show()
+                        }
+                    }
+                    show()
+                }
+
             }
         })
+
+
 
         binding.rvBluetoothDevices.adapter = adapter
         binding.rvBluetoothDevices.layoutManager = LinearLayoutManager(requireContext())
@@ -207,6 +231,11 @@ class BluetoothFragment : Fragment() {
         // Don't forget to unregister the ACTION_FOUND receiver.
         //LocalBroadcastManager.getInstance(requireActivity()).unregisterReceiver(receiver)
         requireActivity().unregisterReceiver(receiver)
+    }
+
+    override fun onDestroy(){
+        job.cancel()
+        super.onDestroy()
     }
 
     //Prüfung sind alle Permissions gegeben
@@ -279,7 +308,6 @@ class BluetoothFragment : Fragment() {
     @SuppressLint("MissingPermission")
     private inner class ConnectThread(device: BluetoothDevice) : Thread() {
 
-
         private val mmSocket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
             device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"))
         }
@@ -289,7 +317,6 @@ class BluetoothFragment : Fragment() {
             bluetoothAdapter?.cancelDiscovery()
             binding.btnStartSearch.visibility = View.VISIBLE
             binding.loadingBarSearch.visibility = View.GONE
-
             mmSocket?.let { socket ->
                 // Connect to the remote device through the socket. This call blocks
                 // until it succeeds or throws an exception.
@@ -306,7 +333,7 @@ class BluetoothFragment : Fragment() {
                     binding.rvBluetoothDevices.visibility = View.VISIBLE
                     binding.btnEndSearch.visibility = View.VISIBLE
                     binding.btnStartSearch.visibility = View.VISIBLE
-                    binding.loadingBarSendingData.visibility = View.GONE
+                    binding.loadingBarSendingData.visibility = View.INVISIBLE
                 }
             }
         }
@@ -370,7 +397,7 @@ class BluetoothFragment : Fragment() {
                 binding.rvBluetoothDevices.visibility = View.VISIBLE
                 binding.btnEndSearch.visibility = View.VISIBLE
                 binding.btnStartSearch.visibility = View.VISIBLE
-                binding.loadingBarSendingData.visibility = View.GONE
+                binding.loadingBarSendingData.visibility = View.INVISIBLE
                 return
             }
 
@@ -390,14 +417,14 @@ class BluetoothFragment : Fragment() {
                 binding.rvBluetoothDevices.visibility = View.VISIBLE
                 binding.btnEndSearch.visibility = View.VISIBLE
                 binding.btnStartSearch.visibility = View.VISIBLE
-                binding.loadingBarSendingData.visibility = View.GONE
+                binding.loadingBarSendingData.visibility = View.INVISIBLE
             } catch (e: IOException) {
                 Log.e("geu", "Could not close the connect socket", e)
                 binding.textView.visibility = View.VISIBLE
                 binding.rvBluetoothDevices.visibility = View.VISIBLE
                 binding.btnEndSearch.visibility = View.VISIBLE
                 binding.btnStartSearch.visibility = View.VISIBLE
-                binding.loadingBarSendingData.visibility = View.GONE
+                binding.loadingBarSendingData.visibility = View.INVISIBLE
             }
 
         }

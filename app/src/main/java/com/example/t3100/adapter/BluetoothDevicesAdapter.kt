@@ -15,6 +15,7 @@ class BluetoothDevicesAdapter(
     val clickListener: ItemClickListener
 ) : RecyclerView.Adapter<BluetoothDevicesAdapter.BluetoothDeviceViewHolder>(){
 
+
     inner class BluetoothDeviceViewHolder(val binding : ItemBluetoothdevicesBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BluetoothDeviceViewHolder {

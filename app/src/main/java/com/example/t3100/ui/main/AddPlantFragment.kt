@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.t3100.MainActivity
 import com.example.t3100.R
 import com.example.t3100.data.Plant
 import com.example.t3100.databinding.FragmentAddplantBinding
@@ -38,17 +39,14 @@ class AddPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
     var savedHour = 12
     var savedMinute = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        activity?.title = "Pflanzenliste"
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        activity?.title = "Pflanze hinzufügen"
+        (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_addplant, container, false)
 
@@ -96,7 +94,7 @@ class AddPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
             val plant = Plant(title, water, valve, savedHour, savedMinute)
             addAndSavePlant(plant)
 
-            findNavController().navigate(AddPlantFragmentDirections.actionAddPlantFragmentToPlantListFragment())
+            findNavController().popBackStack()
         }
 
         binding.btnCancel.setOnClickListener {

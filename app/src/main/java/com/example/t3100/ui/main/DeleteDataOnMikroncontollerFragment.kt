@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.t3100.MainActivity
 import com.example.t3100.R
 import com.example.t3100.adapter.BluetoothDevicesAdapter
 import com.example.t3100.data.ParsedDelete
@@ -95,7 +96,6 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(BluetoothViewModel::class.java)
-        activity?.title = "Manuelle Steuerung"
     }
 
     //Binding für einfacheren Zugriff auf Buttons, TV aus xml File
@@ -103,9 +103,11 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        activity?.title = "Daten auf Mikrocontroller löschen"
+        (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_deletedataonmikrocontroller, container, false)
-
-
         return binding.root
     }
 
@@ -142,7 +144,7 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
                     object: DialogInterface.OnClickListener{
                         override fun onClick(p0: DialogInterface?, p1: Int) {
                             p0?.dismiss()
-                            findNavController().navigate(DeleteDataOnMikroncontollerFragmentDirections.actionDeleteDataOnMikroncontollerFragmentToLaunchfragment())
+                            findNavController().popBackStack()
                         }
                     })
                 alertDialog.show()

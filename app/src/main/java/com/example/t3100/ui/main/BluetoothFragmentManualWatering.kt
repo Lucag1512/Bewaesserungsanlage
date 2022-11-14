@@ -19,14 +19,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.t3100.MainActivity
 import com.example.t3100.R
 import com.example.t3100.adapter.BluetoothDevicesAdapter
 import com.example.t3100.data.ManualWateringElements
@@ -67,6 +70,7 @@ class BluetoothFragmentManualWatering : Fragment() {
         */
 
     }
+    private var lastDevice : BluetoothDevice? = null
 
     private lateinit var viewModel: BluetoothViewModel
     private lateinit var binding: FragmentBluetoothmanualwateringBinding
@@ -97,10 +101,25 @@ class BluetoothFragmentManualWatering : Fragment() {
             }
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(BluetoothViewModel::class.java)
-        activity?.title = "Manuelle Steuerung"
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+
+            lastDevice?.let {
+
+                //TODO: Loadingbar
+                val manualWateringElements = ParsedDateManual(ManualWateringElements(0,0,0,0))
+                val gson = Gson()
+                val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                ConnectThread(it).connectAndSend(manualWateringElementsJson)
+                lastDevice = null
+            }
+            findNavController().popBackStack()
+        }
     }
 
     //Binding für einfacheren Zugriff auf Buttons, TV aus xml File
@@ -108,9 +127,11 @@ class BluetoothFragmentManualWatering : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        activity?.title = "Manuelle Steuerung"
+        (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_bluetoothmanualwatering, container, false)
-
-
         return binding.root
     }
 
@@ -134,8 +155,6 @@ class BluetoothFragmentManualWatering : Fragment() {
         var valve3 = 0
         var manualWateringElements : ParsedDateManual
 
-
-
         adapter = BluetoothDevicesAdapter(viewModel.bluetoothDevices, object :
             BluetoothDevicesAdapter.ItemClickListener {
             override fun onItemClick(device: BluetoothDevice){
@@ -152,6 +171,8 @@ class BluetoothFragmentManualWatering : Fragment() {
                 binding.btnValve3.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
                 stopSearchDevices()
 
+                lastDevice = device
+
                 binding.btnPump.setOnClickListener {
 
                     if(pump == 0){
@@ -165,6 +186,7 @@ class BluetoothFragmentManualWatering : Fragment() {
                         binding.btnPump.text = "Pumpe Ausschalten"
                         binding.btnPump.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
                         binding.loadingBarPumpOn.visibility = View.VISIBLE
+
                     } else if(pump == 255){
                         pump = 0
                         manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))

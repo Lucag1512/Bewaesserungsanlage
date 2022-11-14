@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.t3100.MainActivity
 import com.example.t3100.R
 import com.example.t3100.adapter.PlantAdapter
 import com.example.t3100.data.Plant
@@ -35,7 +36,6 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity?.title = "Pflanzenliste"
 
     }
 
@@ -44,11 +44,14 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
         savedInstanceState: Bundle?
     ): View {
 
+        activity?.title = "Pflanzenliste"
+        (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_plantlist, container, false)
 
-        //Buttons ausblenden
+        //TODO: Besser nur beim ersten mal?
+        getSavedPlants()
 
-        //TODO: Einblenden wenn wenn Pfalnze gelöscht
         //Daten übetragen ausblenden wenn keine Plfanze angelegt ist
         if(sharedViewModel.plantList.size == 0){
             binding.btnShareData.visibility = View.GONE
@@ -62,10 +65,6 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
         } else{
             binding.btnAddPlant.visibility = View.VISIBLE
         }
-
-        //findNavController().popBackStack()
-
-        getSavedPlants()
 
         adapter = PlantAdapter(sharedViewModel.plantList, this)
         binding.rvPlants.adapter = adapter
@@ -107,10 +106,15 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
         }
     }
 
+    override fun onEditClick(pos: Int) {
+        findNavController().navigate(PlantListFragmentDirections.actionPlantListFragmentToEditPlantFragment(pos))
+    }
+
+
     override fun onDeleteClick(pos: Int) {
 
         sharedViewModel.plantList.removeAt(pos)
-        adapter.notifyItemRemoved(pos)
+        adapter.notifyDataSetChanged()
 
         //Save to phone
         val gson = Gson()

@@ -35,6 +35,10 @@ class PlantAdapter(
             } else {
                 tvWateringTime.text = "Bewässerungszeitpunkt: ${plants[position].hour}:${plants[position].minute}"
             }
+            ivEdit.setOnClickListener {
+                clickListener.onEditClick(position)
+            }
+
             ivDelete.setOnClickListener {
                 clickListener.onDeleteClick(position)
             }
@@ -49,6 +53,7 @@ class PlantAdapter(
 
     //Define your Interface method here
     interface ItemClickListener {
+        fun onEditClick(pos: Int)
         fun onDeleteClick(pos: Int)
     }
 }
