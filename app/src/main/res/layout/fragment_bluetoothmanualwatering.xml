@@ -162,6 +162,19 @@
             app:layout_constraintStart_toEndOf="@id/btnValve3"
             app:layout_constraintTop_toBottomOf="@+id/loadingBarValve2Open" />
 
+        <ProgressBar
+            android:id="@+id/pbCloseAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.479"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.222" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

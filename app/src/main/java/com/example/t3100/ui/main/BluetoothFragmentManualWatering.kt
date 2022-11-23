@@ -2,14 +2,12 @@ package com.example.t3100.ui.main
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -31,7 +29,9 @@ import com.example.t3100.MainActivity
 import com.example.t3100.R
 import com.example.t3100.adapter.BluetoothDevicesAdapter
 import com.example.t3100.data.ManualWateringElements
+import com.example.t3100.data.ParsedDate
 import com.example.t3100.data.ParsedDateManual
+import com.example.t3100.data.PlantHeader
 import com.example.t3100.databinding.FragmentBluetoothmanualwateringBinding
 import com.example.t3100.viewmodel.BluetoothViewModel
 import com.google.gson.Gson
@@ -105,7 +105,8 @@ class BluetoothFragmentManualWatering : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
 
-            //TODO: Loading Bar
+            binding.pbCloseAll.visibility = View.VISIBLE
+
 
             lastDevice?.let {
                 val manualWateringElements = ParsedDateManual(ManualWateringElements(0,0,0,0))
@@ -115,6 +116,8 @@ class BluetoothFragmentManualWatering : Fragment() {
                 lastDevice = null
             }
             findNavController().popBackStack()
+
+
         }
     }
 
@@ -172,16 +175,49 @@ class BluetoothFragmentManualWatering : Fragment() {
                 binding.btnPump.setOnClickListener {
 
                     if(pump == 0){
-                        pump = 255
-                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
 
-                        val gson = Gson()
-                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
+                        if(valve1 == 0 && valve2 == 0 && valve3 == 0){
+                            AlertDialog.Builder(requireContext()).create().apply {
+                                setTitle("Hinweis")
+                                setMessage("Aus Sicherheitsgründen muss zum Ansteuern der Pumpe ein Ventil geöffnet sein! Möchten sie Ventil 1 und die Pumpe ansteuern?")
+                                setButton(AlertDialog.BUTTON_NEGATIVE, "Abbrechen"){ dialog, p1 ->
+                                    dialog.dismiss()
+                                }
+                                setButton(AlertDialog.BUTTON_POSITIVE, "Ja") { p0, p1 ->
+                                    p0.dismiss()
 
-                        binding.btnPump.text = "Pumpe Ausschalten"
-                        binding.btnPump.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
-                        binding.loadingBarPumpOn.visibility = View.VISIBLE
+                                    pump = 255
+                                    valve1 = 1
+                                    manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
+
+                                    val gson = Gson()
+                                    val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                                    ConnectThread(device).connectAndSend(manualWateringElementsJson)
+
+                                    binding.btnPump.text = "Pumpe Ausschalten"
+                                    binding.btnPump.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
+                                    binding.loadingBarPumpOn.visibility = View.VISIBLE
+
+                                    binding.btnValve1.text = "Ventil 1 schließen"
+                                    binding.btnValve1.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
+                                    binding.loadingBarValve1Open.visibility = View.VISIBLE
+                                }
+                                show()
+                            }
+                        }
+                        else{
+                            pump = 255
+                            manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
+
+                            val gson = Gson()
+                            val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                            ConnectThread(device).connectAndSend(manualWateringElementsJson)
+
+                            binding.btnPump.text = "Pumpe Ausschalten"
+                            binding.btnPump.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
+                            binding.loadingBarPumpOn.visibility = View.VISIBLE
+                        }
+
 
                     } else if(pump == 255){
                         pump = 0
