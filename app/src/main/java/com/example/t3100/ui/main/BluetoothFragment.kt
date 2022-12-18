@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -41,6 +42,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -102,7 +104,7 @@ class BluetoothFragment : Fragment() {
     //Prüfung ist BT eingeschaltet worden
     private val bluetoothRequest = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
+                //Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
             } else {
                 //TODO: BT wird für APP benötigt
             }
@@ -158,34 +160,23 @@ class BluetoothFragment : Fragment() {
                         binding.btnEndSearch.visibility = View.INVISIBLE
                         binding.btnStartSearch.visibility = View.INVISIBLE
                         binding.loadingBarSendingData.visibility = View.VISIBLE
+                        binding.tvSendingData.visibility = View.VISIBLE
 
-                        val calendar = Calendar.getInstance()
-                        val parsedDate = ParsedDate(
-                            calendar.get(Calendar.SECOND),
-                            calendar.get(Calendar.MINUTE),
-                            calendar.get(Calendar.HOUR_OF_DAY),
-                            calendar.get(Calendar.DAY_OF_MONTH),
-                            calendar.get(Calendar.MONTH) + 1,
-                            calendar.get(Calendar.YEAR)
-                        )
+                            val calendar = Calendar.getInstance()
+                            val parsedDate = ParsedDate(
+                                calendar.get(Calendar.SECOND),
+                                calendar.get(Calendar.MINUTE),
+                                calendar.get(Calendar.HOUR_OF_DAY),
+                                calendar.get(Calendar.DAY_OF_MONTH),
+                                calendar.get(Calendar.MONTH) + 1,
+                                calendar.get(Calendar.YEAR)
+                            )
 
-                        val plantHeader = PlantHeader(viewModel.plantList, parsedDate)
-                        val gson = Gson()
-                        val plantString = gson.toJson(plantHeader)
-                        ConnectThread(device).connectAndSend(plantString)
+                            val plantHeader = PlantHeader(viewModel.plantList, parsedDate)
+                            val gson = Gson()
+                            val plantString = gson.toJson(plantHeader)
+                            ConnectThread(device).connectAndSend(plantString)
 
-                        AlertDialog.Builder(requireContext()).create().apply {
-                            setTitle("Information")
-                            setMessage("Daten erfolgreich übertragen")
-                            setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                                object : DialogInterface.OnClickListener {
-                                    override fun onClick(p0: DialogInterface?, p1: Int) {
-                                        p0?.dismiss()
-                                        findNavController().popBackStack()
-                                    }
-                                })
-                            show()
-                        }
                     }
                     show()
                 }
@@ -252,7 +243,7 @@ class BluetoothFragment : Fragment() {
 
         //Prüfung ist BT auf dem Gerät eingeschaltet, wenn nicht über Intent anfordern
         if (bluetoothAdapter?.isEnabled == true) {
-            Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
+            //Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
         } else{
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             bluetoothRequest.launch(enableBtIntent)
@@ -309,29 +300,36 @@ class BluetoothFragment : Fragment() {
             device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"))
         }
 
+        @SuppressLint("SuspiciousIndentation")
         fun connectAndSend(message: String){
             // Cancel discovery because it otherwise slows down the connection.
             bluetoothAdapter?.cancelDiscovery()
-            binding.btnStartSearch.visibility = View.VISIBLE
             binding.loadingBarSearch.visibility = View.GONE
-            mmSocket?.let { socket ->
-                // Connect to the remote device through the socket. This call blocks
-                // until it succeeds or throws an exception.
-                try {
-                    socket.connect()
 
-                    // The connection attempt succeeded. Perform work associated with
-                    // the connection in a separate thread.
-                    ConnectedThread(socket).write(message.toByteArray())
+                mmSocket?.let { socket ->
+                    // Connect to the remote device through the socket. This call blocks
+                    // until it succeeds or throws an exception.
+                    try {
+                        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                            socket.connect()
 
-                }catch (e: IOException){
-                    Toast.makeText(requireContext(),"Verbindung nicht erfolgreich", Toast.LENGTH_LONG).show()
-                    binding.textView.visibility = View.VISIBLE
-                    binding.rvBluetoothDevices.visibility = View.VISIBLE
-                    binding.btnEndSearch.visibility = View.VISIBLE
-                    binding.btnStartSearch.visibility = View.VISIBLE
-                    binding.loadingBarSendingData.visibility = View.INVISIBLE
-                }
+                            // The connection attempt succeeded. Perform work associated with
+                            // the connection in a separate thread.
+                            ConnectedThread(socket).write(message.toByteArray())
+                        }
+
+                    } catch (e: IOException) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Verbindung nicht erfolgreich",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        binding.textView.visibility = View.VISIBLE
+                        binding.rvBluetoothDevices.visibility = View.VISIBLE
+                        binding.btnEndSearch.visibility = View.VISIBLE
+                        binding.btnStartSearch.visibility = View.VISIBLE
+                        binding.loadingBarSendingData.visibility = View.INVISIBLE
+                    }
             }
         }
 
@@ -380,21 +378,27 @@ class BluetoothFragment : Fragment() {
                 mmOutStream.write(bytes)
 
             } catch (e: IOException) {
-                Log.e("geu", "Error occurred when sending data", e)
+                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+                    Log.e("geu", "Error occurred when sending data", e)
 
-                // Send a failure message back to the activity.
-                /*val writeErrorMsg = handler.obtainMessage(MESSAGE_TOAST)
+                    // Send a failure message back to the activity.
+                    /*val writeErrorMsg = handler.obtainMessage(MESSAGE_TOAST)
                 val bundle = Bundle().apply {
                     putString("toast", "Couldn't send data to the other device")
                 }
                 writeErrorMsg.data = bundle
                 handler.sendMessage(writeErrorMsg)*/
-                Toast.makeText(requireContext(), "Couldn't send data to the other device", Toast.LENGTH_LONG).show()
-                binding.textView.visibility = View.VISIBLE
-                binding.rvBluetoothDevices.visibility = View.VISIBLE
-                binding.btnEndSearch.visibility = View.VISIBLE
-                binding.btnStartSearch.visibility = View.VISIBLE
-                binding.loadingBarSendingData.visibility = View.INVISIBLE
+                    Toast.makeText(
+                        requireContext(),
+                        "Couldn't send data to the other device",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    binding.textView.visibility = View.VISIBLE
+                    binding.rvBluetoothDevices.visibility = View.VISIBLE
+                    binding.btnEndSearch.visibility = View.VISIBLE
+                    binding.btnStartSearch.visibility = View.VISIBLE
+                    binding.loadingBarSendingData.visibility = View.INVISIBLE
+                }
                 return
             }
 
@@ -408,22 +412,21 @@ class BluetoothFragment : Fragment() {
 
         // Call this method from the main activity to shut down the connection.
         fun closeBluetoothSocket() {
-            try {
-                mmSocket.close()
-                binding.textView.visibility = View.VISIBLE
-                binding.rvBluetoothDevices.visibility = View.VISIBLE
-                binding.btnEndSearch.visibility = View.VISIBLE
-                binding.btnStartSearch.visibility = View.VISIBLE
-                binding.loadingBarSendingData.visibility = View.INVISIBLE
-            } catch (e: IOException) {
-                Log.e("geu", "Could not close the connect socket", e)
-                binding.textView.visibility = View.VISIBLE
-                binding.rvBluetoothDevices.visibility = View.VISIBLE
-                binding.btnEndSearch.visibility = View.VISIBLE
-                binding.btnStartSearch.visibility = View.VISIBLE
-                binding.loadingBarSendingData.visibility = View.INVISIBLE
-            }
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+                try {
+                    mmSocket.close()
+                    Toast.makeText(requireContext(),"Daten erfolgreich gesendet",Toast.LENGTH_LONG).show()
+                    findNavController().popBackStack()
 
+                } catch (e: IOException) {
+                    Log.e("geu", "Could not close the connect socket", e)
+                    binding.textView.visibility = View.VISIBLE
+                    binding.rvBluetoothDevices.visibility = View.VISIBLE
+                    binding.btnEndSearch.visibility = View.VISIBLE
+                    binding.btnStartSearch.visibility = View.VISIBLE
+                    binding.loadingBarSendingData.visibility = View.INVISIBLE
+                }
+            }
         }
     }
 

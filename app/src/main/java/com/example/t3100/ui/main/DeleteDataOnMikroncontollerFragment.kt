@@ -87,7 +87,7 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
     //Prüfung ist BT eingeschaltet worden
     private val bluetoothRequest = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
+                //Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
             } else {
                 //TODO: BT wird für APP benötigt
             }
@@ -205,7 +205,7 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
 
         //Prüfung ist BT auf dem Gerät eingeschaltet, wenn nicht über Intent anfordern
         if (bluetoothAdapter?.isEnabled == true) {
-            Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
+            //Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
         } else{
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             bluetoothRequest.launch(enableBtIntent)

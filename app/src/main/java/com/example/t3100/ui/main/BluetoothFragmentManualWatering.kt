@@ -29,9 +29,7 @@ import com.example.t3100.MainActivity
 import com.example.t3100.R
 import com.example.t3100.adapter.BluetoothDevicesAdapter
 import com.example.t3100.data.ManualWateringElements
-import com.example.t3100.data.ParsedDate
 import com.example.t3100.data.ParsedDateManual
-import com.example.t3100.data.PlantHeader
 import com.example.t3100.databinding.FragmentBluetoothmanualwateringBinding
 import com.example.t3100.viewmodel.BluetoothViewModel
 import com.google.gson.Gson
@@ -48,14 +46,15 @@ class BluetoothFragmentManualWatering : Fragment() {
         fun newInstance() = BluetoothFragmentManualWatering()
 
         //Deklaration welche Permissions bei welcher SDK benötigt werden
-        private val REQUIRED_PERMISSIONS =
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.BLUETOOTH_CONNECT,
-                    android.Manifest.permission.BLUETOOTH_SCAN)
-            }else{
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
-            }
+        private val REQUIRED_PERMISSIONS = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            arrayOf(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.BLUETOOTH_CONNECT,
+                android.Manifest.permission.BLUETOOTH_SCAN
+            )
+        } else {
+            arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        }
 
         /* Aktuell nicht verwendet
         // Defines several constants used when transmitting messages between the
@@ -66,7 +65,8 @@ class BluetoothFragmentManualWatering : Fragment() {
         */
 
     }
-    private var lastDevice : BluetoothDevice? = null
+
+    private var lastDevice: BluetoothDevice? = null
 
     private lateinit var viewModel: BluetoothViewModel
     private lateinit var binding: FragmentBluetoothmanualwateringBinding
@@ -76,27 +76,28 @@ class BluetoothFragmentManualWatering : Fragment() {
     private lateinit var adapter: BluetoothDevicesAdapter
 
     //Permissions für Appfunktionalität anfordern
-    private val permissionRequest = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-        val granted = permissions.entries.all{
-            it.value == true
+    private val permissionRequest =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val granted = permissions.entries.all {
+                it.value == true
+            }
+            //Sind alle Permissions gegeben wird setupBT gestartet
+            if (granted) {
+                setupBluetooth()
+            } else {
+                //TODO: Schleife falls Nutzer Permissions ablehnt
+            }
         }
-        //Sind alle Permissions gegeben wird setupBT gestartet
-        if(granted){
-            setupBluetooth()
-        } else{
-            //TODO: Schleife falls Nutzer Permissions ablehnt
-        }
-    }
 
     //Prüfung ist BT eingeschaltet worden
-    private val bluetoothRequest = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val bluetoothRequest =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
+                //Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
             } else {
                 //TODO: BT wird für APP benötigt
             }
-    }
-
+        }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,7 +110,7 @@ class BluetoothFragmentManualWatering : Fragment() {
 
 
             lastDevice?.let {
-                val manualWateringElements = ParsedDateManual(ManualWateringElements(0,0,0,0))
+                val manualWateringElements = ParsedDateManual(ManualWateringElements(0, 0, 0, 0))
                 val gson = Gson()
                 val manualWateringElementsJson = gson.toJson(manualWateringElements)
                 ConnectThread(it).connectAndSend(manualWateringElementsJson)
@@ -123,14 +124,15 @@ class BluetoothFragmentManualWatering : Fragment() {
 
     //Binding für einfacheren Zugriff auf Buttons, TV aus xml File
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
         activity?.title = "Manuelle Steuerung"
         (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_bluetoothmanualwatering, container, false)
+        binding = DataBindingUtil.inflate(
+            layoutInflater, R.layout.fragment_bluetoothmanualwatering, container, false
+        )
         return binding.root
     }
 
@@ -138,9 +140,9 @@ class BluetoothFragmentManualWatering : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //Prüfung sind alle Permissions gegeben wenn nicht User auffordern
-        if(checkPermissionsGranted()){
+        if (checkPermissionsGranted()) {
             setupBluetooth()
-        }else{
+        } else {
             permissionRequest.launch(REQUIRED_PERMISSIONS)
         }
 
@@ -152,175 +154,294 @@ class BluetoothFragmentManualWatering : Fragment() {
         var valve1 = 0
         var valve2 = 0
         var valve3 = 0
-        var manualWateringElements : ParsedDateManual
+        var manualWateringElements: ParsedDateManual
 
-        adapter = BluetoothDevicesAdapter(viewModel.bluetoothDevices, object :
-            BluetoothDevicesAdapter.ItemClickListener {
-            override fun onItemClick(device: BluetoothDevice){
+        adapter = BluetoothDevicesAdapter(
+            viewModel.bluetoothDevices,
+            object : BluetoothDevicesAdapter.ItemClickListener {
+                override fun onItemClick(device: BluetoothDevice) {
 
-                //Benötigten Buttons sichtbar machen und Gerätesuche beenden
-                binding.tvConnected.visibility = View.VISIBLE
-                binding.btnPump.visibility = View.VISIBLE
-                binding.btnValve1.visibility = View.VISIBLE
-                binding.btnValve2.visibility = View.VISIBLE
-                binding.btnValve3.visibility = View.VISIBLE
-                binding.btnPump.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
-                binding.btnValve1.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
-                binding.btnValve2.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
-                binding.btnValve3.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
-                stopSearchDevices()
+                    //Benötigten Buttons sichtbar machen und Gerätesuche beenden
+                    binding.tvConnected.visibility = View.VISIBLE
+                    binding.btnPump.visibility = View.VISIBLE
+                    binding.btnValve1.visibility = View.VISIBLE
+                    binding.btnValve2.visibility = View.VISIBLE
+                    binding.btnValve3.visibility = View.VISIBLE
+                    binding.btnPump.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(), R.color.Green
+                        )
+                    )
+                    binding.btnValve1.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(), R.color.Green
+                        )
+                    )
+                    binding.btnValve2.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(), R.color.Green
+                        )
+                    )
+                    binding.btnValve3.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(), R.color.Green
+                        )
+                    )
+                    stopSearchDevices()
 
-                lastDevice = device
+                    lastDevice = device
 
-                binding.btnPump.setOnClickListener {
+                    binding.btnPump.setOnClickListener {
 
-                    if(pump == 0){
+                        if (pump == 0) {
 
-                        if(valve1 == 0 && valve2 == 0 && valve3 == 0){
-                            AlertDialog.Builder(requireContext()).create().apply {
-                                setTitle("Hinweis")
-                                setMessage("Aus Sicherheitsgründen muss zum Ansteuern der Pumpe ein Ventil geöffnet sein! Möchten sie Ventil 1 und die Pumpe ansteuern?")
-                                setButton(AlertDialog.BUTTON_NEGATIVE, "Abbrechen"){ dialog, p1 ->
-                                    dialog.dismiss()
+                            if (valve1 == 0 && valve2 == 0 && valve3 == 0) {
+                                AlertDialog.Builder(requireContext()).create().apply {
+                                    setTitle("Hinweis")
+                                    setMessage("Aus Sicherheitsgründen muss zum Ansteuern der Pumpe ein Ventil geöffnet sein! Möchten sie Ventil 1 und die Pumpe ansteuern?")
+                                    setButton(
+                                        AlertDialog.BUTTON_NEGATIVE,
+                                        "Abbrechen"
+                                    ) { dialog, p1 ->
+                                        dialog.dismiss()
+                                    }
+                                    setButton(AlertDialog.BUTTON_POSITIVE, "Ja") { p0, p1 ->
+                                        p0.dismiss()
+
+                                        pump = 255
+                                        valve1 = 1
+                                        manualWateringElements = ParsedDateManual(
+                                            ManualWateringElements(
+                                                pump, valve1, valve2, valve3
+                                            )
+                                        )
+
+                                        val gson = Gson()
+                                        val manualWateringElementsJson =
+                                            gson.toJson(manualWateringElements)
+                                        ConnectThread(device).connectAndSend(
+                                            manualWateringElementsJson
+                                        )
+
+                                        binding.btnPump.text = "Pumpe Ausschalten"
+                                        binding.btnPump.setBackgroundColor(
+                                            ContextCompat.getColor(
+                                                requireContext(), R.color.Red
+                                            )
+                                        )
+                                        binding.loadingBarPumpOn.visibility = View.VISIBLE
+
+                                        binding.btnValve1.text = "Ventil 1 schließen"
+                                        binding.btnValve1.setBackgroundColor(
+                                            ContextCompat.getColor(
+                                                requireContext(), R.color.Red
+                                            )
+                                        )
+                                        binding.loadingBarValve1Open.visibility = View.VISIBLE
+                                    }
+                                    show()
                                 }
-                                setButton(AlertDialog.BUTTON_POSITIVE, "Ja") { p0, p1 ->
-                                    p0.dismiss()
+                            } else {
+                                pump = 255
+                                manualWateringElements = ParsedDateManual(
+                                    ManualWateringElements(
+                                        pump, valve1, valve2, valve3
+                                    )
+                                )
 
-                                    pump = 255
-                                    valve1 = 1
-                                    manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
+                                val gson = Gson()
+                                val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                                ConnectThread(device).connectAndSend(manualWateringElementsJson)
 
-                                    val gson = Gson()
-                                    val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                                    ConnectThread(device).connectAndSend(manualWateringElementsJson)
-
-                                    binding.btnPump.text = "Pumpe Ausschalten"
-                                    binding.btnPump.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
-                                    binding.loadingBarPumpOn.visibility = View.VISIBLE
-
-                                    binding.btnValve1.text = "Ventil 1 schließen"
-                                    binding.btnValve1.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
-                                    binding.loadingBarValve1Open.visibility = View.VISIBLE
-                                }
-                                show()
+                                binding.btnPump.text = "Pumpe Ausschalten"
+                                binding.btnPump.setBackgroundColor(
+                                    ContextCompat.getColor(
+                                        requireContext(), R.color.Red
+                                    )
+                                )
+                                binding.loadingBarPumpOn.visibility = View.VISIBLE
                             }
-                        }
-                        else{
-                            pump = 255
-                            manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
+
+
+                        } else if (pump == 255) {
+                            pump = 0
+                            manualWateringElements = ParsedDateManual(
+                                ManualWateringElements(
+                                    pump,
+                                    valve1,
+                                    valve2,
+                                    valve3
+                                )
+                            )
 
                             val gson = Gson()
                             val manualWateringElementsJson = gson.toJson(manualWateringElements)
                             ConnectThread(device).connectAndSend(manualWateringElementsJson)
 
-                            binding.btnPump.text = "Pumpe Ausschalten"
-                            binding.btnPump.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
-                            binding.loadingBarPumpOn.visibility = View.VISIBLE
+                            binding.btnPump.text = "Pumpe Einschalten"
+                            binding.btnPump.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    requireContext(), R.color.Green
+                                )
+                            )
+                            binding.loadingBarPumpOn.visibility = View.INVISIBLE
                         }
 
-
-                    } else if(pump == 255){
-                        pump = 0
-                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
-
-                        val gson = Gson()
-                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
-
-                        binding.btnPump.text = "Pumpe Einschalten"
-                        binding.btnPump.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
-                        binding.loadingBarPumpOn.visibility = View.INVISIBLE
                     }
 
-                }
 
+                    binding.btnValve1.setOnClickListener {
+                        if (valve1 == 0) {
+                            valve1 = 1
+                            manualWateringElements = ParsedDateManual(
+                                ManualWateringElements(
+                                    pump,
+                                    valve1,
+                                    valve2,
+                                    valve3
+                                )
+                            )
 
-                binding.btnValve1.setOnClickListener {
-                    if(valve1 == 0){
-                        valve1 = 1
-                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
+                            val gson = Gson()
+                            val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                            ConnectThread(device).connectAndSend(manualWateringElementsJson)
 
-                        val gson = Gson()
-                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
+                            binding.btnValve1.text = "Ventil 1 schließen"
+                            binding.btnValve1.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    requireContext(), R.color.Red
+                                )
+                            )
+                            binding.loadingBarValve1Open.visibility = View.VISIBLE
+                        } else if (valve1 == 1) {
+                            valve1 = 0
+                            manualWateringElements = ParsedDateManual(
+                                ManualWateringElements(
+                                    pump,
+                                    valve1,
+                                    valve2,
+                                    valve3
+                                )
+                            )
 
-                        binding.btnValve1.text = "Ventil 1 schließen"
-                        binding.btnValve1.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
-                        binding.loadingBarValve1Open.visibility = View.VISIBLE
-                    }else if(valve1 == 1){
-                        valve1 = 0
-                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
+                            val gson = Gson()
+                            val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                            ConnectThread(device).connectAndSend(manualWateringElementsJson)
 
-                        val gson = Gson()
-                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
+                            binding.btnValve1.text = "Ventil 1 öffnen"
+                            binding.btnValve1.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    requireContext(), R.color.Green
+                                )
+                            )
+                            binding.loadingBarValve1Open.visibility = View.INVISIBLE
+                        }
+                    }
 
-                        binding.btnValve1.text = "Ventil 1 öffnen"
-                        binding.btnValve1.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
-                        binding.loadingBarValve1Open.visibility = View.INVISIBLE
+                    binding.btnValve2.setOnClickListener {
+                        if (valve2 == 0) {
+                            valve2 = 1
+                            manualWateringElements = ParsedDateManual(
+                                ManualWateringElements(
+                                    pump,
+                                    valve1,
+                                    valve2,
+                                    valve3
+                                )
+                            )
+
+                            val gson = Gson()
+                            val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                            ConnectThread(device).connectAndSend(manualWateringElementsJson)
+
+                            binding.btnValve2.text = "Ventil 2 schließen"
+                            binding.btnValve2.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    requireContext(), R.color.Red
+                                )
+                            )
+                            binding.loadingBarValve2Open.visibility = View.VISIBLE
+                        } else if (valve2 == 1) {
+                            valve2 = 0
+                            manualWateringElements = ParsedDateManual(
+                                ManualWateringElements(
+                                    pump,
+                                    valve1,
+                                    valve2,
+                                    valve3
+                                )
+                            )
+
+                            val gson = Gson()
+                            val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                            ConnectThread(device).connectAndSend(manualWateringElementsJson)
+
+                            binding.btnValve2.text = "Ventil 2 öffnen"
+                            binding.btnValve2.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    requireContext(), R.color.Green
+                                )
+                            )
+                            binding.loadingBarValve2Open.visibility = View.INVISIBLE
+                        }
+                    }
+
+                    binding.btnValve3.setOnClickListener {
+
+                        if (valve3 == 0) {
+                            valve3 = 1
+                            manualWateringElements = ParsedDateManual(
+                                ManualWateringElements(
+                                    pump,
+                                    valve1,
+                                    valve2,
+                                    valve3
+                                )
+                            )
+
+                            val gson = Gson()
+                            val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                            ConnectThread(device).connectAndSend(manualWateringElementsJson)
+
+                            binding.btnValve3.text = "Ventil 3 schließen"
+                            binding.btnValve3.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    requireContext(), R.color.Red
+                                )
+                            )
+                            binding.loadingBarValve3Open.visibility = View.VISIBLE
+                        } else if (valve3 == 1) {
+                            valve3 = 0
+                            manualWateringElements = ParsedDateManual(
+                                ManualWateringElements(
+                                    pump,
+                                    valve1,
+                                    valve2,
+                                    valve3
+                                )
+                            )
+
+                            val gson = Gson()
+                            val manualWateringElementsJson = gson.toJson(manualWateringElements)
+                            ConnectThread(device).connectAndSend(manualWateringElementsJson)
+
+                            binding.btnValve3.text = "Ventil 3 öffnen"
+                            binding.btnValve3.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    requireContext(), R.color.Green
+                                )
+                            )
+                            binding.loadingBarValve3Open.visibility = View.INVISIBLE
+                        }
                     }
                 }
-
-                binding.btnValve2.setOnClickListener {
-                    if(valve2 == 0){
-                        valve2 = 1
-                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
-
-                        val gson = Gson()
-                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
-
-                        binding.btnValve2.text = "Ventil 2 schließen"
-                        binding.btnValve2.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
-                        binding.loadingBarValve2Open.visibility = View.VISIBLE
-                    }else if(valve2 == 1){
-                        valve2 = 0
-                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
-
-                        val gson = Gson()
-                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
-
-                        binding.btnValve2.text = "Ventil 2 öffnen"
-                        binding.btnValve2.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
-                        binding.loadingBarValve2Open.visibility = View.INVISIBLE
-                    }
-                }
-
-                binding.btnValve3.setOnClickListener {
-
-                    if(valve3 == 0){
-                        valve3 = 1
-                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
-
-                        val gson = Gson()
-                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
-
-                        binding.btnValve3.text = "Ventil 3 schließen"
-                        binding.btnValve3.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Red))
-                        binding.loadingBarValve3Open.visibility = View.VISIBLE
-                    }else if(valve3 == 1){
-                        valve3 = 0
-                        manualWateringElements = ParsedDateManual(ManualWateringElements(pump, valve1, valve2, valve3))
-
-                        val gson = Gson()
-                        val manualWateringElementsJson = gson.toJson(manualWateringElements)
-                        ConnectThread(device).connectAndSend(manualWateringElementsJson)
-
-                        binding.btnValve3.text = "Ventil 3 öffnen"
-                        binding.btnValve3.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.Green))
-                        binding.loadingBarValve3Open.visibility = View.INVISIBLE
-                    }
-                }
-            }
-        })
+            })
 
         binding.rvBluetoothDevices.adapter = adapter
         binding.rvBluetoothDevices.layoutManager = LinearLayoutManager(requireContext())
         val dividerItemDecoration = DividerItemDecoration(
             requireContext(),
-            (binding.rvBluetoothDevices.layoutManager as LinearLayoutManager).getOrientation()
+            (binding.rvBluetoothDevices.layoutManager as LinearLayoutManager).orientation
         )
         binding.rvBluetoothDevices.addItemDecoration(dividerItemDecoration)
 
@@ -353,23 +474,27 @@ class BluetoothFragmentManualWatering : Fragment() {
     }
 
     //Prüfung sind alle Permissions gegeben
-    private fun checkPermissionsGranted() = REQUIRED_PERMISSIONS.all {permission ->
-            ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED
+    private fun checkPermissionsGranted() = REQUIRED_PERMISSIONS.all { permission ->
+        ContextCompat.checkSelfPermission(
+            requireContext(), permission
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun setupBluetooth(){
+    private fun setupBluetooth() {
         //Adapter anlegen, entspricht BT Adapter des lokalen Gerätes
-        val bluetoothManager: BluetoothManager? = requireActivity().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
+        val bluetoothManager: BluetoothManager? =
+            requireActivity().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
         bluetoothAdapter = bluetoothManager?.adapter
 
-        if(bluetoothAdapter == null){
-            Toast.makeText(requireContext(), "Your Device doens't support BT", Toast.LENGTH_LONG).show()
+        if (bluetoothAdapter == null) {
+            Toast.makeText(requireContext(), "Your Device doens't support BT", Toast.LENGTH_LONG)
+                .show()
         }
 
         //Prüfung ist BT auf dem Gerät eingeschaltet, wenn nicht über Intent anfordern
         if (bluetoothAdapter?.isEnabled == true) {
-            Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
-        } else{
+            //Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
+        } else {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             bluetoothRequest.launch(enableBtIntent)
             //TODO: Schleife falls Nutzer BT nicht einschaltet
@@ -378,14 +503,14 @@ class BluetoothFragmentManualWatering : Fragment() {
 
     //Suche nach Geräte starten
     @SuppressLint("MissingPermission")
-    private fun startSearchDevices(){
+    private fun startSearchDevices() {
         binding.btnStartSearch.visibility = View.INVISIBLE
         binding.loadingBarSearch.visibility = View.VISIBLE
         bluetoothAdapter?.startDiscovery()
     }
 
     @SuppressLint("MissingPermission")
-    private fun stopSearchDevices(){
+    private fun stopSearchDevices() {
         binding.btnStartSearch.visibility = View.VISIBLE
         binding.loadingBarSearch.visibility = View.GONE
         bluetoothAdapter?.cancelDiscovery()
@@ -398,7 +523,7 @@ class BluetoothFragmentManualWatering : Fragment() {
         @SuppressLint("MissingPermission")
         override fun onReceive(context: Context, intent: Intent) {
             val action: String? = intent.action
-            when(action) {
+            when (action) {
                 BluetoothDevice.ACTION_FOUND -> {
                     // Discovery has found a device. Get the BluetoothDevice
                     // object and its info from the Intent.
@@ -407,7 +532,10 @@ class BluetoothFragmentManualWatering : Fragment() {
                     val deviceName = device?.name
                     val deviceHardwareAddress = device?.address // MAC address
 
-                    if(deviceName?.contains("ESP") == true && !viewModel.bluetoothDevices.contains(device)){
+                    if (deviceName?.contains("ESP") == true && !viewModel.bluetoothDevices.contains(
+                            device
+                        )
+                    ) {
                         viewModel.bluetoothDevices.add(device)
                         adapter.notifyItemInserted(viewModel.bluetoothDevices.size - 1)
 
@@ -427,7 +555,7 @@ class BluetoothFragmentManualWatering : Fragment() {
             device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"))
         }
 
-        fun connectAndSend(message: String){
+        fun connectAndSend(message: String) {
             // Cancel discovery because it otherwise slows down the connection.
             bluetoothAdapter?.cancelDiscovery()
 
@@ -441,8 +569,10 @@ class BluetoothFragmentManualWatering : Fragment() {
                     // the connection in a separate thread.
                     ConnectedThread(socket).write(message.toByteArray())
 
-                }catch (e: IOException){
-                    Toast.makeText(requireContext(),"Verbindung nicht erfolgreich", Toast.LENGTH_LONG).show()
+                } catch (e: IOException) {
+                    Toast.makeText(
+                        requireContext(), "Verbindung nicht erfolgreich", Toast.LENGTH_LONG
+                    ).show()
                     binding.main.visibility = View.VISIBLE
                     binding.loadingBarSearch.visibility = View.GONE
                 }
@@ -480,10 +610,10 @@ class BluetoothFragmentManualWatering : Fragment() {
                 }
 
                 // Send the obtained bytes to the UI activity.
-               /* val readMsg = handler.obtainMessage(
-                    MESSAGE_READ, numBytes, -1,
-                    mmBuffer)
-                readMsg.sendToTarget()*/
+                /* val readMsg = handler.obtainMessage(
+                     MESSAGE_READ, numBytes, -1,
+                     mmBuffer)
+                 readMsg.sendToTarget()*/
             }
         }
 
@@ -503,7 +633,9 @@ class BluetoothFragmentManualWatering : Fragment() {
                 }
                 writeErrorMsg.data = bundle
                 handler.sendMessage(writeErrorMsg)*/
-                Toast.makeText(requireContext(), "Couldn't send data to the other device", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(), "Couldn't send data to the other device", Toast.LENGTH_LONG
+                ).show()
                 binding.main.visibility = View.VISIBLE
                 binding.loadingBarSearch.visibility = View.GONE
                 return
@@ -511,10 +643,10 @@ class BluetoothFragmentManualWatering : Fragment() {
 
             closeBluetoothSocket()
 
-           /* // Share the sent message with the UI activity.
-            val writtenMsg = handler.obtainMessage(
-                MESSAGE_WRITE, -1, -1, mmBuffer)
-            writtenMsg.sendToTarget()*/
+            /* // Share the sent message with the UI activity.
+             val writtenMsg = handler.obtainMessage(
+                 MESSAGE_WRITE, -1, -1, mmBuffer)
+             writtenMsg.sendToTarget()*/
         }
 
         // Call this method from the main activity to shut down the connection.
