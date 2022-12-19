@@ -26,7 +26,6 @@ import java.util.*
 class AddPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
 
     companion object {
-        fun newInstance() = AddPlantFragment()
     }
 
     private val sharedViewModel : SharedViewModel by activityViewModels()

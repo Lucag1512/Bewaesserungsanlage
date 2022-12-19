@@ -24,12 +24,11 @@ import java.util.*
 class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
 
     companion object {
-        fun newInstance() = PlantListFragment()
     }
 
     private lateinit var binding: FragmentPlantlistBinding
 
-    private val sharedViewModel : SharedViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private lateinit var adapter: PlantAdapter
 
@@ -47,22 +46,23 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
         activity?.title = "Pflanzenliste"
         (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_plantlist, container, false)
+        binding =
+            DataBindingUtil.inflate(layoutInflater, R.layout.fragment_plantlist, container, false)
 
         //TODO: Besser nur beim ersten mal?
         getSavedPlants()
 
         //Daten übetragen ausblenden wenn keine Plfanze angelegt ist
-        if(sharedViewModel.plantList.size == 0){
+        if (sharedViewModel.plantList.size == 0) {
             binding.btnShareData.visibility = View.GONE
-        } else{
+        } else {
             binding.btnShareData.visibility = View.VISIBLE
         }
 
         //Pflanze hinzufügen ausblenden wenn bereits 3 Elemente angelegt wurden
-        if(sharedViewModel.plantList.size == 3){
+        if (sharedViewModel.plantList.size == 3) {
             binding.btnAddPlant.visibility = View.INVISIBLE
-        } else{
+        } else {
             binding.btnAddPlant.visibility = View.VISIBLE
         }
 
@@ -77,13 +77,15 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
 
 
         binding.btnAddPlant.setOnClickListener {
-           findNavController().navigate(PlantListFragmentDirections.actionPlantListFragmentToAddPlantFragment())
+            findNavController().navigate(PlantListFragmentDirections.actionPlantListFragmentToAddPlantFragment())
         }
 
         binding.btnShareData.setOnClickListener {
-            findNavController().navigate(PlantListFragmentDirections.actionPlantListFragmentToBluetoothFragment(
-                sharedViewModel.plantList.toTypedArray()
-            ))
+            findNavController().navigate(
+                PlantListFragmentDirections.actionPlantListFragmentToBluetoothFragment(
+                    sharedViewModel.plantList.toTypedArray()
+                )
+            )
         }
 
         return binding.root
@@ -91,23 +93,27 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
     }
 
 
-    fun getSavedPlants(){
+    fun getSavedPlants() {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-        val plantString = sharedPref?.getString(getString(R.string.plant_list_key), "")?:""
+        val plantString = sharedPref?.getString(getString(R.string.plant_list_key), "") ?: ""
 
         val gson = Gson()
-        val savedPlantList = gson.fromJson(plantString, Array<Plant>::class.java)?: arrayOf()
+        val savedPlantList = gson.fromJson(plantString, Array<Plant>::class.java) ?: arrayOf()
         sharedViewModel.plantList = savedPlantList.toMutableList()
 
-        if(sharedViewModel.plantList.size == 0){
+        if (sharedViewModel.plantList.size == 0) {
             binding.btnShareData.visibility = View.GONE
-        } else{
+        } else {
             binding.btnShareData.visibility = View.VISIBLE
         }
     }
 
     override fun onEditClick(pos: Int) {
-        findNavController().navigate(PlantListFragmentDirections.actionPlantListFragmentToEditPlantFragment(pos))
+        findNavController().navigate(
+            PlantListFragmentDirections.actionPlantListFragmentToEditPlantFragment(
+                pos
+            )
+        )
     }
 
 
@@ -122,22 +128,22 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
 
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
         sharedPref?.let { storage ->
-            with (storage.edit()) {
+            with(storage.edit()) {
                 putString(getString(R.string.plant_list_key), plantString)
                 apply()
             }
         }
 
-        if(sharedViewModel.plantList.size == 0){
+        if (sharedViewModel.plantList.size == 0) {
             binding.btnShareData.visibility = View.GONE
-        } else{
+        } else {
             binding.btnShareData.visibility = View.VISIBLE
         }
 
         //Pflanze hinzufügen ausblenden wenn bereits 3 Elemente angelegt wurden
-        if(sharedViewModel.plantList.size == 3){
+        if (sharedViewModel.plantList.size == 3) {
             binding.btnAddPlant.visibility = View.INVISIBLE
-        } else{
+        } else {
             binding.btnAddPlant.visibility = View.VISIBLE
         }
     }

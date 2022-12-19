@@ -18,7 +18,6 @@ import androidx.navigation.fragment.navArgs
 import com.example.t3100.MainActivity
 import com.example.t3100.R
 import com.example.t3100.data.Plant
-import com.example.t3100.databinding.FragmentAddplantBinding
 import com.example.t3100.databinding.FragmentEditplantBinding
 import com.example.t3100.viewmodel.SharedViewModel
 import com.google.gson.Gson
@@ -28,7 +27,6 @@ import java.util.*
 class EditPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
 
     companion object {
-        fun newInstance() = EditPlantFragment()
     }
 
     private val sharedViewModel : SharedViewModel by activityViewModels()
@@ -47,9 +45,6 @@ class EditPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
     }
 
     override fun onCreateView(

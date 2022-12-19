@@ -1,15 +1,12 @@
 package com.example.t3100.ui.main
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
 import android.content.*
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -43,18 +39,6 @@ class BluetoothFragmentManualWatering : Fragment() {
 
     //Companion object verwendung der Variablen in Klasse
     companion object {
-        fun newInstance() = BluetoothFragmentManualWatering()
-
-        //Deklaration welche Permissions bei welcher SDK benötigt werden
-        private val REQUIRED_PERMISSIONS = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            arrayOf(
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.BLUETOOTH_CONNECT,
-                android.Manifest.permission.BLUETOOTH_SCAN
-            )
-        } else {
-            arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
-        }
 
         /* Aktuell nicht verwendet
         // Defines several constants used when transmitting messages between the
@@ -75,31 +59,6 @@ class BluetoothFragmentManualWatering : Fragment() {
 
     private lateinit var adapter: BluetoothDevicesAdapter
 
-    //Permissions für Appfunktionalität anfordern
-    private val permissionRequest =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            val granted = permissions.entries.all {
-                it.value == true
-            }
-            //Sind alle Permissions gegeben wird setupBT gestartet
-            if (granted) {
-                setupBluetooth()
-            } else {
-                //TODO: Schleife falls Nutzer Permissions ablehnt
-            }
-        }
-
-    //Prüfung ist BT eingeschaltet worden
-    private val bluetoothRequest =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                //Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
-            } else {
-                //TODO: BT wird für APP benötigt
-            }
-        }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(BluetoothViewModel::class.java)
@@ -107,7 +66,6 @@ class BluetoothFragmentManualWatering : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this) {
 
             binding.pbCloseAll.visibility = View.VISIBLE
-
 
             lastDevice?.let {
                 val manualWateringElements = ParsedDateManual(ManualWateringElements(0, 0, 0, 0))
@@ -139,12 +97,10 @@ class BluetoothFragmentManualWatering : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //Prüfung sind alle Permissions gegeben wenn nicht User auffordern
-        if (checkPermissionsGranted()) {
-            setupBluetooth()
-        } else {
-            permissionRequest.launch(REQUIRED_PERMISSIONS)
-        }
+        //Adapter anlegen, entspricht BT Adapter des lokalen Gerätes
+        val bluetoothManager: BluetoothManager? =
+            requireActivity().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
+        bluetoothAdapter = bluetoothManager?.adapter
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
@@ -161,7 +117,13 @@ class BluetoothFragmentManualWatering : Fragment() {
             object : BluetoothDevicesAdapter.ItemClickListener {
                 override fun onItemClick(device: BluetoothDevice) {
 
+                    stopSearchDevices()
+
                     //Benötigten Buttons sichtbar machen und Gerätesuche beenden
+                    binding.tvChoose.visibility = View.INVISIBLE
+                    binding.rvBluetoothDevices.visibility = View.INVISIBLE
+                    binding.btnStartSearch.visibility = View.INVISIBLE
+                    binding.btnEndSearch.visibility = View.INVISIBLE
                     binding.tvConnected.visibility = View.VISIBLE
                     binding.btnPump.visibility = View.VISIBLE
                     binding.btnValve1.visibility = View.VISIBLE
@@ -187,7 +149,6 @@ class BluetoothFragmentManualWatering : Fragment() {
                             requireContext(), R.color.Green
                         )
                     )
-                    stopSearchDevices()
 
                     lastDevice = device
 
@@ -313,7 +274,16 @@ class BluetoothFragmentManualWatering : Fragment() {
                                 )
                             )
                             binding.loadingBarValve1Open.visibility = View.VISIBLE
-                        } else if (valve1 == 1) {
+                        } else if (valve1 == 1 && pump == 255 && valve2 == 0 && valve3 == 0) {
+                            AlertDialog.Builder(requireContext()).create().apply {
+                                setTitle("Achtung")
+                                setMessage("Die Pumpe darf nicht alleine geöffnet sein")
+                                setButton(AlertDialog.BUTTON_NEGATIVE, "Abbrechen") { dialog, p1 ->
+                                    dialog.dismiss()
+                                }
+                                show()
+                            }
+                        } else {
                             valve1 = 0
                             manualWateringElements = ParsedDateManual(
                                 ManualWateringElements(
@@ -361,7 +331,16 @@ class BluetoothFragmentManualWatering : Fragment() {
                                 )
                             )
                             binding.loadingBarValve2Open.visibility = View.VISIBLE
-                        } else if (valve2 == 1) {
+                        } else if (valve2 == 1 && pump == 255 && valve1 == 0 && valve3 == 0) {
+                            AlertDialog.Builder(requireContext()).create().apply {
+                                setTitle("Achtung")
+                                setMessage("Die Pumpe darf nicht alleine geöffnet sein")
+                                setButton(AlertDialog.BUTTON_NEGATIVE, "Abbrechen") { dialog, p1 ->
+                                    dialog.dismiss()
+                                }
+                                show()
+                            }
+                        } else {
                             valve2 = 0
                             manualWateringElements = ParsedDateManual(
                                 ManualWateringElements(
@@ -410,7 +389,16 @@ class BluetoothFragmentManualWatering : Fragment() {
                                 )
                             )
                             binding.loadingBarValve3Open.visibility = View.VISIBLE
-                        } else if (valve3 == 1) {
+                        } else if (valve3 == 1 && pump == 255 && valve1 == 0 && valve2 == 0) {
+                            AlertDialog.Builder(requireContext()).create().apply {
+                                setTitle("Achtung")
+                                setMessage("Die Pumpe darf nicht alleine geöffnet sein")
+                                setButton(AlertDialog.BUTTON_NEGATIVE, "Abbrechen") { dialog, p1 ->
+                                    dialog.dismiss()
+                                }
+                                show()
+                            }
+                        } else {
                             valve3 = 0
                             manualWateringElements = ParsedDateManual(
                                 ManualWateringElements(
@@ -473,34 +461,6 @@ class BluetoothFragmentManualWatering : Fragment() {
         requireActivity().unregisterReceiver(receiver)
     }
 
-    //Prüfung sind alle Permissions gegeben
-    private fun checkPermissionsGranted() = REQUIRED_PERMISSIONS.all { permission ->
-        ContextCompat.checkSelfPermission(
-            requireContext(), permission
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun setupBluetooth() {
-        //Adapter anlegen, entspricht BT Adapter des lokalen Gerätes
-        val bluetoothManager: BluetoothManager? =
-            requireActivity().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
-        bluetoothAdapter = bluetoothManager?.adapter
-
-        if (bluetoothAdapter == null) {
-            Toast.makeText(requireContext(), "Your Device doens't support BT", Toast.LENGTH_LONG)
-                .show()
-        }
-
-        //Prüfung ist BT auf dem Gerät eingeschaltet, wenn nicht über Intent anfordern
-        if (bluetoothAdapter?.isEnabled == true) {
-            //Toast.makeText(requireContext(), "All permissions set", Toast.LENGTH_LONG).show()
-        } else {
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            bluetoothRequest.launch(enableBtIntent)
-            //TODO: Schleife falls Nutzer BT nicht einschaltet
-        }
-    }
-
     //Suche nach Geräte starten
     @SuppressLint("MissingPermission")
     private fun startSearchDevices() {
@@ -530,7 +490,7 @@ class BluetoothFragmentManualWatering : Fragment() {
                     val device: BluetoothDevice? =
                         intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                     val deviceName = device?.name
-                    val deviceHardwareAddress = device?.address // MAC address
+                    device?.address // MAC address
 
                     if (deviceName?.contains("ESP") == true && !viewModel.bluetoothDevices.contains(
                             device
@@ -573,20 +533,11 @@ class BluetoothFragmentManualWatering : Fragment() {
                     Toast.makeText(
                         requireContext(), "Verbindung nicht erfolgreich", Toast.LENGTH_LONG
                     ).show()
-                    binding.main.visibility = View.VISIBLE
-                    binding.loadingBarSearch.visibility = View.GONE
+
                 }
             }
         }
 
-        // Closes the client socket and causes the thread to finish.
-        fun closeBluetoothSocket() {
-            try {
-                mmSocket?.close()
-            } catch (e: IOException) {
-                Log.e("geu", "Could not close the client socket", e)
-            }
-        }
     }
 
     //Klasse um Daten an ein verbundenes Gerät zu senden oder Daten zu empfangen
@@ -628,16 +579,16 @@ class BluetoothFragmentManualWatering : Fragment() {
 
                 // Send a failure message back to the activity.
                 /*val writeErrorMsg = handler.obtainMessage(MESSAGE_TOAST)
-                val bundle = Bundle().apply {
-                    putString("toast", "Couldn't send data to the other device")
-                }
-                writeErrorMsg.data = bundle
-                handler.sendMessage(writeErrorMsg)*/
+            val bundle = Bundle().apply {
+                putString("toast", "Couldn't send data to the other device")
+            }
+            writeErrorMsg.data = bundle
+            handler.sendMessage(writeErrorMsg)*/
                 Toast.makeText(
-                    requireContext(), "Couldn't send data to the other device", Toast.LENGTH_LONG
+                    requireContext(),
+                    "Daten konnten nicht an den ESP gesendet werden",
+                    Toast.LENGTH_LONG
                 ).show()
-                binding.main.visibility = View.VISIBLE
-                binding.loadingBarSearch.visibility = View.GONE
                 return
             }
 
@@ -653,12 +604,10 @@ class BluetoothFragmentManualWatering : Fragment() {
         fun closeBluetoothSocket() {
             try {
                 mmSocket.close()
-                binding.main.visibility = View.VISIBLE
-                binding.loadingBarSearch.visibility = View.GONE
+
             } catch (e: IOException) {
                 Log.e("geu", "Could not close the connect socket", e)
-                binding.main.visibility = View.VISIBLE
-                binding.loadingBarSearch.visibility = View.GONE
+
             }
         }
     }
