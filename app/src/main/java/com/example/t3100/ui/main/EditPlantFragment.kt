@@ -112,8 +112,6 @@ class EditPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
                 return@setOnClickListener
             }
 
-            //TODO:Nicht auf aktuelles Element prüfen
-
             if(oldPlant.valve != (binding.spinnerValve.selectedItemPosition + 1) &&
                 sharedViewModel.plantList.any {plant -> plant.valve == (binding.spinnerValve.selectedItemPosition + 1) }){
                 Toast.makeText(requireContext(), "Ventil ist bereits belegt", Toast.LENGTH_LONG).show()

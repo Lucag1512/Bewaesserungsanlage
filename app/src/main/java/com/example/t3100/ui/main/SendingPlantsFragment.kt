@@ -41,6 +41,7 @@ import java.io.OutputStream
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+@Suppress("DEPRECATION")
 class SendingPlantsFragment : Fragment() {
 
     //Companion object verwendung der Variablen in Klasse
@@ -211,10 +212,8 @@ class SendingPlantsFragment : Fragment() {
                     // object and its info from the Intent.
                     val device: BluetoothDevice? =
                         intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-                    val deviceName = device?.name
-                    device?.address // MAC address
 
-                    if (deviceName?.contains("ESP") == true && !viewModel.bluetoothDevices.contains(
+                    if (device?.name?.contains("ESP") == true && !viewModel.bluetoothDevices.contains(
                             device
                         )
                     ) {

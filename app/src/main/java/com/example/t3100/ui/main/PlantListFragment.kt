@@ -1,5 +1,6 @@
 package com.example.t3100.ui.main
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -117,6 +118,8 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
+
     override fun onDeleteClick(pos: Int) {
 
         sharedViewModel.plantList.removeAt(pos)
@@ -140,12 +143,6 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
             binding.btnShareData.visibility = View.VISIBLE
         }
 
-        //Pflanze hinzufügen ausblenden wenn bereits 3 Elemente angelegt wurden
-        if (sharedViewModel.plantList.size == 3) {
-            binding.btnAddPlant.visibility = View.INVISIBLE
-        } else {
-            binding.btnAddPlant.visibility = View.VISIBLE
-        }
     }
 
 }

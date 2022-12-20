@@ -67,7 +67,6 @@ class AddPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
         binding.btnSelectTime.setOnClickListener {
             getTimeCalender()
             TimePickerDialog(requireContext(), this ,hour,minute,true).show()
-
         }
 
         binding.btnAddPlant.setOnClickListener {
@@ -108,7 +107,6 @@ class AddPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
 
         //Add to ViewModelList
         sharedViewModel.plantList.add(plant)
-
 
         //Save to phone
         val gson = Gson()
