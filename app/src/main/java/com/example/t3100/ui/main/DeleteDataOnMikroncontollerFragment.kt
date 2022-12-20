@@ -187,10 +187,8 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
                     // object and its info from the Intent.
                     val device: BluetoothDevice? =
                         intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-                    val deviceName = device?.name
-                    device?.address // MAC address
 
-                    if (deviceName?.contains("ESP") == true && !viewModel.bluetoothDevices.contains(
+                    if (device?.name?.contains("ESP") == true && !viewModel.bluetoothDevices.contains(
                             device
                         )
                     ) {

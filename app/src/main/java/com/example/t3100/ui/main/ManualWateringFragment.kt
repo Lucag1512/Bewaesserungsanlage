@@ -25,7 +25,7 @@ import com.example.t3100.MainActivity
 import com.example.t3100.R
 import com.example.t3100.adapter.BluetoothDevicesAdapter
 import com.example.t3100.data.ManualWateringElements
-import com.example.t3100.data.ParsedDateManual
+import com.example.t3100.data.ParsedDataManual
 import com.example.t3100.databinding.FragmentManualwateringBinding
 import com.example.t3100.viewmodel.BluetoothViewModel
 import com.google.gson.Gson
@@ -65,17 +65,14 @@ class ManualWateringFragment : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
 
-            binding.pbCloseAll.visibility = View.VISIBLE
-
             lastDevice?.let {
-                val manualWateringElements = ParsedDateManual(ManualWateringElements(0, 0, 0, 0))
+                val manualWateringElements = ParsedDataManual(ManualWateringElements(0, 0, 0, 0))
                 val gson = Gson()
                 val manualWateringElementsJson = gson.toJson(manualWateringElements)
                 ConnectThread(it).connectAndSend(manualWateringElementsJson)
                 lastDevice = null
             }
             findNavController().popBackStack()
-
 
         }
     }
@@ -110,7 +107,7 @@ class ManualWateringFragment : Fragment() {
         var valve1 = 0
         var valve2 = 0
         var valve3 = 0
-        var manualWateringElements: ParsedDateManual
+        var manualWateringElements: ParsedDataManual
 
         adapter = BluetoothDevicesAdapter(
             viewModel.bluetoothDevices,
@@ -171,7 +168,7 @@ class ManualWateringFragment : Fragment() {
 
                                         pump = 255
                                         valve1 = 1
-                                        manualWateringElements = ParsedDateManual(
+                                        manualWateringElements = ParsedDataManual(
                                             ManualWateringElements(
                                                 pump, valve1, valve2, valve3
                                             )
@@ -204,7 +201,7 @@ class ManualWateringFragment : Fragment() {
                                 }
                             } else {
                                 pump = 255
-                                manualWateringElements = ParsedDateManual(
+                                manualWateringElements = ParsedDataManual(
                                     ManualWateringElements(
                                         pump, valve1, valve2, valve3
                                     )
@@ -226,7 +223,7 @@ class ManualWateringFragment : Fragment() {
 
                         } else if (pump == 255) {
                             pump = 0
-                            manualWateringElements = ParsedDateManual(
+                            manualWateringElements = ParsedDataManual(
                                 ManualWateringElements(
                                     pump,
                                     valve1,
@@ -254,7 +251,7 @@ class ManualWateringFragment : Fragment() {
                     binding.btnValve1.setOnClickListener {
                         if (valve1 == 0) {
                             valve1 = 1
-                            manualWateringElements = ParsedDateManual(
+                            manualWateringElements = ParsedDataManual(
                                 ManualWateringElements(
                                     pump,
                                     valve1,
@@ -285,7 +282,7 @@ class ManualWateringFragment : Fragment() {
                             }
                         } else {
                             valve1 = 0
-                            manualWateringElements = ParsedDateManual(
+                            manualWateringElements = ParsedDataManual(
                                 ManualWateringElements(
                                     pump,
                                     valve1,
@@ -311,7 +308,7 @@ class ManualWateringFragment : Fragment() {
                     binding.btnValve2.setOnClickListener {
                         if (valve2 == 0) {
                             valve2 = 1
-                            manualWateringElements = ParsedDateManual(
+                            manualWateringElements = ParsedDataManual(
                                 ManualWateringElements(
                                     pump,
                                     valve1,
@@ -342,7 +339,7 @@ class ManualWateringFragment : Fragment() {
                             }
                         } else {
                             valve2 = 0
-                            manualWateringElements = ParsedDateManual(
+                            manualWateringElements = ParsedDataManual(
                                 ManualWateringElements(
                                     pump,
                                     valve1,
@@ -369,7 +366,7 @@ class ManualWateringFragment : Fragment() {
 
                         if (valve3 == 0) {
                             valve3 = 1
-                            manualWateringElements = ParsedDateManual(
+                            manualWateringElements = ParsedDataManual(
                                 ManualWateringElements(
                                     pump,
                                     valve1,
@@ -400,7 +397,7 @@ class ManualWateringFragment : Fragment() {
                             }
                         } else {
                             valve3 = 0
-                            manualWateringElements = ParsedDateManual(
+                            manualWateringElements = ParsedDataManual(
                                 ManualWateringElements(
                                     pump,
                                     valve1,
@@ -489,10 +486,8 @@ class ManualWateringFragment : Fragment() {
                     // object and its info from the Intent.
                     val device: BluetoothDevice? =
                         intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-                    val deviceName = device?.name
-                    device?.address // MAC address
 
-                    if (deviceName?.contains("ESP") == true && !viewModel.bluetoothDevices.contains(
+                    if (device?.name?.contains("ESP") == true && !viewModel.bluetoothDevices.contains(
                             device
                         )
                     ) {
