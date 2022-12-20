@@ -5,15 +5,6 @@
     app:startDestination="@id/launchfragment">
 
     <fragment
-        android:id="@+id/bluetoothFragment"
-        android:name="com.example.t3100.ui.main.BluetoothFragment"
-        android:label="MainFragment" >
-        <argument
-            android:name="plantList"
-            app:argType="com.example.t3100.data.Plant[]" />
-    </fragment>
-
-    <fragment
         android:id="@+id/launchfragment"
         android:name="com.example.t3100.ui.main.LaunchFragment"
         android:label="SecondFragment">
@@ -22,19 +13,16 @@
             app:destination="@id/plantListFragment"
             />
         <action
-            android:id="@+id/action_launchfragment_to_bluetoothFragmentManualWatering"
-            app:destination="@id/bluetoothFragmentManualWatering" />
-        <action
             android:id="@+id/action_launchfragment_to_deleteDataOnMikroncontollerFragment"
             app:destination="@id/deleteDataOnMikroncontollerFragment" />
+        <action
+            android:id="@+id/action_launchfragment_to_manualWateringFragment"
+            app:destination="@id/manualWateringFragment" />
     </fragment>
     <fragment
         android:id="@+id/plantListFragment"
         android:name="com.example.t3100.ui.main.PlantListFragment"
         android:label="PlantListFragment">
-        <action
-            android:id="@+id/action_plantListFragment_to_bluetoothFragment"
-            app:destination="@id/bluetoothFragment" />
         <action
             android:id="@+id/action_plantListFragment_to_addPlantFragment"
             app:destination="@id/addPlantFragment" />
@@ -42,11 +30,10 @@
             android:id="@+id/action_plantListFragment_to_editPlantFragment"
             app:destination="@id/editPlantFragment"
             />
+        <action
+            android:id="@+id/action_plantListFragment_to_sendingPlantsFragment2"
+            app:destination="@id/sendingPlantsFragment2" />
     </fragment>
-    <fragment
-        android:id="@+id/bluetoothFragmentManualWatering"
-        android:name="com.example.t3100.ui.main.BluetoothFragmentManualWatering"
-        android:label="BluetoothFragmentManualWatering" />
     <fragment
         android:id="@+id/addPlantFragment"
         android:name="com.example.t3100.ui.main.AddPlantFragment"
@@ -63,6 +50,18 @@
             android:name="position"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/sendingPlantsFragment2"
+        android:name="com.example.t3100.ui.main.SendingPlantsFragment"
+        android:label="SendingPlantsFragment" >
+        <argument
+            android:name="plantList"
+            app:argType="com.example.t3100.data.Plant[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/manualWateringFragment"
+        android:name="com.example.t3100.ui.main.ManualWateringFragment"
+        android:label="ManualWateringFragment" />
 
 
 </navigation>

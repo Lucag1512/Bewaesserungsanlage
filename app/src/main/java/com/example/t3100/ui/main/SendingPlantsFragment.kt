@@ -29,7 +29,7 @@ import com.example.t3100.R
 import com.example.t3100.adapter.BluetoothDevicesAdapter
 import com.example.t3100.data.ParsedDate
 import com.example.t3100.data.PlantHeader
-import com.example.t3100.databinding.FragmentBluetoothBinding
+import com.example.t3100.databinding.FragmentSendingplantsBinding
 import com.example.t3100.viewmodel.BluetoothViewModel
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +41,7 @@ import java.io.OutputStream
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class BluetoothFragment : Fragment() {
+class SendingPlantsFragment : Fragment() {
 
     //Companion object verwendung der Variablen in Klasse
     companion object {
@@ -58,13 +58,13 @@ class BluetoothFragment : Fragment() {
     val job = Job()
 
     private lateinit var viewModel: BluetoothViewModel
-    private lateinit var binding: FragmentBluetoothBinding
+    private lateinit var binding: FragmentSendingplantsBinding
 
     private var bluetoothAdapter: BluetoothAdapter? = null
 
     private lateinit var adapter: BluetoothDevicesAdapter
 
-    private val args: BluetoothFragmentArgs by navArgs()
+    private val args: SendingPlantsFragmentArgs by navArgs()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +82,7 @@ class BluetoothFragment : Fragment() {
         (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding =
-            DataBindingUtil.inflate(layoutInflater, R.layout.fragment_bluetooth, container, false)
+            DataBindingUtil.inflate(layoutInflater, R.layout.fragment_sendingplants, container, false)
         return binding.root
     }
 

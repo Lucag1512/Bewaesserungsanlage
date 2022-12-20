@@ -26,7 +26,7 @@ import com.example.t3100.R
 import com.example.t3100.adapter.BluetoothDevicesAdapter
 import com.example.t3100.data.ManualWateringElements
 import com.example.t3100.data.ParsedDateManual
-import com.example.t3100.databinding.FragmentBluetoothmanualwateringBinding
+import com.example.t3100.databinding.FragmentManualwateringBinding
 import com.example.t3100.viewmodel.BluetoothViewModel
 import com.google.gson.Gson
 import java.io.IOException
@@ -35,7 +35,7 @@ import java.io.OutputStream
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class BluetoothFragmentManualWatering : Fragment() {
+class ManualWateringFragment : Fragment() {
 
     //Companion object verwendung der Variablen in Klasse
     companion object {
@@ -53,7 +53,7 @@ class BluetoothFragmentManualWatering : Fragment() {
     private var lastDevice: BluetoothDevice? = null
 
     private lateinit var viewModel: BluetoothViewModel
-    private lateinit var binding: FragmentBluetoothmanualwateringBinding
+    private lateinit var binding: FragmentManualwateringBinding
 
     private var bluetoothAdapter: BluetoothAdapter? = null
 
@@ -89,7 +89,7 @@ class BluetoothFragmentManualWatering : Fragment() {
         (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding = DataBindingUtil.inflate(
-            layoutInflater, R.layout.fragment_bluetoothmanualwatering, container, false
+            layoutInflater, R.layout.fragment_manualwatering, container, false
         )
         return binding.root
     }

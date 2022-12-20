@@ -111,7 +111,7 @@ class LaunchFragment : Fragment() {
         }
 
         binding.btnForwardManualWatering.setOnClickListener {
-            findNavController().navigate(LaunchFragmentDirections.actionLaunchfragmentToBluetoothFragmentManualWatering())
+            findNavController().navigate(LaunchFragmentDirections.actionLaunchfragmentToManualWateringFragment())
         }
 
         binding.btnForwardDeleteData.setOnClickListener {
