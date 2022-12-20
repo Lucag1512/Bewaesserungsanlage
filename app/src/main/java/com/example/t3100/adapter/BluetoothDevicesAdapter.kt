@@ -8,13 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.example.t3100.databinding.ItemBluetoothdevicesBinding
 
-
-
 class BluetoothDevicesAdapter(
     var bluetoothDevices : List<BluetoothDevice>,
     val clickListener: ItemClickListener
 ) : RecyclerView.Adapter<BluetoothDevicesAdapter.BluetoothDeviceViewHolder>(){
-
 
     inner class BluetoothDeviceViewHolder(val binding : ItemBluetoothdevicesBinding): RecyclerView.ViewHolder(binding.root)
 

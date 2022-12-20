@@ -7,7 +7,6 @@ import com.example.t3100.data.Plant
 import com.example.t3100.databinding.ItemPlantBinding
 import com.example.t3100.ui.main.PlantListFragment
 
-
 class PlantAdapter(
     var plants: List<Plant>,
     var clickListener: PlantListFragment

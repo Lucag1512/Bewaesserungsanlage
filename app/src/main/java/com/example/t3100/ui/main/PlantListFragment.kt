@@ -49,7 +49,7 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
         binding =
             DataBindingUtil.inflate(layoutInflater, R.layout.fragment_plantlist, container, false)
 
-        //TODO: Besser nur beim ersten mal?
+        //Gespeichterte Pflanzen vom Handy laden
         getSavedPlants()
 
         //Daten übetragen ausblenden wenn keine Plfanze angelegt ist
@@ -82,7 +82,7 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
 
         binding.btnShareData.setOnClickListener {
             findNavController().navigate(
-                PlantListFragmentDirections.actionPlantListFragmentToBluetoothFragment(
+                PlantListFragmentDirections.actionPlantListFragmentToSendingPlantsFragment2(
                     sharedViewModel.plantList.toTypedArray()
                 )
             )
@@ -147,6 +147,5 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
             binding.btnAddPlant.visibility = View.VISIBLE
         }
     }
-
 
 }

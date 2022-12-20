@@ -140,7 +140,6 @@ class AddPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
         }
     }
 
-
     private fun getTimeCalender(){
         val calendar = Calendar.getInstance()
         hour = calendar.get(Calendar.HOUR_OF_DAY)

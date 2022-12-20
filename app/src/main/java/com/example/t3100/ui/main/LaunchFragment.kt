@@ -136,7 +136,6 @@ class LaunchFragment : Fragment() {
             return
         }
 
-        //Prüfung ist BT auf dem Gerät eingeschaltet, wenn nicht über Intent anfordern
         launchBTCheck()
     }
 
@@ -156,8 +155,8 @@ class LaunchFragment : Fragment() {
         }
     }
 
+    //Prüfung ist BT auf dem Gerät eingeschaltet, wenn nicht über Intent anfordern
     private fun launchBTCheck() {
-
         if (bluetoothAdapter?.isEnabled != true) {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             bluetoothRequest.launch(enableBtIntent)
