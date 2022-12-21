@@ -195,6 +195,7 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
 
 
         private val mmSocket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
+            //UUID frei wählbar (lediglich valide UUID)
             device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"))
         }
 

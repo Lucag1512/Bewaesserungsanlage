@@ -214,6 +214,7 @@ class SendingPlantsFragment : Fragment() {
     private inner class ConnectThread(device: BluetoothDevice) : Thread() {
 
         private val mmSocket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
+            //UUID frei wählbar (lediglich valide UUID)
             device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"))
         }
 
@@ -302,8 +303,7 @@ class SendingPlantsFragment : Fragment() {
                     mmSocket.close()
                     Toast.makeText(
                         requireContext(),
-                        "Daten erfolgreich gesendet",
-                        Toast.LENGTH_LONG
+                        "Daten erfolgreich gesendet",                        Toast.LENGTH_LONG
                     ).show()
                     findNavController().popBackStack()
 
