@@ -57,11 +57,14 @@ class EditPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
 
         oldPlant = sharedViewModel.plantList[args.position]
 
+        //Einfacherer Zugriff auf Objekte des xml Flies
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_editplant, container, false)
+
+        //Festlegen der auszuwählenden Ventile
         binding.spinnerValve.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, arrayOf("Ventil 1", "Ventil 2", "Ventil 3"))
 
-        //Aktuelle Pflanzendaten anzeigen
-        //Name
+        //Aktuelle Pflanzendaten anzeigen :
+        // Name
         binding.etNewPlantName.setText(sharedViewModel.plantList[args.position].name)
 
         //Wassermenge
@@ -86,6 +89,7 @@ class EditPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
 
         //Ende aktuelle Werte übernehmen
 
+        //Text in der Benutzeroberfläche an eingestellten Wert anpassen Wert von 1-20 wird mit 100 multipliziert damit 100-2000mL verfügbar sind
         binding.seekBarWater.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 binding.tvWater.text = "Tägliche Wassermenge ${p1*100} mL"
@@ -99,12 +103,15 @@ class EditPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
             }
         })
 
+        //Gewählte Bewässerungszeit in Variable übernehmen
         binding.btnSelectTime.setOnClickListener {
             getTimeCalender()
             TimePickerDialog(requireContext(), this ,hour,minute,true).show()
 
         }
 
+        //Prüfung kann Pflanze editiert werden (Doppelungen/Name leer)
+        //Keine Prüfung auf alte Werte
         binding.btnEditPlant.setOnClickListener {
 
             if ((binding.etNewPlantName.text.isEmpty())) {
@@ -125,6 +132,7 @@ class EditPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
                 return@setOnClickListener
             }
 
+            //Eingegebene Werte vom Nutzer in Pflanzenliste übernehmen und anpassen
             sharedViewModel.plantList[args.position].name = binding.etNewPlantName.text.toString().trim()
             sharedViewModel.plantList[args.position].water = (binding.seekBarWater.progress)*100/0.018
             sharedViewModel.plantList[args.position].valve = binding.spinnerValve.selectedItemPosition + 1
@@ -144,6 +152,7 @@ class EditPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
 
     }
 
+    //Eingestellter Bewässerungszeitpunkt in Textfeld der Benutzeroberfläche übernehemn
     override fun onTimeSet(p0: TimePicker?, hourOfDay: Int, minute: Int) {
         savedHour = hourOfDay
         savedMinute = minute
@@ -166,12 +175,12 @@ class EditPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
         minute = calendar.get(Calendar.MINUTE)
     }
 
+
     fun savePlant(){
 
-        //Save to phone
+        //Liste der Pflanzen auf dem Handy speichern
         val gson = Gson()
         val plantString = gson.toJson(sharedViewModel.plantList)
-
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
         sharedPref?.let { storage ->
             with (storage.edit()) {

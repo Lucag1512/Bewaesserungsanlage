@@ -24,20 +24,11 @@ import java.util.*
 
 class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
 
-    companion object {
-    }
-
     private lateinit var binding: FragmentPlantlistBinding
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private lateinit var adapter: PlantAdapter
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,10 +38,11 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
         activity?.title = "Pflanzenliste"
         (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        //Einfacherer Zugriff auf Objekte des xml Flies
         binding =
             DataBindingUtil.inflate(layoutInflater, R.layout.fragment_plantlist, container, false)
 
-        //Gespeichterte Pflanzen vom Handy laden
+        //Gespeichterten Pflanzen vom Handy laden
         getSavedPlants()
 
         //Daten übetragen ausblenden wenn keine Plfanze angelegt ist
@@ -69,6 +61,8 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
 
         adapter = PlantAdapter(sharedViewModel.plantList, this)
         binding.rvPlants.adapter = adapter
+
+        //Trennlinie zwischen den angezeigten Pflanzen einfügen
         binding.rvPlants.layoutManager = LinearLayoutManager(requireContext())
         val dividerItemDecoration = DividerItemDecoration(
             requireContext(),
@@ -93,7 +87,7 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
 
     }
 
-
+    //Gespeicherten Daten vom Handy laden
     fun getSavedPlants() {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
         val plantString = sharedPref?.getString(getString(R.string.plant_list_key), "") ?: ""
@@ -125,10 +119,9 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
         sharedViewModel.plantList.removeAt(pos)
         adapter.notifyDataSetChanged()
 
-        //Save to phone
+        //Daten auf dem Handy speichern
         val gson = Gson()
         val plantString = gson.toJson(sharedViewModel.plantList)
-
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
         sharedPref?.let { storage ->
             with(storage.edit()) {
@@ -137,6 +130,7 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
             }
         }
 
+        //Bei keinem verbleibendem Element Übertragen ausblenden
         if (sharedViewModel.plantList.size == 0) {
             binding.btnShareData.visibility = View.GONE
         } else {

@@ -37,19 +37,8 @@ import java.util.concurrent.TimeUnit
 
 class DeleteDataOnMikroncontollerFragment : Fragment() {
 
-    //Companion object verwendung der Variablen in Klasse
-    companion object {
-        /* Aktuell nicht verwendet
-        // Defines several constants used when transmitting messages between the
-        // service and the UI.
-        val MESSAGE_READ: Int = 0
-        val MESSAGE_WRITE: Int = 1
-        val MESSAGE_TOAST: Int = 2
-        */
-
-    }
-
     private lateinit var viewModel: BluetoothViewModel
+
     private lateinit var binding: FragmentDeletedataonmikrocontrollerBinding
 
     private var bluetoothAdapter: BluetoothAdapter? = null
@@ -61,7 +50,6 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(BluetoothViewModel::class.java)
     }
 
-    //Binding für einfacheren Zugriff auf Buttons, TV aus xml File
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,6 +58,7 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
         activity?.title = "Daten auf Mikrocontroller löschen"
         (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        //Einfacherer Zugriff auf Objekte des xml Flies
         binding = DataBindingUtil.inflate(
             layoutInflater,
             R.layout.fragment_deletedataonmikrocontroller,
@@ -90,11 +79,13 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        //Sendevorgang bei Klick auf gewünschtes BT-Gerät starten
         adapter = BluetoothDevicesAdapter(viewModel.bluetoothDevices, object :
             BluetoothDevicesAdapter.ItemClickListener {
             override fun onItemClick(device: BluetoothDevice) {
                 stopSearchDevices()
 
+                //Versehentliches Drücken durch erneute Abfrage verhindern
                 AlertDialog.Builder(requireContext()).create().apply {
                     setTitle("Achtung")
                     setMessage("Möchten sie die Daten auf dem Mikrocontroller löschen")
@@ -111,8 +102,8 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
                         binding.loadingBarDeletingData.visibility = View.VISIBLE
                         binding.tvDeletingData.visibility = View.VISIBLE
 
+                        //Variable zum JSON Format konvertieren
                         val delete = ParsedDelete(true)
-
                         val gson = Gson()
                         val manualWateringElementsJson = gson.toJson(delete)
                         ConnectThread(device).connectAndSend(manualWateringElementsJson)
@@ -124,6 +115,8 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
         })
 
         binding.rvBluetoothDevices.adapter = adapter
+
+        //Trennlinie zwischen den angezeigten BT-Geräten einfügen
         binding.rvBluetoothDevices.layoutManager = LinearLayoutManager(requireContext())
         val dividerItemDecoration = DividerItemDecoration(
             requireContext(),
@@ -131,7 +124,6 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
         )
         binding.rvBluetoothDevices.addItemDecoration(dividerItemDecoration)
 
-        //Verfügbare BT Geräte in der Nähe suchen
         binding.btnStartSearch.setOnClickListener {
             startSearchDevices()
         }
@@ -142,24 +134,19 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
 
     }
 
+    //Registrieren eines Broadcasts wenn ein Gerät gefunden wurde
     override fun onResume() {
         super.onResume()
-
-        // Register for broadcasts when a device is discovered.
         val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
         requireActivity().registerReceiver(receiver, filter)
-        //LocalBroadcastManager.getInstance(requireActivity()).registerReceiver(receiver, filter)
     }
 
     //BT reciever deaktivieren bei Schließen der App
     override fun onPause() {
         super.onPause()
-        // Don't forget to unregister the ACTION_FOUND receiver.
-        //LocalBroadcastManager.getInstance(requireActivity()).unregisterReceiver(receiver)
         requireActivity().unregisterReceiver(receiver)
     }
 
-    //Suche nach Geräte starten
     @SuppressLint("MissingPermission")
     private fun startSearchDevices() {
         binding.btnStartSearch.visibility = View.INVISIBLE
@@ -174,8 +161,8 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
         bluetoothAdapter?.cancelDiscovery()
     }
 
-    // Create a BroadcastReceiver for ACTION_FOUND.
-    // Nach Geräten suchen und Name sowie MAC-Adresse in Variablen speichern
+    //Broadcastreciever erstellen wenn ein Gerät gefunden wurde
+    //Gefundenes Gerät in die angezeigte Liste übernehmen
     private val receiver = object : BroadcastReceiver() {
 
         @SuppressLint("MissingPermission")
@@ -183,8 +170,8 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
             val action: String? = intent.action
             when (action) {
                 BluetoothDevice.ACTION_FOUND -> {
-                    // Discovery has found a device. Get the BluetoothDevice
-                    // object and its info from the Intent.
+
+                    // Gerät wurden gefunden. Info des Gerätes über Intent anfordern
                     val device: BluetoothDevice? =
                         intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
 
@@ -212,18 +199,15 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
         }
 
         fun connectAndSend(message: String) {
-            // Cancel discovery because it otherwise slows down the connection.
+
             bluetoothAdapter?.cancelDiscovery()
 
             mmSocket?.let { socket ->
-                // Connect to the remote device through the socket. This call blocks
-                // until it succeeds or throws an exception.
+                //Mit dem BT-Gerät über den Socket verbinden. Aufruf blockiert Programmausführung
+                //bis Verbindung hergestellt wurde oder ein Fehler erzeugt wird
                 try {
                     viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                         socket.connect()
-
-                        // The connection attempt succeeded. Perform work associated with
-                        // the connection in a separate thread.
                         ConnectedThread(socket).write(message.toByteArray())
                     }
                 } catch (e: IOException) {
@@ -249,14 +233,14 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
 
         private val mmInStream: InputStream = mmSocket.inputStream
         private val mmOutStream: OutputStream = mmSocket.outputStream
-        private val mmBuffer: ByteArray = ByteArray(1024) // mmBuffer store for the stream
+        private val mmBuffer: ByteArray = ByteArray(1024)
 
+        //Daten einlesen
         override fun run() {
-            var numBytes: Int // bytes returned from read()
+            var numBytes: Int
 
-            // Keep listening to the InputStream until an exception occurs.
+            //Inputstream abhören bis ein Fehler entsteht
             while (true) {
-                // Read from the InputStream.
                 numBytes = try {
                     mmInStream.read(mmBuffer)
                 } catch (e: IOException) {
@@ -264,31 +248,18 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
                     break
                 }
 
-                // Send the obtained bytes to the UI activity.
-                /* val readMsg = handler.obtainMessage(
-                     MESSAGE_READ, numBytes, -1,
-                     mmBuffer)
-                 readMsg.sendToTarget()*/
             }
         }
 
-        // Call this from the main activity to send data to the remote device.
+        //Aufrufen um Daten an ein BT-Gerät zu senden
         fun write(bytes: ByteArray) {
             try {
-                TimeUnit.SECONDS.sleep(1L)
+                TimeUnit.SECONDS.sleep(1L) //Wartezeit um Timingproblem zu beheben
                 mmOutStream.write(bytes)
 
             } catch (e: IOException) {
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                     Log.e("geu", "Error occurred when sending data", e)
-
-                    // Send a failure message back to the activity.
-                    /*val writeErrorMsg = handler.obtainMessage(MESSAGE_TOAST)
-                val bundle = Bundle().apply {
-                    putString("toast", "Couldn't send data to the other device")
-                }
-                writeErrorMsg.data = bundle
-                handler.sendMessage(writeErrorMsg)*/
                     Toast.makeText(
                         requireContext(),
                         "Daten konnten nicht an den ESP gesendet werden",
@@ -306,13 +277,8 @@ class DeleteDataOnMikroncontollerFragment : Fragment() {
 
             closeBluetoothSocket()
 
-            /* // Share the sent message with the UI activity.
-             val writtenMsg = handler.obtainMessage(
-                 MESSAGE_WRITE, -1, -1, mmBuffer)
-             writtenMsg.sendToTarget()*/
         }
 
-        // Call this method from the main activity to shut down the connection.
         fun closeBluetoothSocket() {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                 try {

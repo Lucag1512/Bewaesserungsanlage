@@ -28,7 +28,7 @@ class LaunchFragment : Fragment() {
 
     companion object {
 
-        //Deklaration welche Permissions bei welcher SDK benötigt werden
+        //Deklaration welche Berechtigungen bei welcher SDK benötigt werden
         val REQUIRED_PERMISSIONS_LAUNCH =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 arrayOf(
@@ -45,7 +45,7 @@ class LaunchFragment : Fragment() {
 
     private var bluetoothAdapter: BluetoothAdapter? = null
 
-    //Permissions für Appfunktionalität anfordern
+    //Berechtigungen für Appfunktionalität anfordern
     private val permissionRequest =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             val granted = permissions.entries.all {
@@ -55,6 +55,8 @@ class LaunchFragment : Fragment() {
             if (granted) {
                 setupBluetooth()
             } else {
+                //Lenht der Nutzer die Berechtigungen ab wird Endlosschleife gestartet
+                //Nutzer muss Berechtigungen geben, sonst kann App nicht verwendet werden
                 AlertDialog.Builder(requireContext()).create().apply {
                     setTitle("Information")
                     setMessage("Berechtigungen benötigt")
@@ -74,6 +76,8 @@ class LaunchFragment : Fragment() {
     //Prüfung ist BT eingeschaltet worden
     private val bluetoothRequest =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            //Lenht der Nutzer das Einschalten von BT ab wird Endlosschleife gestartet
+            //Nutzer muss BBT einschalten, sonst kann App nicht verwendet werden
             if (result.resultCode != Activity.RESULT_OK) {
                 AlertDialog.Builder(requireContext()).create().apply {
                     setTitle("Information")
@@ -100,12 +104,13 @@ class LaunchFragment : Fragment() {
         activity?.title = "T3100"
         (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
+        //Einfacherer Zugriff auf Objekte des xml Flies
         binding =
             DataBindingUtil.inflate(layoutInflater, R.layout.fragment_launch, container, false)
 
-        //Prüfung sind alle Permissions gegeben wenn nicht User auffordern
         launchPermissionCheck()
 
+        //Navigieren zu den weiteren Untermenüs
         binding.btnForwardPlantList.setOnClickListener {
             findNavController().navigate(LaunchFragmentDirections.actionSecondFragmentToPlantListFragment())
         }

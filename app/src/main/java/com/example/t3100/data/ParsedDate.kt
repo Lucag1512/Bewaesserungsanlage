@@ -2,6 +2,8 @@ package com.example.t3100.data
 
 import com.google.gson.annotations.SerializedName
 
+//Datenklasse für Mikrocontroller damit Werte entsprechend zugeordnet werden können
+//Anfügen von Headern
 data class ParsedDate (
     var s : Int,
     @SerializedName("m") var mi : Int,
