@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/launchfragment">
 
     <fragment
         android:id="@+id/launchfragment"
         android:name="com.example.t3100.ui.main.LaunchFragment"
-        android:label="SecondFragment">
+        android:label="SecondFragment"
+        tools:layout="@layout/fragment_launch"
+        >
         <action
             android:id="@+id/action_secondFragment_to_plantListFragment"
             app:destination="@id/plantListFragment"
@@ -22,7 +26,8 @@
     <fragment
         android:id="@+id/plantListFragment"
         android:name="com.example.t3100.ui.main.PlantListFragment"
-        android:label="PlantListFragment">
+        android:label="PlantListFragment"
+        tools:layout="@layout/fragment_plantlist">
         <action
             android:id="@+id/action_plantListFragment_to_addPlantFragment"
             app:destination="@id/addPlantFragment" />
@@ -37,15 +42,19 @@
     <fragment
         android:id="@+id/addPlantFragment"
         android:name="com.example.t3100.ui.main.AddPlantFragment"
-        android:label="AddPlantFragment" />
+        android:label="AddPlantFragment"
+        tools:layout="@layout/fragment_addplant"/>
     <fragment
         android:id="@+id/deleteDataOnMikroncontollerFragment"
         android:name="com.example.t3100.ui.main.DeleteDataOnMikroncontollerFragment"
-        android:label="DeleteDataOnMikroncontollerFragment" />
+        android:label="DeleteDataOnMikroncontollerFragment"
+        tools:layout="@layout/fragment_deletedataonmikrocontroller"/>
     <fragment
         android:id="@+id/editPlantFragment"
         android:name="com.example.t3100.ui.main.EditPlantFragment"
-        android:label="EditPlantFragment" >
+        android:label="EditPlantFragment"
+        tools:layout="@layout/fragment_editplant"
+        >
         <argument
             android:name="position"
             app:argType="integer" />
@@ -53,7 +62,9 @@
     <fragment
         android:id="@+id/sendingPlantsFragment2"
         android:name="com.example.t3100.ui.main.SendingPlantsFragment"
-        android:label="SendingPlantsFragment" >
+        android:label="SendingPlantsFragment"
+        tools:layout="@layout/fragment_sendingplants"
+        >
         <argument
             android:name="plantList"
             app:argType="com.example.t3100.data.Plant[]" />
@@ -61,7 +72,9 @@
     <fragment
         android:id="@+id/manualWateringFragment"
         android:name="com.example.t3100.ui.main.ManualWateringFragment"
-        android:label="ManualWateringFragment" />
+        android:label="ManualWateringFragment"
+        tools:layout="@layout/fragment_manualwatering"
+        />
 
 
 </navigation>

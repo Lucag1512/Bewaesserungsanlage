@@ -1,5 +1,6 @@
 package com.example.t3100.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -20,11 +21,16 @@ class PlantAdapter(
         return PlantViewHolder(binding)
     }
 
+    @SuppressLint("SetTextI18n")
+
     override fun onBindViewHolder(holder: PlantViewHolder, position: Int) {
         holder.binding.apply {
             tvName.text = "Pflanzenname: ${plants[position].name}"
+
             tvWater.text = "Tägliche Wassermenge: ${((plants[position].water)*0.018).toInt()}mL"
+
             tvValve.text = "Ventil: ${plants[position].valve}"
+
             if(plants[position].minute < 10 && plants[position].hour < 10){
                 tvWateringTime.text ="Bewässerungszeitpunkt: 0${plants[position].hour}:0${plants[position].minute}"
             } else if(plants[position].hour < 10){
@@ -34,6 +40,7 @@ class PlantAdapter(
             } else {
                 tvWateringTime.text = "Bewässerungszeitpunkt: ${plants[position].hour}:${plants[position].minute}"
             }
+
             ivEdit.setOnClickListener {
                 clickListener.onEditClick(position)
             }
@@ -41,9 +48,7 @@ class PlantAdapter(
             ivDelete.setOnClickListener {
                 clickListener.onDeleteClick(position)
             }
-
         }
-
     }
 
     override fun getItemCount(): Int {
