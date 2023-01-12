@@ -68,8 +68,8 @@ class EditPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
         binding.etNewPlantName.setText(sharedViewModel.plantList[args.position].name)
 
         //Wassermenge
-        binding.seekBarWater.setProgress(((sharedViewModel.plantList[args.position].water)*0.018/100).toInt())
-        binding.tvWater.text = "Tägliche Wassermenge ${((sharedViewModel.plantList[args.position].water)*0.018).toInt()} mL"
+        binding.seekBarWater.setProgress(((sharedViewModel.plantList[args.position].water)*0.013/100).toInt())
+        binding.tvWater.text = "Tägliche Wassermenge ${((sharedViewModel.plantList[args.position].water)*0.013).toInt()} mL"
 
         //Bewässerungszeitpunkt
         savedHour = sharedViewModel.plantList[args.position].hour
@@ -134,7 +134,7 @@ class EditPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
 
             //Eingegebene Werte vom Nutzer in Pflanzenliste übernehmen und anpassen
             sharedViewModel.plantList[args.position].name = binding.etNewPlantName.text.toString().trim()
-            sharedViewModel.plantList[args.position].water = (binding.seekBarWater.progress)*100/0.018
+            sharedViewModel.plantList[args.position].water = (binding.seekBarWater.progress)*100/0.013
             sharedViewModel.plantList[args.position].valve = binding.spinnerValve.selectedItemPosition + 1
             sharedViewModel.plantList[args.position].minute = savedMinute
             sharedViewModel.plantList[args.position].hour = savedHour

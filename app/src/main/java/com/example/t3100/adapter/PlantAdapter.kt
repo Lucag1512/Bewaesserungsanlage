@@ -27,7 +27,7 @@ class PlantAdapter(
         holder.binding.apply {
             tvName.text = "Pflanzenname: ${plants[position].name}"
 
-            tvWater.text = "Tägliche Wassermenge: ${((plants[position].water)*0.018).toInt()}mL"
+            tvWater.text = "Tägliche Wassermenge: ${((plants[position].water)*0.013).toInt()}mL"
 
             tvValve.text = "Ventil: ${plants[position].valve}"
 

@@ -90,7 +90,7 @@ class AddPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
 
             //Eingegebene Werte vom Nutzer in Variablen übernehmen und anpassen
             val title = binding.etNewPlantName.text.toString().trim()
-            val water : Double = (binding.seekBarWater.progress)*100/0.018
+            val water : Double = (binding.seekBarWater.progress)*100/0.013
             val valve = binding.spinnerValve.selectedItemPosition + 1
 
             //Variablen in die Datenklasse Plant einfügen und Pflanze speichern
