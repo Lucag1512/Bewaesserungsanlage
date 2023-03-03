@@ -123,7 +123,8 @@ class CalibratePumpflowFragment : Fragment() {
         })
 
         binding.btnSaveValue.setOnClickListener {
-            if ((binding.etWaterAmount.text.isEmpty())) { //TODO: logische Grenzwerte einbauen
+            if ((binding.etWaterAmount.text.isEmpty()) || binding.etWaterAmount.text.toString().toInt() <175
+                || binding.etWaterAmount.text.toString().toInt() >900) {
                 Toast.makeText(
                     requireContext(),
                     "Biite gültige Wassermenge eingeben",
