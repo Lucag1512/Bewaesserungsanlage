@@ -19,10 +19,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.t3100.MainActivity
 import com.example.t3100.R
+import com.example.t3100.data.Plant
 import com.example.t3100.databinding.FragmentLaunchBinding
+import com.example.t3100.viewmodel.SharedViewModel
+import com.google.gson.Gson
 
 class LaunchFragment : Fragment() {
 
@@ -40,6 +44,8 @@ class LaunchFragment : Fragment() {
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
             }
     }
+
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private lateinit var binding: FragmentLaunchBinding
 
@@ -101,7 +107,7 @@ class LaunchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        activity?.title = "T3100"
+        activity?.title = "T3200"
         (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         //Einfacherer Zugriff auf Objekte des xml Flies
@@ -109,6 +115,9 @@ class LaunchFragment : Fragment() {
             DataBindingUtil.inflate(layoutInflater, R.layout.fragment_launch, container, false)
 
         launchPermissionCheck()
+
+        //Gespeichterten Pflanzen vom Handy laden
+        getSavedPlants()
 
         //Navigieren zu den weiteren Untermenüs
         binding.btnForwardPlantList.setOnClickListener {
@@ -121,6 +130,10 @@ class LaunchFragment : Fragment() {
 
         binding.btnForwardDeleteData.setOnClickListener {
             findNavController().navigate(LaunchFragmentDirections.actionLaunchfragmentToDeleteDataOnMikroncontollerFragment())
+        }
+
+        binding.btnForwardCalibrateFlow.setOnClickListener {
+            findNavController().navigate(LaunchFragmentDirections.actionLaunchfragmentToCalibratePumpflowFragment())
         }
 
         return binding.root
@@ -167,4 +180,16 @@ class LaunchFragment : Fragment() {
             bluetoothRequest.launch(enableBtIntent)
         }
     }
+
+    //Gespeicherten Daten vom Handy laden
+    fun getSavedPlants() {
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+        val plantString = sharedPref?.getString(getString(R.string.plant_list_key), "") ?: ""
+
+        val gson = Gson()
+        val savedPlantList = gson.fromJson(plantString, Array<Plant>::class.java) ?: arrayOf()
+        sharedViewModel.plantList = savedPlantList.toMutableList()
+    }
 }
+
+

@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/tvWater"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvName" />
+        app:layout_constraintTop_toBottomOf="@+id/tvName" />-->
 
     <TextView
         android:id="@+id/tvValve"
@@ -41,9 +41,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvWater" />
+        app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/tvWateringTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvValve"/>
+        app:layout_constraintTop_toBottomOf="@+id/tvValve"/>-->
 
 
     <ImageView
@@ -63,7 +63,7 @@
         android:src="@drawable/ic_baseline_delete_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/ivEdit"
-        app:layout_constraintTop_toBottomOf="@+id/tvWateringTime" />
+        app:layout_constraintTop_toBottomOf="@+id/tvValve" />
 
     <ImageView
         android:id="@+id/ivEdit"
@@ -73,7 +73,7 @@
         android:src="@drawable/ic_baseline_edit_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivDelete"
-        app:layout_constraintTop_toBottomOf="@+id/tvWateringTime" />
+        app:layout_constraintTop_toBottomOf="@+id/tvValve" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,19 +27,7 @@ class PlantAdapter(
         holder.binding.apply {
             tvName.text = "Pflanzenname: ${plants[position].name}"
 
-            tvWater.text = "Tägliche Wassermenge: ${((plants[position].water)*0.013).toInt()}mL"
-
             tvValve.text = "Ventil: ${plants[position].valve}"
-
-            if(plants[position].minute < 10 && plants[position].hour < 10){
-                tvWateringTime.text ="Bewässerungszeitpunkt: 0${plants[position].hour}:0${plants[position].minute}"
-            } else if(plants[position].hour < 10){
-                tvWateringTime.text ="Bewässerungszeitpunkt: 0${plants[position].hour}:${plants[position].minute}"
-            }else if (plants[position].minute <10){
-                tvWateringTime.text ="Bewässerungszeitpunkt: ${plants[position].hour}:0${plants[position].minute}"
-            } else {
-                tvWateringTime.text = "Bewässerungszeitpunkt: ${plants[position].hour}:${plants[position].minute}"
-            }
 
             ivEdit.setOnClickListener {
                 clickListener.onEditClick(position)

@@ -7,26 +7,21 @@ import com.google.gson.annotations.SerializedName
 data class Plant(
 
     @SerializedName("n")var name: String?,
-    @SerializedName("w")var water: Double,
     @SerializedName("v")var valve: Int,
-    @SerializedName("h")var hour: Int,
-    @SerializedName("m")var minute: Int
-): Parcelable{
+    @SerializedName("b")var wateringList: MutableList<WateringElement>
+
+): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
-        parcel.readDouble(),
         parcel.readInt(),
-        parcel.readInt(),
-        parcel.readInt()
+        parcel.createTypedArrayList(WateringElement)?.toMutableList()?: mutableListOf()
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
-        parcel.writeDouble(water)
         parcel.writeInt(valve)
-        parcel.writeInt(hour)
-        parcel.writeInt(minute)
+        parcel.writeTypedList(wateringList)
     }
 
     override fun describeContents(): Int {

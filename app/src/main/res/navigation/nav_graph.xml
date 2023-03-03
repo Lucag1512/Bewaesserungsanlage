@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_launchfragment_to_manualWateringFragment"
             app:destination="@id/manualWateringFragment" />
+        <action
+            android:id="@+id/action_launchfragment_to_calibratePumpflowFragment"
+            app:destination="@id/calibratePumpflowFragment" />
     </fragment>
     <fragment
         android:id="@+id/plantListFragment"
@@ -43,7 +46,11 @@
         android:id="@+id/addPlantFragment"
         android:name="com.example.t3100.ui.main.AddPlantFragment"
         android:label="AddPlantFragment"
-        tools:layout="@layout/fragment_addplant"/>
+        tools:layout="@layout/fragment_addplant">
+        <action
+            android:id="@+id/action_addPlantFragment_to_editNewPlantWateringElementFragment"
+            app:destination="@id/editNewPlantWateringElementFragment" />
+    </fragment>
     <fragment
         android:id="@+id/deleteDataOnMikroncontollerFragment"
         android:name="com.example.t3100.ui.main.DeleteDataOnMikroncontollerFragment"
@@ -58,6 +65,9 @@
         <argument
             android:name="position"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_editPlantFragment_to_editWateringElementFragment"
+            app:destination="@id/editWateringElementFragment" />
     </fragment>
     <fragment
         android:id="@+id/sendingPlantsFragment2"
@@ -75,6 +85,31 @@
         android:label="ManualWateringFragment"
         tools:layout="@layout/fragment_manualwatering"
         />
+    <fragment
+        android:id="@+id/editWateringElementFragment"
+        android:name="com.example.t3100.ui.main.EditWateringElementFragment"
+        android:label="EditWateringElementFragment" >
+        <argument
+            android:name="plantposition"
+            app:argType="integer" />
+        <argument
+            android:name="wateringelementposition"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/calibratePumpflowFragment"
+        android:name="com.example.t3100.ui.main.CalibratePumpflowFragment"
+        android:label="CalibratePumpflowFragment" />
+    <fragment
+        android:id="@+id/editNewPlantWateringElementFragment"
+        android:name="com.example.t3100.ui.main.EditNewPlantWateringElementFragment"
+        android:label="EditNewPlantWateringElementFragment" >
+        <argument
+            android:name="wateringelementposition"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
 
 </navigation>

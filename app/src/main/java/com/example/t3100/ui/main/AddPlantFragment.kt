@@ -1,40 +1,34 @@
 package com.example.t3100.ui.main
 
-import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.SeekBar
-import android.widget.TimePicker
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.t3100.App
 import com.example.t3100.MainActivity
 import com.example.t3100.R
+import com.example.t3100.adapter.WateringTimesAdapter
 import com.example.t3100.data.Plant
 import com.example.t3100.databinding.FragmentAddplantBinding
 import com.example.t3100.viewmodel.SharedViewModel
 import com.google.gson.Gson
-import java.util.*
 
 
-class AddPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
+class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener  {
 
     //Zugriff auf das SharedViewModel herstellen
     private val sharedViewModel : SharedViewModel by activityViewModels()
 
+    private lateinit var adapter: WateringTimesAdapter
+
     private lateinit var binding: FragmentAddplantBinding
-
-    var hour = 12
-    var minute = 0
-
-    var savedHour = 12
-    var savedMinute = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,25 +44,13 @@ class AddPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
         //Festlegen der auszuwählenden Ventile
         binding.spinnerValve.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, arrayOf("Ventil 1", "Ventil 2", "Ventil 3"))
 
-        //Text in der Benutzeroberfläche an eingestellten Wert anpassen Wert von 1-20 wird mit 100 multipliziert damit 100-2000mL verfügbar sind
-        binding.seekBarWater.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                binding.tvWater.text = "Tägliche Wassermenge ${p1*100} mL"
-            }
-
-            override fun onStartTrackingTouch(p0: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(p0: SeekBar?) {
-
-            }
-        })
-
-        //Gewählte Bewässerungszeit in Variable übernehmen
-        binding.btnSelectTime.setOnClickListener {
-            getTimeCalender()
-            TimePickerDialog(requireContext(), this ,hour,minute,true).show()
+        //Bewässerungszeitpunkt hinzufügen
+        binding.btnAddWateringElement.setOnClickListener {
+            findNavController().navigate(AddPlantFragmentDirections.actionAddPlantFragmentToEditNewPlantWateringElementFragment(null))
         }
+
+        adapter = WateringTimesAdapter(sharedViewModel.tempWateringElementList, this, ((activity?.application as? App)?.calibrationValue!!))
+        binding.rvWateringTimes.adapter = adapter
 
         //Prüfung kann Pflanze hinzugefügt werden (Doppelungen/Name leer)
         binding.btnAddPlant.setOnClickListener {
@@ -90,11 +72,10 @@ class AddPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
 
             //Eingegebene Werte vom Nutzer in Variablen übernehmen und anpassen
             val title = binding.etNewPlantName.text.toString().trim()
-            val water : Double = (binding.seekBarWater.progress)*100/0.013
             val valve = binding.spinnerValve.selectedItemPosition + 1
 
             //Variablen in die Datenklasse Plant einfügen und Pflanze speichern
-            val plant = Plant(title, water, valve, savedHour, savedMinute)
+            val plant = Plant(title,valve, sharedViewModel.tempWateringElementList)
             addAndSavePlant(plant)
 
             findNavController().popBackStack()
@@ -124,28 +105,17 @@ class AddPlantFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
                 apply()
             }
         }
+        sharedViewModel.tempWateringElementList.clear()
 
     }
 
-    //Eingestellter Bewässerungszeitpunkt in Textfeld der Benutzeroberfläche übernehemn
-    override fun onTimeSet(p0: TimePicker?, hourOfDay: Int, minute: Int) {
-        savedHour = hourOfDay
-        savedMinute = minute
-
-        if(savedHour <10 && savedMinute <10){
-            binding.tvWateringTime.text = "Bewässerungszeitpunkt 0${savedHour}:0${savedMinute}"
-        }else if(savedHour <10){
-            binding.tvWateringTime.text = "Bewässerungszeitpunkt 0${savedHour}:${savedMinute}"
-        } else if(savedMinute <10){
-            binding.tvWateringTime.text = "Bewässerungszeitpunkt ${savedHour}:0${savedMinute}"
-        } else {
-            binding.tvWateringTime.text = "Bewässerungszeitpunkt ${savedHour}:${savedMinute}"
-        }
+    override fun onEditClick(pos: Int) {
+        findNavController().navigate(AddPlantFragmentDirections.actionAddPlantFragmentToEditNewPlantWateringElementFragment(pos.toString()))
     }
 
-    private fun getTimeCalender(){
-        val calendar = Calendar.getInstance()
-        hour = calendar.get(Calendar.HOUR_OF_DAY)
-        minute = calendar.get(Calendar.MINUTE)
+    override fun onDeleteClick(pos: Int) {
+        sharedViewModel.tempWateringElementList.removeAt(pos)
+        adapter.notifyDataSetChanged()
     }
+
 }
