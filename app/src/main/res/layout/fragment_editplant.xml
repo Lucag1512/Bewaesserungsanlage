@@ -54,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="128dp"
             android:text="Bewässerungszeitpunkt hinzufügen"
+            android:textAllCaps="false"
             app:layout_constraintBottom_toTopOf="@+id/btnSavePlant"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -62,7 +63,8 @@
             android:id="@+id/btnSavePlant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="änderung bestätigen"
+            android:text="Änderung bestätigen"
+            android:textAllCaps="false"
             app:layout_constraintBottom_toTopOf="@+id/btnCancel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -73,6 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:text="Abbrechen"
+            android:textAllCaps="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
