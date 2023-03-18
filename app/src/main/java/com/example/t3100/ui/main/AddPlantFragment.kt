@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -22,10 +21,10 @@ import com.example.t3100.viewmodel.SharedViewModel
 import com.google.gson.Gson
 
 
-class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener  {
+class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
 
     //Zugriff auf das SharedViewModel herstellen
-    private val sharedViewModel : SharedViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private lateinit var adapter: WateringTimesAdapter
 
@@ -40,33 +39,53 @@ class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener  {
         (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         //Einfacherer Zugriff auf Objekte des xml Flies
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_addplant, container, false)
+        binding =
+            DataBindingUtil.inflate(layoutInflater, R.layout.fragment_addplant, container, false)
 
         //Festlegen der auszuwählenden Ventile
-        binding.spinnerValve.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, arrayOf("Ventil 1", "Ventil 2", "Ventil 3"))
+        binding.spinnerValve.adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            arrayOf("Ventil 1", "Ventil 2", "Ventil 3")
+        )
 
         //Bewässerungszeitpunkt hinzufügen
         binding.btnAddWateringElement.setOnClickListener {
-            findNavController().navigate(AddPlantFragmentDirections.actionAddPlantFragmentToEditNewPlantWateringElementFragment(null))
+            findNavController().navigate(
+                AddPlantFragmentDirections.actionAddPlantFragmentToEditNewPlantWateringElementFragment(
+                    null
+                )
+            )
         }
 
-        adapter = WateringTimesAdapter(sharedViewModel.tempWateringElementList, this, 13.33) //TODO: Anpassen
+        adapter = WateringTimesAdapter(
+            sharedViewModel.tempWateringElementList,
+            this,
+            13.33
+        )
         binding.rvWateringTimes.adapter = adapter
 
         //Prüfung kann Pflanze hinzugefügt werden (Doppelungen/Name leer)
         binding.btnAddPlant.setOnClickListener {
 
             if ((binding.etNewPlantName.text.isEmpty())) {
-                Toast.makeText(requireContext(), "Name der Pflanze darf nicht leer sein", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Name der Pflanze darf nicht leer sein",
+                    Toast.LENGTH_LONG
+                ).show()
                 return@setOnClickListener
             }
 
-            if(sharedViewModel.plantList.any {plant -> plant.valve == (binding.spinnerValve.selectedItemPosition + 1) }){
-                Toast.makeText(requireContext(), "Ventil ist bereits belegt", Toast.LENGTH_LONG).show()
+            if (sharedViewModel.plantList.any { plant -> plant.valve == (binding.spinnerValve.selectedItemPosition + 1) }) {
+                Toast.makeText(requireContext(), "Ventil ist bereits belegt", Toast.LENGTH_LONG)
+                    .show()
                 return@setOnClickListener
             }
 
-            if(sharedViewModel.plantList.any {plant -> plant.name == binding.etNewPlantName.text.toString().trim() }) {
+            if (sharedViewModel.plantList.any { plant ->
+                    plant.name == binding.etNewPlantName.text.toString().trim()
+                }) {
                 Toast.makeText(requireContext(), "Name bereits vergeben", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
@@ -78,21 +97,20 @@ class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener  {
             //Wassermenge an Ventil anpassen je nach Kalibrierungswert
             val sizeWateringElementList = sharedViewModel.tempWateringElementList.size
             var calibrationValue = 13.33
-            if(valve == 1){
+            if (valve == 1) {
                 calibrationValue = ((activity?.application as? App)?.calibrationValue1!!)
-            }
-            else if(valve == 2){
+            } else if (valve == 2) {
                 calibrationValue = ((activity?.application as? App)?.calibrationValue2!!)
-            }
-            else if(valve == 3){
+            } else if (valve == 3) {
                 calibrationValue = ((activity?.application as? App)?.calibrationValue3!!)
             }
-            for(i in 0..(sizeWateringElementList-1)){
-                sharedViewModel.tempWateringElementList[i].water = sharedViewModel.tempWateringElementList[i].water*13.33/calibrationValue
+            for (i in 0..(sizeWateringElementList - 1)) {
+                sharedViewModel.tempWateringElementList[i].water =
+                    sharedViewModel.tempWateringElementList[i].water * 13.33 / calibrationValue
             }
 
             //Variablen in die Datenklasse Plant einfügen und Pflanze speichern
-            val plant = Plant(title,valve, sharedViewModel.tempWateringElementList)
+            val plant = Plant(title, valve, sharedViewModel.tempWateringElementList)
             addAndSavePlant(plant)
 
             findNavController().popBackStack()
@@ -107,7 +125,7 @@ class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener  {
     }
 
     //Hinzufügen der Pflanze zur Liste und Liste auf dem Handy speichern
-    fun addAndSavePlant(plant: Plant){
+    fun addAndSavePlant(plant: Plant) {
 
         //Pflanze zur Liste der Pflanzen hinzüfgen
         sharedViewModel.plantList.add(plant)
@@ -117,7 +135,7 @@ class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener  {
         val plantString = gson.toJson(sharedViewModel.plantList)
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
         sharedPref?.let { storage ->
-            with (storage.edit()) {
+            with(storage.edit()) {
                 putString(getString(R.string.plant_list_key), plantString)
                 apply()
             }
@@ -127,7 +145,11 @@ class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener  {
     }
 
     override fun onEditClick(pos: Int) {
-        findNavController().navigate(AddPlantFragmentDirections.actionAddPlantFragmentToEditNewPlantWateringElementFragment(pos.toString()))
+        findNavController().navigate(
+            AddPlantFragmentDirections.actionAddPlantFragmentToEditNewPlantWateringElementFragment(
+                pos.toString()
+            )
+        )
     }
 
     override fun onDeleteClick(pos: Int) {

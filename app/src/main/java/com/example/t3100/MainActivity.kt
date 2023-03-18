@@ -1,8 +1,8 @@
 package com.example.t3100
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 
 //Main Rahmen in den die Fragmente eingefügt werden

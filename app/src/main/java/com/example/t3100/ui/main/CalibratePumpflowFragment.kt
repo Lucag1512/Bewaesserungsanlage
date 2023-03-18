@@ -21,7 +21,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.t3100.App
 import com.example.t3100.MainActivity
 import com.example.t3100.R
 import com.example.t3100.adapter.BluetoothDevicesAdapter
@@ -50,7 +49,7 @@ class CalibratePumpflowFragment : Fragment() {
 
     private lateinit var adapter: BluetoothDevicesAdapter
 
-    private var choosenValve : Int = 0
+    private var choosenValve: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,7 +116,7 @@ class CalibratePumpflowFragment : Fragment() {
 
                 binding.btnValve1.setOnClickListener {
                     //Variable zum JSON Format konvertieren
-                    val calibrate = ParsedCalibrate(true,1)
+                    val calibrate = ParsedCalibrate(true, 1)
                     val gson = Gson()
                     val calibrateJson = gson.toJson(calibrate)
                     ConnectThread(device).connectAndSend(calibrateJson)
@@ -314,7 +313,11 @@ class CalibratePumpflowFragment : Fragment() {
                 try {
                     mmSocket.close()
 
-                    findNavController().navigate(CalibratePumpflowFragmentDirections.actionCalibratePumpflowFragmentToCalibratePumpflowValveFragment(choosenValve))
+                    findNavController().navigate(
+                        CalibratePumpflowFragmentDirections.actionCalibratePumpflowFragmentToCalibratePumpflowValveFragment(
+                            choosenValve
+                        )
+                    )
                 } catch (e: IOException) {
                     Log.e("geu", "Could not close the connect socket", e)
                     binding.textView.visibility = View.VISIBLE

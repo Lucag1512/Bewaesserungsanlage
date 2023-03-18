@@ -1,14 +1,7 @@
 package com.example.t3100.ui.main
 
-import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothManager
-import android.bluetooth.BluetoothSocket
-import android.content.*
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,28 +10,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.t3100.App
 import com.example.t3100.MainActivity
 import com.example.t3100.R
-import com.example.t3100.adapter.BluetoothDevicesAdapter
-import com.example.t3100.data.ParsedCalibrate
-import com.example.t3100.databinding.FragmentCalibratepumpflowBinding
 import com.example.t3100.databinding.FragmentCalibratepumpflowvalveBinding
 import com.example.t3100.viewmodel.BluetoothViewModel
 import com.example.t3100.viewmodel.SharedViewModel
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 class CalibratePumpflowValveFragment : Fragment() {
 

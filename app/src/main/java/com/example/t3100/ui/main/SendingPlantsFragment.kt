@@ -33,7 +33,6 @@ import com.example.t3100.databinding.FragmentSendingplantsBinding
 import com.example.t3100.viewmodel.BluetoothViewModel
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.InputStream
@@ -69,7 +68,12 @@ class SendingPlantsFragment : Fragment() {
 
         //Einfacherer Zugriff auf Objekte des xml Flies
         binding =
-            DataBindingUtil.inflate(layoutInflater, R.layout.fragment_sendingplants, container, false)
+            DataBindingUtil.inflate(
+                layoutInflater,
+                R.layout.fragment_sendingplants,
+                container,
+                false
+            )
 
         return binding.root
     }
@@ -303,7 +307,7 @@ class SendingPlantsFragment : Fragment() {
                     mmSocket.close()
                     Toast.makeText(
                         requireContext(),
-                        "Daten erfolgreich gesendet",                        Toast.LENGTH_LONG
+                        "Daten erfolgreich gesendet", Toast.LENGTH_LONG
                     ).show()
                     findNavController().popBackStack(R.id.launchfragment, false)
 

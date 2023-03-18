@@ -70,9 +70,9 @@ class EditWateringElementFragment : Fragment(), TimePickerDialog.OnTimeSetListen
 
             //Wassermenge
             binding.seekBarWater.progress =
-                ((currentWateringElement.water) / 100 * (args.calibrationValue.toDouble())).toInt() //TODO: Anpassen
+                ((currentWateringElement.water) / 100 * (args.calibrationValue.toDouble())).toInt()
             binding.tvWater.text =
-                "Tägliche Wassermenge ${((currentWateringElement.water) * (args.calibrationValue.toDouble())).toInt()} mL" //TODO: Anpassen
+                "Tägliche Wassermenge ${((currentWateringElement.water) * (args.calibrationValue.toDouble())).toInt()} mL"
 
         }
 
@@ -98,11 +98,11 @@ class EditWateringElementFragment : Fragment(), TimePickerDialog.OnTimeSetListen
                         savedHour,
                         savedMinute
                     )
-                ) //TODO: Anpassen
+                )
 
             } else {
                 sharedViewModel.plantList[args.plantposition].wateringList[args.wateringelementposition!!.toInt()].water =
-                    (binding.seekBarWater.progress * 100 / (args.calibrationValue.toDouble())) //TODO: Anpassen
+                    (binding.seekBarWater.progress * 100 / (args.calibrationValue.toDouble()))
                 sharedViewModel.plantList[args.plantposition].wateringList[args.wateringelementposition!!.toInt()].hour =
                     savedHour
                 sharedViewModel.plantList[args.plantposition].wateringList[args.wateringelementposition!!.toInt()].minute =
