@@ -305,7 +305,7 @@ class SendingPlantsFragment : Fragment() {
                         requireContext(),
                         "Daten erfolgreich gesendet",                        Toast.LENGTH_LONG
                     ).show()
-                    findNavController().popBackStack()
+                    findNavController().popBackStack(R.id.launchfragment, false)
 
                 } catch (e: IOException) {
                     Log.e("geu", "Could not close the connect socket", e)

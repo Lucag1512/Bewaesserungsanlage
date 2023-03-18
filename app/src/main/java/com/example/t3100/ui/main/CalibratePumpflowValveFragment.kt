@@ -131,7 +131,7 @@ class CalibratePumpflowValveFragment : Fragment() {
                         }
                     }
                     savePlantList()
-                    findNavController().popBackStack()
+                    findNavController().popBackStack(R.id.launchfragment, false)
                 }
             }
         }
