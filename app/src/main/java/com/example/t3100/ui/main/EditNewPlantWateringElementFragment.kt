@@ -63,7 +63,7 @@ class EditNewPlantWateringElementFragment : Fragment(), TimePickerDialog.OnTimeS
             }
 
             //Wassermenge
-            binding.seekBarWater.setProgress(((currentWateringElement.water)/100*13.33).toInt()) //TODO: Anpassen
+            binding.seekBarWater.progress = ((currentWateringElement.water)/100*13.33).toInt() //TODO: Anpassen
             binding.tvWater.text =
                 "Tägliche Wassermenge ${((currentWateringElement.water)*13.33).toInt()} mL" //TODO: Anpassen
 

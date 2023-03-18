@@ -66,7 +66,7 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
         binding.rvPlants.layoutManager = LinearLayoutManager(requireContext())
         val dividerItemDecoration = DividerItemDecoration(
             requireContext(),
-            (binding.rvPlants.layoutManager as LinearLayoutManager).getOrientation()
+            (binding.rvPlants.layoutManager as LinearLayoutManager).orientation
         )
         binding.rvPlants.addItemDecoration(dividerItemDecoration)
 

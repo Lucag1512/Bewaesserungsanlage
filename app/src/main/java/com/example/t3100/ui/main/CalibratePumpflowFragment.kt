@@ -153,7 +153,7 @@ class CalibratePumpflowFragment : Fragment() {
         binding.rvBluetoothDevices.layoutManager = LinearLayoutManager(requireContext())
         val dividerItemDecoration = DividerItemDecoration(
             requireContext(),
-            (binding.rvBluetoothDevices.layoutManager as LinearLayoutManager).getOrientation()
+            (binding.rvBluetoothDevices.layoutManager as LinearLayoutManager).orientation
         )
         binding.rvBluetoothDevices.addItemDecoration(dividerItemDecoration)
 

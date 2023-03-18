@@ -24,8 +24,7 @@ import com.google.gson.Gson
 
 class EditPlantFragment : Fragment(),  WateringTimesAdapter.ItemClickListener {
 
-    companion object {
-    }
+    companion object;
 
     private val sharedViewModel : SharedViewModel by activityViewModels()
 
@@ -38,10 +37,6 @@ class EditPlantFragment : Fragment(),  WateringTimesAdapter.ItemClickListener {
     private val args :  EditPlantFragmentArgs by navArgs()
 
     var oldCalibrationValue = 13.33
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

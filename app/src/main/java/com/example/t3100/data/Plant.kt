@@ -15,8 +15,7 @@ data class Plant(
         parcel.readString(),
         parcel.readInt(),
         parcel.createTypedArrayList(WateringElement)?.toMutableList()?: mutableListOf()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)

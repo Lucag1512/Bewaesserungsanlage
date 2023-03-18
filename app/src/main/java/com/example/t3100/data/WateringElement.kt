@@ -15,8 +15,7 @@ data class WateringElement (
         parcel.readDouble(),
         parcel.readInt(),
         parcel.readInt()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeDouble(water)
