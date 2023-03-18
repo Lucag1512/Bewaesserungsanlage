@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -49,7 +50,7 @@ class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener  {
             findNavController().navigate(AddPlantFragmentDirections.actionAddPlantFragmentToEditNewPlantWateringElementFragment(null))
         }
 
-        adapter = WateringTimesAdapter(sharedViewModel.tempWateringElementList, this, ((activity?.application as? App)?.calibrationValue!!))
+        adapter = WateringTimesAdapter(sharedViewModel.tempWateringElementList, this, 13.33) //TODO: Anpassen
         binding.rvWateringTimes.adapter = adapter
 
         //Prüfung kann Pflanze hinzugefügt werden (Doppelungen/Name leer)
@@ -73,6 +74,22 @@ class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener  {
             //Eingegebene Werte vom Nutzer in Variablen übernehmen und anpassen
             val title = binding.etNewPlantName.text.toString().trim()
             val valve = binding.spinnerValve.selectedItemPosition + 1
+
+            //Wassermenge an Ventil anpassen je nach Kalibrierungswert
+            val sizeWateringElementList = sharedViewModel.tempWateringElementList.size
+            var calibrationValue = 13.33
+            if(valve == 1){
+                calibrationValue = ((activity?.application as? App)?.calibrationValue1!!)
+            }
+            else if(valve == 2){
+                calibrationValue = ((activity?.application as? App)?.calibrationValue2!!)
+            }
+            else if(valve == 3){
+                calibrationValue = ((activity?.application as? App)?.calibrationValue3!!)
+            }
+            for(i in 0..(sizeWateringElementList-1)){
+                sharedViewModel.tempWateringElementList[i].water = sharedViewModel.tempWateringElementList[i].water*13.33/calibrationValue
+            }
 
             //Variablen in die Datenklasse Plant einfügen und Pflanze speichern
             val plant = Plant(title,valve, sharedViewModel.tempWateringElementList)

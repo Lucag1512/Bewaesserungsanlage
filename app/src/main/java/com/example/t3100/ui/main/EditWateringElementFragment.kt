@@ -61,9 +61,9 @@ class EditWateringElementFragment : Fragment(), TimePickerDialog.OnTimeSetListen
             }
 
             //Wassermenge
-            binding.seekBarWater.setProgress(((currentWateringElement.water)/100*((activity?.application as? App)?.calibrationValue!!)).toInt())
+            binding.seekBarWater.setProgress(((currentWateringElement.water)/100*(args.calibrationValue.toDouble())).toInt()) //TODO: Anpassen
             binding.tvWater.text =
-                "Tägliche Wassermenge ${((currentWateringElement.water)*((activity?.application as? App)?.calibrationValue!!)).toInt()} mL"
+                "Tägliche Wassermenge ${((currentWateringElement.water)*(args.calibrationValue.toDouble())).toInt()} mL" //TODO: Anpassen
 
         }
 
@@ -84,11 +84,11 @@ class EditWateringElementFragment : Fragment(), TimePickerDialog.OnTimeSetListen
         binding.btnSave.setOnClickListener {
             if(args.wateringelementposition == null){
                 sharedViewModel.plantList[args.plantposition].wateringList.add(WateringElement(
-                    (binding.seekBarWater.progress*100/((activity?.application as? App)?.calibrationValue!!)),savedHour,savedMinute))
+                    (binding.seekBarWater.progress*100/(args.calibrationValue.toDouble())),savedHour,savedMinute)) //TODO: Anpassen
 
             } else{
                 sharedViewModel.plantList[args.plantposition].wateringList[args.wateringelementposition!!.toInt()].water =
-                    (binding.seekBarWater.progress*100/((activity?.application as? App)?.calibrationValue!!))
+                    (binding.seekBarWater.progress*100/(args.calibrationValue.toDouble())) //TODO: Anpassen
                 sharedViewModel.plantList[args.plantposition].wateringList[args.wateringelementposition!!.toInt()].hour = savedHour
                 sharedViewModel.plantList[args.plantposition].wateringList[args.wateringelementposition!!.toInt()].minute = savedMinute
             }

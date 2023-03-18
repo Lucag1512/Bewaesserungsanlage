@@ -69,45 +69,54 @@
             app:layout_constraintTop_toBottomOf="@+id/rvBluetoothDevices" />
 
         <TextView
-            android:id="@+id/tvWaterHint"
+            android:id="@+id/tvChooseValve"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
-            android:text="Bitte gesamte Wassermenge in ml eingeben:"
+            android:text="Bitte Ventil zum kalibrieren auswählen:"
             android:textSize="20sp"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/etWaterAmount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
-            android:hint="Gesamtwassermenge"
-            android:minHeight="48dp"
-            android:visibility="invisible"
-            android:inputType="numberDecimal"
-            android:digits="0123456789."
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvWaterHint" />
-
         <Button
-            android:id="@+id/btnSaveValue"
+            android:id="@+id/btnValve1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Wert Speichern"
+            android:layout_marginTop="16dp"
+            android:text="Ventil 1"
+            android:textAllCaps="false"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etWaterAmount" />
+            app:layout_constraintTop_toBottomOf="@id/tvChooseValve" />
+
+        <Button
+            android:id="@+id/btnValve2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Ventil 2"
+            android:textAllCaps="false"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnValve1" />
+
+        <Button
+            android:id="@+id/btnValve3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Ventil 3"
+            android:textAllCaps="false"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnValve2" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

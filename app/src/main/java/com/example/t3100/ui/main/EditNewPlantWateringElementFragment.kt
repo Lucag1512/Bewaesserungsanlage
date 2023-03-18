@@ -44,6 +44,7 @@ class EditNewPlantWateringElementFragment : Fragment(), TimePickerDialog.OnTimeS
         //Einfacherer Zugriff auf Objekte des xml Flies
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_editnewplantwateringelement, container, false)
 
+        //Werte übernehmen falls bestehender Bewässerungszeitpunkt angepasst wird
         args.wateringelementposition?.toIntOrNull()?.let { wateringElementPosition->
 
             val currentWateringElement = sharedViewModel.tempWateringElementList[wateringElementPosition]
@@ -62,9 +63,9 @@ class EditNewPlantWateringElementFragment : Fragment(), TimePickerDialog.OnTimeS
             }
 
             //Wassermenge
-            binding.seekBarWater.setProgress(((currentWateringElement.water)/100*((activity?.application as? App)?.calibrationValue!!)).toInt())
+            binding.seekBarWater.setProgress(((currentWateringElement.water)/100*13.33).toInt()) //TODO: Anpassen
             binding.tvWater.text =
-                "Tägliche Wassermenge ${((currentWateringElement.water)*((activity?.application as? App)?.calibrationValue!!)).toInt()} mL"
+                "Tägliche Wassermenge ${((currentWateringElement.water)*13.33).toInt()} mL" //TODO: Anpassen
 
         }
 
@@ -85,11 +86,11 @@ class EditNewPlantWateringElementFragment : Fragment(), TimePickerDialog.OnTimeS
         binding.btnSave.setOnClickListener {
             if(args.wateringelementposition == null){
                 sharedViewModel.tempWateringElementList.add(WateringElement(
-                    (binding.seekBarWater.progress*100/((activity?.application as? App)?.calibrationValue!!)),savedHour,savedMinute))
+                    (binding.seekBarWater.progress*100/13.33),savedHour,savedMinute)) //TODO: Anpassen
 
             } else{
                 sharedViewModel.tempWateringElementList[args.wateringelementposition!!.toInt()].water =
-                    (binding.seekBarWater.progress*100/((activity?.application as? App)?.calibrationValue!!))
+                    (binding.seekBarWater.progress*100/13.33) //TODO: Anpassen
                 sharedViewModel.tempWateringElementList[args.wateringelementposition!!.toInt()].hour = savedHour
                 sharedViewModel.tempWateringElementList[args.wateringelementposition!!.toInt()].minute = savedMinute
             }

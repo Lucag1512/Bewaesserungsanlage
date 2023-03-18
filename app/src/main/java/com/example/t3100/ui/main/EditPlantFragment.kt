@@ -37,6 +37,8 @@ class EditPlantFragment : Fragment(),  WateringTimesAdapter.ItemClickListener {
 
     private val args :  EditPlantFragmentArgs by navArgs()
 
+    var oldCalibrationValue = 13.33
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -52,10 +54,23 @@ class EditPlantFragment : Fragment(),  WateringTimesAdapter.ItemClickListener {
         activity?.title = "Pflanze anpassen"
         (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        adapter = WateringTimesAdapter(sharedViewModel.plantList[args.position].wateringList, this, ((activity?.application as? App)?.calibrationValue!!))
-        binding.rvWateringTimes.adapter = adapter
-
         oldPlant = sharedViewModel.plantList[args.position]
+
+        if(oldPlant.valve == 1){
+            adapter = WateringTimesAdapter(sharedViewModel.plantList[args.position].wateringList, this, ((activity?.application as? App)?.calibrationValue1!!)) //TODO: Anpassen
+            binding.rvWateringTimes.adapter = adapter
+            oldCalibrationValue = ((activity?.application as? App)?.calibrationValue1!!)
+        }
+        else if(oldPlant.valve == 2){
+            adapter = WateringTimesAdapter(sharedViewModel.plantList[args.position].wateringList, this, ((activity?.application as? App)?.calibrationValue2!!)) //TODO: Anpassen
+            binding.rvWateringTimes.adapter = adapter
+            oldCalibrationValue = ((activity?.application as? App)?.calibrationValue2!!)
+        }
+        else if(oldPlant.valve == 3){
+            adapter = WateringTimesAdapter(sharedViewModel.plantList[args.position].wateringList, this, ((activity?.application as? App)?.calibrationValue3!!)) //TODO: Anpassen
+            binding.rvWateringTimes.adapter = adapter
+            oldCalibrationValue = ((activity?.application as? App)?.calibrationValue3!!)
+        }
 
         //Festlegen der auszuwählenden Ventile
         binding.spinnerValve.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, arrayOf("Ventil 1", "Ventil 2", "Ventil 3"))
@@ -64,14 +79,13 @@ class EditPlantFragment : Fragment(),  WateringTimesAdapter.ItemClickListener {
         // Name
         binding.etNewPlantName.setText(sharedViewModel.plantList[args.position].name)
 
-
         //Ventil
         binding.spinnerValve.setSelection((sharedViewModel.plantList[args.position].valve)-1)
+        //Ende aktuelle Werte übernehmen
 
         binding.btnAddWateringElement.setOnClickListener {
-            findNavController().navigate(EditPlantFragmentDirections.actionEditPlantFragmentToEditWateringElementFragment(args.position, null))
+            findNavController().navigate(EditPlantFragmentDirections.actionEditPlantFragmentToEditWateringElementFragment(args.position, null,oldCalibrationValue.toString()))
         }
-        //Ende aktuelle Werte übernehmen
 
         //Prüfung kann Pflanze editiert werden (Doppelungen/Name leer)
         //Keine Prüfung auf alte Werte
@@ -95,12 +109,35 @@ class EditPlantFragment : Fragment(),  WateringTimesAdapter.ItemClickListener {
                 return@setOnClickListener
             }
 
+            val oldValve = oldPlant.valve
+
             //Eingegebene Werte vom Nutzer in Pflanzenliste übernehmen und anpassen
             sharedViewModel.plantList[args.position].name = binding.etNewPlantName.text.toString().trim()
             sharedViewModel.plantList[args.position].valve = binding.spinnerValve.selectedItemPosition + 1
 
-            savePlant()
+            if(oldValve == (binding.spinnerValve.selectedItemPosition + 1)){
+                savePlant()
+            }
+            else{
+                var newCalibrationValue = 13.33
 
+                if(sharedViewModel.plantList[args.position].valve == 1){
+                    newCalibrationValue = ((activity?.application as? App)?.calibrationValue1!!)
+                }
+                else if(sharedViewModel.plantList[args.position].valve == 2){
+                    newCalibrationValue = ((activity?.application as? App)?.calibrationValue2!!)
+                }
+                else if(sharedViewModel.plantList[args.position].valve == 3){
+                    newCalibrationValue = ((activity?.application as? App)?.calibrationValue3!!)
+                }
+
+                val sizeWateringElementList = sharedViewModel.plantList[args.position].wateringList.size
+                for (i in 0..(sizeWateringElementList-1)){
+                    sharedViewModel.plantList[args.position].wateringList[i].water=
+                        sharedViewModel.plantList[args.position].wateringList[i].water*oldCalibrationValue/newCalibrationValue
+                }
+                savePlant()
+            }
             findNavController().popBackStack()
         }
 
@@ -130,7 +167,7 @@ class EditPlantFragment : Fragment(),  WateringTimesAdapter.ItemClickListener {
     }
 
     override fun onEditClick(pos: Int) {
-        findNavController().navigate(EditPlantFragmentDirections.actionEditPlantFragmentToEditWateringElementFragment(args.position, pos.toString()))
+        findNavController().navigate(EditPlantFragmentDirections.actionEditPlantFragmentToEditWateringElementFragment(args.position, pos.toString(),oldCalibrationValue.toString()))
     }
 
     override fun onDeleteClick(pos: Int) {

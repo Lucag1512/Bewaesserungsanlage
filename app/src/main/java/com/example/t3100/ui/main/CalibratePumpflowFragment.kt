@@ -50,6 +50,8 @@ class CalibratePumpflowFragment : Fragment() {
 
     private lateinit var adapter: BluetoothDevicesAdapter
 
+    private var choosenValve : Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(BluetoothViewModel::class.java)
@@ -76,19 +78,6 @@ class CalibratePumpflowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        AlertDialog.Builder(requireContext()).create().apply {
-            setTitle("Hinweis")
-            setMessage(
-                "Nach Auswahl des entsprechenden Mikrocontrollers wird jedes Ventil für 10s " +
-                        "angesteuert. Anschließend bitte gesamt geflossene Menge Wasser eintragen"
-            )
-            setButton(AlertDialog.BUTTON_POSITIVE, "OK") { dialog, p1 ->
-                dialog.dismiss()
-            }
-            show()
-        }
-
-
         //Adapter anlegen, entspricht BT Adapter des lokalen Gerätes
         val bluetoothManager: BluetoothManager? =
             requireActivity().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
@@ -97,7 +86,7 @@ class CalibratePumpflowFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        //Sendevorgang bei Klick auf gewünschtes BT-Gerät starten
+        //Verbindung mit gerät aufbauen
         adapter = BluetoothDevicesAdapter(viewModel.bluetoothDevices, object :
             BluetoothDevicesAdapter.ItemClickListener {
             override fun onItemClick(device: BluetoothDevice) {
@@ -108,55 +97,55 @@ class CalibratePumpflowFragment : Fragment() {
                 binding.btnEndSearch.visibility = View.INVISIBLE
                 binding.btnStartSearch.visibility = View.INVISIBLE
 
-                //Variable zum JSON Format konvertieren
-                val calibrate = ParsedCalibrate(true)
-                val gson = Gson()
-                val calibrateJson = gson.toJson(calibrate)
-                ConnectThread(device).connectAndSend(calibrateJson)
-
-                binding.etWaterAmount.visibility = View.VISIBLE
-                binding.btnSaveValue.visibility = View.VISIBLE
-                binding.tvWaterHint.visibility = View.VISIBLE
-
-
-            }
-        })
-
-        binding.btnSaveValue.setOnClickListener {
-            if ((binding.etWaterAmount.text.isEmpty()) || binding.etWaterAmount.text.toString().toInt() <175
-                || binding.etWaterAmount.text.toString().toInt() >900) {
-                Toast.makeText(
-                    requireContext(),
-                    "Biite gültige Wassermenge eingeben",
-                    Toast.LENGTH_LONG
-                ).show()
-                return@setOnClickListener
-            } else {
-                val oldCalibrationValue = ((activity?.application as? App)?.calibrationValue!!)
-                val newCalibrationValue = (binding.etWaterAmount.text.toString()
-                    .toDouble()) / 3 / 10000
-                (activity?.application as? App)?.setNewCalibrationValue(newCalibrationValue)
-
-                //Pflanzenliste auf neuen Kalibrieungswert updaten
-                val sizePlantList = sharedViewModel.plantList.size
-                if (sizePlantList == 0) {
-                    findNavController().popBackStack()
-                } else {
-                    for (i in 0..(sizePlantList - 1)) {
-                        val sizeWateringElements: Int =
-                            sharedViewModel.plantList[i].wateringList.size
-                        if (sizeWateringElements != 0) {
-                            for (x in 0..(sizeWateringElements - 1)) {
-                                sharedViewModel.plantList[i].wateringList[x].water =
-                                    sharedViewModel.plantList[i].wateringList[x].water * oldCalibrationValue / ((activity?.application as? App)?.calibrationValue!!)
-                            }
-                        }
+                AlertDialog.Builder(requireContext()).create().apply {
+                    setTitle("Hinweis")
+                    setMessage(
+                        "Nach Auswahl des entsprechenden Ventils wird das Ventil für 10s " +
+                                "angesteuert. Anschließend bitte gesamt geflossene Menge Wasser eintragen"
+                    )
+                    setButton(AlertDialog.BUTTON_POSITIVE, "OK") { dialog, p1 ->
+                        dialog.dismiss()
                     }
-                    savePlantList()
-                    findNavController().popBackStack()
+                    show()
+                }
+
+                //Buttons zur Ventilauswahl einblenden
+                binding.tvChooseValve.visibility = View.VISIBLE
+                binding.btnValve1.visibility = View.VISIBLE
+                binding.btnValve2.visibility = View.VISIBLE
+                binding.btnValve3.visibility = View.VISIBLE
+
+                binding.btnValve1.setOnClickListener {
+                    //Variable zum JSON Format konvertieren
+                    val calibrate = ParsedCalibrate(true,1)
+                    val gson = Gson()
+                    val calibrateJson = gson.toJson(calibrate)
+                    ConnectThread(device).connectAndSend(calibrateJson)
+
+                    choosenValve = 1
+                }
+
+                binding.btnValve2.setOnClickListener {
+                    //Variable zum JSON Format konvertieren
+                    val calibrate = ParsedCalibrate(true, 2)
+                    val gson = Gson()
+                    val calibrateJson = gson.toJson(calibrate)
+                    ConnectThread(device).connectAndSend(calibrateJson)
+
+                    choosenValve = 2
+                }
+
+                binding.btnValve3.setOnClickListener {
+                    //Variable zum JSON Format konvertieren
+                    val calibrate = ParsedCalibrate(true, 3)
+                    val gson = Gson()
+                    val calibrateJson = gson.toJson(calibrate)
+                    ConnectThread(device).connectAndSend(calibrateJson)
+
+                    choosenValve = 3
                 }
             }
-        }
+        })
 
         binding.rvBluetoothDevices.adapter = adapter
 
@@ -324,6 +313,8 @@ class CalibratePumpflowFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                 try {
                     mmSocket.close()
+
+                    findNavController().navigate(CalibratePumpflowFragmentDirections.actionCalibratePumpflowFragmentToCalibratePumpflowValveFragment(choosenValve))
                 } catch (e: IOException) {
                     Log.e("geu", "Could not close the connect socket", e)
                     binding.textView.visibility = View.VISIBLE

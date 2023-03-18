@@ -130,6 +130,13 @@ class PlantListFragment : Fragment(), PlantAdapter.ItemClickListener {
             }
         }
 
+        //Pflanze hinzufügen ausblenden wenn bereits 3 Elemente angelegt wurden
+        if (sharedViewModel.plantList.size == 3) {
+            binding.btnAddPlant.visibility = View.INVISIBLE
+        } else {
+            binding.btnAddPlant.visibility = View.VISIBLE
+        }
+
         //Bei keinem verbleibendem Element Übertragen ausblenden
         if (sharedViewModel.plantList.size == 0) {
             binding.btnShareData.visibility = View.GONE
