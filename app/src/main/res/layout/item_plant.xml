@@ -33,7 +33,6 @@
         android:id="@+id/ivPlantPicture"
         android:layout_width="119dp"
         android:layout_height="92dp"
-        android:layout_marginEnd="16dp"
         android:src="@drawable/plant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

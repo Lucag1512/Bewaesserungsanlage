@@ -32,28 +32,28 @@ class PlantAdapter(
             tvValve.text = "Ventil: ${plants[position].valve}"
 
             //Bild der Pflanzen anhand des Namen setzen TODO: Weitere Pflanzen hinzufügen
-            if(plants[position].name?.lowercase()  == "chili"){
+            if(plants[position].name?.lowercase()?.contains("chili")  == true){
                 ivPlantPicture.setImageResource(R.drawable.chilli)
             }
-            else if(plants[position].name?.lowercase()  == "gurke"){
+            else if(plants[position].name?.lowercase()?.contains("gurke")  == true){
                 ivPlantPicture.setImageResource(R.drawable.cucumber)
             }
-            else if(plants[position].name?.lowercase()  == "salat"){
+            else if(plants[position].name?.lowercase()?.contains("salat")  == true){
                 ivPlantPicture.setImageResource(R.drawable.lettuce)
             }
-            else if(plants[position].name?.lowercase()  == "paprika"){
+            else if(plants[position].name?.lowercase()?.contains("paprika")  == true){
                 ivPlantPicture.setImageResource(R.drawable.paprika)
             }
-            else if(plants[position].name?.lowercase()  == "radieschen"){
+            else if(plants[position].name?.lowercase()?.contains("radieschen") == true){
                 ivPlantPicture.setImageResource(R.drawable.radish)
             }
-            else if(plants[position].name?.lowercase()  == "erdbeere"){
+            else if(plants[position].name?.lowercase()?.contains("erdbeere")  == true){
                 ivPlantPicture.setImageResource(R.drawable.strawberry)
             }
-            else if(plants[position].name?.lowercase()  == "tomate"){
+            else if(plants[position].name?.lowercase()?.contains("tomate")  == true){
                 ivPlantPicture.setImageResource(R.drawable.tomato)
             }
-            else if(plants[position].name?.lowercase()  == "zucchini"){
+            else if(plants[position].name?.lowercase()?.contains("zucchini")  == true){
                 ivPlantPicture.setImageResource(R.drawable.zucchini)
             }
             else{
