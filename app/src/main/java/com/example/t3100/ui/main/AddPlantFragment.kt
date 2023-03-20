@@ -11,6 +11,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.t3100.App
 import com.example.t3100.MainActivity
 import com.example.t3100.R
@@ -84,7 +86,7 @@ class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
             }
 
             if (sharedViewModel.plantList.any { plant ->
-                    plant.name == binding.etNewPlantName.text.toString().trim()
+                    plant.name?.lowercase() == binding.etNewPlantName.text.toString().trim().lowercase()
                 }) {
                 Toast.makeText(requireContext(), "Name bereits vergeben", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
@@ -119,6 +121,15 @@ class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
         binding.btnCancel.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        //Trennlinie zwischen den angezeigten Pflanzen einfügen
+        binding.rvWateringTimes.layoutManager = LinearLayoutManager(requireContext())
+        val dividerItemDecoration = DividerItemDecoration(
+            requireContext(),
+            (binding.rvWateringTimes.layoutManager as LinearLayoutManager).orientation
+        )
+        binding.rvWateringTimes.addItemDecoration(dividerItemDecoration)
+
 
         return binding.root
 
