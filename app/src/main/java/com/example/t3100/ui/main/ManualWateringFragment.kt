@@ -241,6 +241,7 @@ class ManualWateringFragment : Fragment() {
 
                     //Manuelle Ventilsteuerung (Ventil1)
                     binding.btnValve1.setOnClickListener {
+                        //Wenn Ventil aktuell geschlossen
                         if (valve1 == 0) {
                             valve1 = 1
                             manualWateringElements = ParsedDataManual(
@@ -263,6 +264,7 @@ class ManualWateringFragment : Fragment() {
                                 )
                             )
                             binding.loadingBarValve1Open.visibility = View.VISIBLE
+                        //Wenn nur Ventil 1 offen und Pumpe offen kein Schließen möglich
                         } else if (valve1 == 1 && pump == 255 && valve2 == 0 && valve3 == 0) {
                             AlertDialog.Builder(requireContext()).create().apply {
                                 setTitle("Achtung")
@@ -272,6 +274,7 @@ class ManualWateringFragment : Fragment() {
                                 }
                                 show()
                             }
+                        //Andernfalls wird Ventil geschlossen
                         } else {
                             valve1 = 0
                             manualWateringElements = ParsedDataManual(

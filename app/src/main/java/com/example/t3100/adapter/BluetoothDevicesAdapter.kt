@@ -24,6 +24,7 @@ class BluetoothDevicesAdapter(
     @SuppressLint("MissingPermission")
     override fun onBindViewHolder(holder: BluetoothDeviceViewHolder, position: Int) {
         holder.binding.apply {
+            //Name und Adresse in Listenelement übernehmen
             tvBTMacAdress.text = "MAC-Adresse: ${bluetoothDevices[position].address}"
             tvBTName.text = bluetoothDevices[position].name
 
@@ -37,7 +38,7 @@ class BluetoothDevicesAdapter(
        return bluetoothDevices.size
     }
 
-    //Define your Interface method here
+    //Interface Methoden
     interface ItemClickListener {
         fun onItemClick(device: BluetoothDevice)
     }

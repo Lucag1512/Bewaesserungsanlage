@@ -4,12 +4,15 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
+//Datenklasse für Pflanzenobjekte
+//Durch @SerializedName werden Header für Zuordnung im Mikrocontroller angefügt
 data class Plant(
 
     @SerializedName("n")var name: String?,
     @SerializedName("v")var valve: Int,
     @SerializedName("b")var wateringList: MutableList<WateringElement>
 
+    //Einstellungen für Übergabe ins JSON Format
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),

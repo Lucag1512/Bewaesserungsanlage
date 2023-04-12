@@ -27,8 +27,8 @@ class WateringTimesAdapter(
 
     override fun onBindViewHolder(holder: WateringTimesViewHolder, position: Int) {
         holder.binding.apply {
-            tvWateringTime.text = "${wateringTimes[position].hour}:${wateringTimes[position].minute} Uhr"
 
+            //Wassermenge und Uhrzeit der Bewässerung in Listenelement übernehmen
             tvWaterAmount.text = "${((wateringTimes[position].water)*calibrationValue).toInt()} ml"
 
             if(wateringTimes[position].minute < 10 && wateringTimes[position].hour < 10){
@@ -55,7 +55,7 @@ class WateringTimesAdapter(
        return wateringTimes.size
     }
 
-    //Define your Interface method here
+    //Interface Methoden
     interface ItemClickListener {
         fun onEditClick(pos: Int)
         fun onDeleteClick(pos: Int)

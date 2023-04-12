@@ -60,6 +60,8 @@ class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
             )
         }
 
+        /*Defaultwert für Wassermenge übergeben bei Speichern der Pflanze wird passender
+        Wert hinterlegt*/
         adapter = WateringTimesAdapter(
             sharedViewModel.tempWateringElementList,
             this,

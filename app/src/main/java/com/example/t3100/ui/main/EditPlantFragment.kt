@@ -52,6 +52,10 @@ class EditPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
         activity?.title = "Pflanze anpassen"
         (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        /*Aktuelle Pflanzendaten anzeigen:
+        Bewässerungszeitpunkte der ausgewählten pflanze anzeigen
+        Dazu Prüfung auf welchem Ventil es liegt damit richtige Wassermenge angezeigt wird
+         */
         oldPlant = sharedViewModel.plantList[args.position]
 
         if (oldPlant.valve == 1) {
@@ -79,6 +83,12 @@ class EditPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
             binding.rvWateringTimes.adapter = adapter
             oldCalibrationValue = ((activity?.application as? App)?.calibrationValue3!!)
         }
+        // Name
+        binding.etNewPlantName.setText(sharedViewModel.plantList[args.position].name)
+
+        //Ventil
+        binding.spinnerValve.setSelection((sharedViewModel.plantList[args.position].valve) - 1)
+        //Ende aktuelle Werte übernehmen
 
         //Festlegen der auszuwählenden Ventile
         binding.spinnerValve.adapter = ArrayAdapter(
@@ -87,15 +97,9 @@ class EditPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
             arrayOf("Ventil 1", "Ventil 2", "Ventil 3")
         )
 
-        //Aktuelle Pflanzendaten anzeigen :
-        // Name
-        binding.etNewPlantName.setText(sharedViewModel.plantList[args.position].name)
-
-        //Ventil
-        binding.spinnerValve.setSelection((sharedViewModel.plantList[args.position].valve) - 1)
-        //Ende aktuelle Werte übernehmen
-
+        //Bewässerungszeitpunkt hinzufügen
         binding.btnAddWateringElement.setOnClickListener {
+            //Übergabe von null als Wateringelementposition damit neues Element erstellt wird
             findNavController().navigate(
                 EditPlantFragmentDirections.actionEditPlantFragmentToEditWateringElementFragment(
                     args.position,
@@ -106,7 +110,6 @@ class EditPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
         }
 
         //Prüfung kann Pflanze editiert werden (Doppelungen/Name leer)
-        //Keine Prüfung auf alte Werte
         binding.btnSavePlant.setOnClickListener {
 
             if ((binding.etNewPlantName.text.isEmpty())) {
@@ -117,7 +120,7 @@ class EditPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
                 ).show()
                 return@setOnClickListener
             }
-
+            //Keine Prüfung auf alte Werte
             if (oldPlant.valve != (binding.spinnerValve.selectedItemPosition + 1) &&
                 sharedViewModel.plantList.any { plant -> plant.valve == (binding.spinnerValve.selectedItemPosition + 1) }
             ) {
@@ -136,6 +139,7 @@ class EditPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
                 return@setOnClickListener
             }
 
+            //Altes Ventil speichern damit Wassermenge richtig gespeichert werden kann
             val oldValve = oldPlant.valve
 
             //Eingegebene Werte vom Nutzer in Pflanzenliste übernehmen und anpassen
@@ -144,6 +148,9 @@ class EditPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
             sharedViewModel.plantList[args.position].valve =
                 binding.spinnerValve.selectedItemPosition + 1
 
+            /*Prüfung ist Ventil gleich geblieben wenn nicht Kalibrierungswert des neuen Ventils
+            speichern
+             */
             if (oldValve == (binding.spinnerValve.selectedItemPosition + 1)) {
                 savePlant()
             } else {
@@ -157,6 +164,7 @@ class EditPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
                     newCalibrationValue = ((activity?.application as? App)?.calibrationValue3!!)
                 }
 
+                //Jeden Bewässerungszeitpunkt auf Kalibrierungswert des neuen Ventils anpassen
                 val sizeWateringElementList =
                     sharedViewModel.plantList[args.position].wateringList.size
                 for (i in 0..(sizeWateringElementList - 1)) {
@@ -200,6 +208,7 @@ class EditPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
 
     }
 
+    //Bei Anpassen eines Bewässerungszeitpunkts wird Position des Bewässerungszeitpunkts übergeben
     override fun onEditClick(pos: Int) {
         findNavController().navigate(
             EditPlantFragmentDirections.actionEditPlantFragmentToEditWateringElementFragment(

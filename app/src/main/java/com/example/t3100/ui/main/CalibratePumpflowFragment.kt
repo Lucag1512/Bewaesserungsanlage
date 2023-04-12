@@ -85,7 +85,7 @@ class CalibratePumpflowFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        //Verbindung mit gerät aufbauen
+        //Verbindung mit Gerät aufbauen
         adapter = BluetoothDevicesAdapter(viewModel.bluetoothDevices, object :
             BluetoothDevicesAdapter.ItemClickListener {
             override fun onItemClick(device: BluetoothDevice) {
@@ -115,7 +115,9 @@ class CalibratePumpflowFragment : Fragment() {
                 binding.btnValve3.visibility = View.VISIBLE
 
                 binding.btnValve1.setOnClickListener {
-                    //Variable zum JSON Format konvertieren
+                    /*Variable zum JSON Format konvertieren
+                    und Kalibrierungswerte an Mikrocontroller senden
+                     */
                     val calibrate = ParsedCalibrate(true, 1)
                     val gson = Gson()
                     val calibrateJson = gson.toJson(calibrate)
@@ -125,7 +127,9 @@ class CalibratePumpflowFragment : Fragment() {
                 }
 
                 binding.btnValve2.setOnClickListener {
-                    //Variable zum JSON Format konvertieren
+                    /*Variable zum JSON Format konvertieren
+                   und Kalibrierungswerte an Mikrocontroller senden
+                    */
                     val calibrate = ParsedCalibrate(true, 2)
                     val gson = Gson()
                     val calibrateJson = gson.toJson(calibrate)
@@ -135,7 +139,9 @@ class CalibratePumpflowFragment : Fragment() {
                 }
 
                 binding.btnValve3.setOnClickListener {
-                    //Variable zum JSON Format konvertieren
+                    /*Variable zum JSON Format konvertieren
+                   und Kalibrierungswerte an Mikrocontroller senden
+                    */
                     val calibrate = ParsedCalibrate(true, 3)
                     val gson = Gson()
                     val calibrateJson = gson.toJson(calibrate)

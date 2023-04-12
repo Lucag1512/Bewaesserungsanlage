@@ -83,7 +83,7 @@ class LaunchFragment : Fragment() {
     private val bluetoothRequest =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             //Lenht der Nutzer das Einschalten von BT ab wird Endlosschleife gestartet
-            //Nutzer muss BBT einschalten, sonst kann App nicht verwendet werden
+            //Nutzer muss BT einschalten, sonst kann App nicht verwendet werden
             if (result.resultCode != Activity.RESULT_OK) {
                 AlertDialog.Builder(requireContext()).create().apply {
                     setTitle("Information")

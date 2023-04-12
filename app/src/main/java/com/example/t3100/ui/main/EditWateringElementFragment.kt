@@ -46,8 +46,10 @@ class EditWateringElementFragment : Fragment(), TimePickerDialog.OnTimeSetListen
             false
         )
 
+        //Prüfung soll neuer Bewässerungszeitpunkt erstellt werden oder vorhandener bearbeitet
         args.wateringelementposition?.toIntOrNull()?.let { wateringElementPosition ->
 
+            //Vorhandener bearbeitet --> Aktuelle Werte übernehmen
             val currentWateringElement =
                 sharedViewModel.plantList[args.plantposition].wateringList[wateringElementPosition]
 
@@ -91,6 +93,7 @@ class EditWateringElementFragment : Fragment(), TimePickerDialog.OnTimeSetListen
         })
 
         binding.btnSave.setOnClickListener {
+            //Bei übergebener null wird ein neues Element erstellt andernfalls das vorhandene bearbeitet
             if (args.wateringelementposition == null) {
                 sharedViewModel.plantList[args.plantposition].wateringList.add(
                     WateringElement(

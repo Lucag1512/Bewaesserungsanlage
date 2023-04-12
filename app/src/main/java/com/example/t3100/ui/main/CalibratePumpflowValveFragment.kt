@@ -62,6 +62,9 @@ class CalibratePumpflowValveFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        /*Prüfung liegt eingegebener Wert innerhalb logischer Grenzen
+        Anschließend Kalibrierungswert des ausgewählten Ventils updaten
+         */
         binding.btnSaveValue.setOnClickListener {
             if ((binding.etWaterAmount.text.isEmpty()) || binding.etWaterAmount.text.toString().toInt() <175
                 || binding.etWaterAmount.text.toString().toInt() >900) {
@@ -77,6 +80,7 @@ class CalibratePumpflowValveFragment : Fragment() {
                     oldCalibrationValue = ((activity?.application as? App)?.calibrationValue1!!)
                     newCalibrationValue = (binding.etWaterAmount.text.toString()
                         .toDouble()) / 10000
+                    //Wert global speichern
                     (activity?.application as? App)?.setNewCalibrationValue1(newCalibrationValue)
                 }
                 else if(args.valve == 2){

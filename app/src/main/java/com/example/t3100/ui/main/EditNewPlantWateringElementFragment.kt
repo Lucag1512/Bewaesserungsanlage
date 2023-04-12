@@ -92,6 +92,9 @@ class EditNewPlantWateringElementFragment : Fragment(), TimePickerDialog.OnTimeS
         })
 
         binding.btnSave.setOnClickListener {
+            /*Sollte der übergebene Wertt null sein handelt es sich um ein neuen
+            Bewässerungszeipunkt. Andernfalls wird der alte geupdatet
+             */
             if (args.wateringelementposition == null) {
                 sharedViewModel.tempWateringElementList.add(
                     WateringElement(

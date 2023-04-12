@@ -31,7 +31,8 @@ class PlantAdapter(
             tvName.text = "Pflanzenname: ${plants[position].name}"
             tvValve.text = "Ventil: ${plants[position].valve}"
 
-            //Bild der Pflanzen anhand des Namen setzen TODO: Weitere Pflanzen hinzufügen
+            //Prüfung: Existiert Bild der Pflanze in Datenbank
+            //Wenn Ja, Bild einfügen
             if(plants[position].name?.lowercase()?.contains("chili")  == true){
                 ivPlantPicture.setImageResource(R.drawable.chilli)
             }
@@ -74,7 +75,7 @@ class PlantAdapter(
        return plants.size
     }
 
-    //Define your Interface method here
+    //Interface Methoden
     interface ItemClickListener {
         fun onEditClick(pos: Int)
         fun onDeleteClick(pos: Int)

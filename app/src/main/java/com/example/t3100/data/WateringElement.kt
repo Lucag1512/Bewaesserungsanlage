@@ -4,8 +4,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
-//Datenklasse für Mikrocontroller damit Werte entsprechend zugeordnet werden können
-//Anfügen von Headern
+//Datenklasse für Bewässerungszeitpunkte
+//Durch @SerializedName werden Header für Zuordnung im Mikrocontroller angefügt
 data class WateringElement (
     @SerializedName("w")var water: Double,
     @SerializedName("h")var hour: Int,
