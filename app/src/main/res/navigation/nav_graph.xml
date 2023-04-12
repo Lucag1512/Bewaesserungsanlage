@@ -88,7 +88,8 @@
     <fragment
         android:id="@+id/editWateringElementFragment"
         android:name="com.example.t3100.ui.main.EditWateringElementFragment"
-        android:label="EditWateringElementFragment" >
+        android:label="EditWateringElementFragment"
+        tools:layout="@layout/fragment_editwateringelement">
         <argument
             android:name="plantposition"
             app:argType="integer" />
@@ -103,7 +104,8 @@
     <fragment
         android:id="@+id/calibratePumpflowFragment"
         android:name="com.example.t3100.ui.main.CalibratePumpflowFragment"
-        android:label="CalibratePumpflowFragment" >
+        android:label="CalibratePumpflowFragment"
+        tools:layout="@layout/fragment_calibratepumpflow">
         <action
             android:id="@+id/action_calibratePumpflowFragment_to_calibratePumpflowValveFragment"
             app:destination="@id/calibratePumpflowValveFragment" />
@@ -111,7 +113,8 @@
     <fragment
         android:id="@+id/editNewPlantWateringElementFragment"
         android:name="com.example.t3100.ui.main.EditNewPlantWateringElementFragment"
-        android:label="EditNewPlantWateringElementFragment" >
+        android:label="EditNewPlantWateringElementFragment"
+        tools:layout="@layout/fragment_editnewplantwateringelement">
         <argument
             android:name="wateringelementposition"
             app:argType="string"
@@ -120,7 +123,8 @@
     <fragment
         android:id="@+id/calibratePumpflowValveFragment"
         android:name="com.example.t3100.ui.main.CalibratePumpflowValveFragment"
-        android:label="CalibratePumpflowValveFragment" >
+        android:label="CalibratePumpflowValveFragment"
+        tools:layout="@layout/fragment_calibratepumpflowvalve">
         <argument
             android:name="valve"
             app:argType="integer" />
