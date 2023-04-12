@@ -107,7 +107,7 @@ class LaunchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        activity?.title = "T3200"
+        activity?.title = "Smart Watering"
         (activity as? MainActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         //Einfacherer Zugriff auf Objekte des xml Flies
