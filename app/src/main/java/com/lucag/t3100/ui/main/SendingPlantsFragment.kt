@@ -136,8 +136,6 @@ class SendingPlantsFragment : Fragment() {
             }
         })
 
-
-
         binding.rvBluetoothDevices.adapter = adapter
 
         //Trennlinie zwischen den angezeigten BT-Geräten einfügen

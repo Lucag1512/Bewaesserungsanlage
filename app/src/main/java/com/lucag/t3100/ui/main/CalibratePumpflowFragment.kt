@@ -117,7 +117,16 @@ class CalibratePumpflowFragment : Fragment() {
                 binding.btnValve1.setOnClickListener {
                     /*Variable zum JSON Format konvertieren
                     und Kalibrierungswerte an Mikrocontroller senden
+                    Sendemeldung einblenden
                      */
+                    binding.btnValve1.visibility = View.INVISIBLE
+                    binding.btnValve2.visibility = View.INVISIBLE
+                    binding.btnValve3.visibility = View.INVISIBLE
+                    binding.tvChooseValve.visibility = View.INVISIBLE
+
+                    binding.loadingBarSendingData.visibility = View.VISIBLE
+                    binding.tvSendingData.visibility = View.VISIBLE
+
                     val calibrate = ParsedCalibrate(true, 1)
                     val gson = Gson()
                     val calibrateJson = gson.toJson(calibrate)
@@ -129,7 +138,16 @@ class CalibratePumpflowFragment : Fragment() {
                 binding.btnValve2.setOnClickListener {
                     /*Variable zum JSON Format konvertieren
                    und Kalibrierungswerte an Mikrocontroller senden
+                   Sendemeldung einblenden
                     */
+                    binding.btnValve1.visibility = View.INVISIBLE
+                    binding.btnValve2.visibility = View.INVISIBLE
+                    binding.btnValve3.visibility = View.INVISIBLE
+                    binding.tvChooseValve.visibility = View.INVISIBLE
+
+                    binding.loadingBarSendingData.visibility = View.VISIBLE
+                    binding.tvSendingData.visibility = View.VISIBLE
+
                     val calibrate = ParsedCalibrate(true, 2)
                     val gson = Gson()
                     val calibrateJson = gson.toJson(calibrate)
@@ -141,7 +159,16 @@ class CalibratePumpflowFragment : Fragment() {
                 binding.btnValve3.setOnClickListener {
                     /*Variable zum JSON Format konvertieren
                    und Kalibrierungswerte an Mikrocontroller senden
+                   Sendemeldung einblenden
                     */
+                    binding.btnValve1.visibility = View.INVISIBLE
+                    binding.btnValve2.visibility = View.INVISIBLE
+                    binding.btnValve3.visibility = View.INVISIBLE
+                    binding.tvChooseValve.visibility = View.INVISIBLE
+
+                    binding.loadingBarSendingData.visibility = View.VISIBLE
+                    binding.tvSendingData.visibility = View.VISIBLE
+
                     val calibrate = ParsedCalibrate(true, 3)
                     val gson = Gson()
                     val calibrateJson = gson.toJson(calibrate)
@@ -255,10 +282,13 @@ class CalibratePumpflowFragment : Fragment() {
                         "Verbindung nicht erfolgreich",
                         Toast.LENGTH_LONG
                     ).show()
-                    binding.textView.visibility = View.VISIBLE
-                    binding.rvBluetoothDevices.visibility = View.VISIBLE
-                    binding.btnEndSearch.visibility = View.VISIBLE
-                    binding.btnStartSearch.visibility = View.VISIBLE
+                    binding.btnValve1.visibility = View.VISIBLE
+                    binding.btnValve2.visibility = View.VISIBLE
+                    binding.btnValve3.visibility = View.VISIBLE
+                    binding.tvChooseValve.visibility = View.VISIBLE
+
+                    binding.loadingBarSendingData.visibility = View.INVISIBLE
+                    binding.tvSendingData.visibility = View.INVISIBLE
                 }
             }
         }
@@ -302,10 +332,13 @@ class CalibratePumpflowFragment : Fragment() {
                         "Daten konnten nicht an den ESP gesendet werden",
                         Toast.LENGTH_LONG
                     ).show()
-                    binding.textView.visibility = View.VISIBLE
-                    binding.rvBluetoothDevices.visibility = View.VISIBLE
-                    binding.btnEndSearch.visibility = View.VISIBLE
-                    binding.btnStartSearch.visibility = View.VISIBLE
+                    binding.btnValve1.visibility = View.VISIBLE
+                    binding.btnValve2.visibility = View.VISIBLE
+                    binding.btnValve3.visibility = View.VISIBLE
+                    binding.tvChooseValve.visibility = View.VISIBLE
+
+                    binding.loadingBarSendingData.visibility = View.INVISIBLE
+                    binding.tvSendingData.visibility = View.INVISIBLE
                 }
                 return
             }
@@ -326,10 +359,13 @@ class CalibratePumpflowFragment : Fragment() {
                     )
                 } catch (e: IOException) {
                     Log.e("geu", "Could not close the connect socket", e)
-                    binding.textView.visibility = View.VISIBLE
-                    binding.rvBluetoothDevices.visibility = View.VISIBLE
-                    binding.btnEndSearch.visibility = View.VISIBLE
-                    binding.btnStartSearch.visibility = View.VISIBLE
+                    binding.btnValve1.visibility = View.VISIBLE
+                    binding.btnValve2.visibility = View.VISIBLE
+                    binding.btnValve3.visibility = View.VISIBLE
+                    binding.tvChooseValve.visibility = View.VISIBLE
+
+                    binding.loadingBarSendingData.visibility = View.INVISIBLE
+                    binding.tvSendingData.visibility = View.INVISIBLE
                 }
             }
         }
