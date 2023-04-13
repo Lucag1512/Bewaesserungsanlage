@@ -32,7 +32,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvBluetoothDevices"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="160dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
@@ -45,25 +45,23 @@
             android:id="@+id/btnStartSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
             android:text="Suche starten"
             android:textAllCaps="false"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btnEndSearch" />
+            app:layout_constraintStart_toEndOf="@+id/btnEndSearch"
+            app:layout_constraintTop_toBottomOf="@+id/rvBluetoothDevices" />
 
         <Button
             android:id="@+id/btnEndSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
             android:text="Suche beenden"
             android:textAllCaps="false"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnStartSearch"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvBluetoothDevices" />
 
         <ProgressBar
             android:id="@+id/loadingBarSearch"
@@ -71,9 +69,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btnEndSearch" />
+            app:layout_constraintStart_toEndOf="@+id/btnEndSearch"
+            app:layout_constraintTop_toBottomOf="@+id/rvBluetoothDevices" />
 
         <ProgressBar
             android:id="@+id/loadingBarSendingData"

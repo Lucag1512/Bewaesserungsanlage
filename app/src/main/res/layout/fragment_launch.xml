@@ -15,7 +15,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="Herzlich Willkommen"
-            android:textSize="24sp"
+            android:textSize="32sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,10 +24,10 @@
 
         <Button
             android:id="@+id/btnForwardPlantList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/pflanzenliste_einsehen"
+            android:layout_width="350dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="48dp"
+            android:text="Pflanzenliste/Daten übertragen"
             android:textAllCaps="false"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,39 +36,39 @@
 
         <Button
             android:id="@+id/btnForwardManualWatering"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="350dp"
+            android:layout_height="80dp"
             android:layout_marginTop="32dp"
             android:text="Manuelle Steuerung"
             android:textAllCaps="false"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnForwardPlantList" />
+            app:layout_constraintTop_toBottomOf="@+id/btnForwardDeleteData" />
 
         <Button
             android:id="@+id/btnForwardDeleteData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="350dp"
+            android:layout_height="80dp"
             android:layout_marginTop="32dp"
-            android:text="Daten auf Mikrocontroller löschen"
+            android:text="Daten auf\nMikrocontroller löschen"
             android:textAllCaps="false"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnForwardManualWatering" />
+            app:layout_constraintTop_toBottomOf="@+id/btnForwardCalibrateFlow" />
 
         <Button
             android:id="@+id/btnForwardCalibrateFlow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="350dp"
+            android:layout_height="80dp"
             android:layout_marginTop="32dp"
             android:text="Wassermenge kalibrieren"
             android:textAllCaps="false"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnForwardDeleteData" />
+            app:layout_constraintTop_toBottomOf="@id/btnForwardPlantList" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
