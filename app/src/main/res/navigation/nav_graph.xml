@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/launchfragment"
-        android:name="com.example.t3100.ui.main.LaunchFragment"
+        android:name="com.lucag.t3100.ui.main.LaunchFragment"
         android:label="SecondFragment"
         tools:layout="@layout/fragment_launch"
         >
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/plantListFragment"
-        android:name="com.example.t3100.ui.main.PlantListFragment"
+        android:name="com.lucag.t3100.ui.main.PlantListFragment"
         android:label="PlantListFragment"
         tools:layout="@layout/fragment_plantlist">
         <action
@@ -44,7 +44,7 @@
     </fragment>
     <fragment
         android:id="@+id/addPlantFragment"
-        android:name="com.example.t3100.ui.main.AddPlantFragment"
+        android:name="com.lucag.t3100.ui.main.AddPlantFragment"
         android:label="AddPlantFragment"
         tools:layout="@layout/fragment_addplant">
         <action
@@ -53,12 +53,12 @@
     </fragment>
     <fragment
         android:id="@+id/deleteDataOnMikroncontollerFragment"
-        android:name="com.example.t3100.ui.main.DeleteDataOnMikroncontollerFragment"
+        android:name="com.lucag.t3100.ui.main.DeleteDataOnMikroncontollerFragment"
         android:label="DeleteDataOnMikroncontollerFragment"
         tools:layout="@layout/fragment_deletedataonmikrocontroller"/>
     <fragment
         android:id="@+id/editPlantFragment"
-        android:name="com.example.t3100.ui.main.EditPlantFragment"
+        android:name="com.lucag.t3100.ui.main.EditPlantFragment"
         android:label="EditPlantFragment"
         tools:layout="@layout/fragment_editplant"
         >
@@ -71,23 +71,23 @@
     </fragment>
     <fragment
         android:id="@+id/sendingPlantsFragment2"
-        android:name="com.example.t3100.ui.main.SendingPlantsFragment"
+        android:name="com.lucag.t3100.ui.main.SendingPlantsFragment"
         android:label="SendingPlantsFragment"
         tools:layout="@layout/fragment_sendingplants"
         >
         <argument
             android:name="plantList"
-            app:argType="com.example.t3100.data.Plant[]" />
+            app:argType="com.lucag.t3100.data.Plant[]" />
     </fragment>
     <fragment
         android:id="@+id/manualWateringFragment"
-        android:name="com.example.t3100.ui.main.ManualWateringFragment"
+        android:name="com.lucag.t3100.ui.main.ManualWateringFragment"
         android:label="ManualWateringFragment"
         tools:layout="@layout/fragment_manualwatering"
         />
     <fragment
         android:id="@+id/editWateringElementFragment"
-        android:name="com.example.t3100.ui.main.EditWateringElementFragment"
+        android:name="com.lucag.t3100.ui.main.EditWateringElementFragment"
         android:label="EditWateringElementFragment"
         tools:layout="@layout/fragment_editwateringelement">
         <argument
@@ -103,7 +103,7 @@
     </fragment>
     <fragment
         android:id="@+id/calibratePumpflowFragment"
-        android:name="com.example.t3100.ui.main.CalibratePumpflowFragment"
+        android:name="com.lucag.t3100.ui.main.CalibratePumpflowFragment"
         android:label="CalibratePumpflowFragment"
         tools:layout="@layout/fragment_calibratepumpflow">
         <action
@@ -112,7 +112,7 @@
     </fragment>
     <fragment
         android:id="@+id/editNewPlantWateringElementFragment"
-        android:name="com.example.t3100.ui.main.EditNewPlantWateringElementFragment"
+        android:name="com.lucag.t3100.ui.main.EditNewPlantWateringElementFragment"
         android:label="EditNewPlantWateringElementFragment"
         tools:layout="@layout/fragment_editnewplantwateringelement">
         <argument
@@ -122,7 +122,7 @@
     </fragment>
     <fragment
         android:id="@+id/calibratePumpflowValveFragment"
-        android:name="com.example.t3100.ui.main.CalibratePumpflowValveFragment"
+        android:name="com.lucag.t3100.ui.main.CalibratePumpflowValveFragment"
         android:label="CalibratePumpflowValveFragment"
         tools:layout="@layout/fragment_calibratepumpflowvalve">
         <argument

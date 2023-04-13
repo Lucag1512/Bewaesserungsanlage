@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.t3100'
+    namespace 'com.lucag.t3100'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.t3100"
+        applicationId "com.lucag.t3100"
         minSdk 24
         targetSdk 33
         versionCode 1

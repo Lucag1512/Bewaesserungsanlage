@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.t3100.viewmodel.BluetoothViewModel" />
+            type="com.lucag.t3100.viewmodel.BluetoothViewModel" />
         <import type="android.view.View"/>
     </data>
 
