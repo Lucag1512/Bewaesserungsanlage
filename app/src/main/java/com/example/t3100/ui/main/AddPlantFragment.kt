@@ -65,7 +65,7 @@ class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
         adapter = WateringTimesAdapter(
             sharedViewModel.tempWateringElementList,
             this,
-            13.33
+            13.3333
         )
         binding.rvWateringTimes.adapter = adapter
 
@@ -100,7 +100,7 @@ class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
 
             //Wassermenge an Ventil anpassen je nach Kalibrierungswert
             val sizeWateringElementList = sharedViewModel.tempWateringElementList.size
-            var calibrationValue = 13.33
+            var calibrationValue = 13.3333
             if (valve == 1) {
                 calibrationValue = ((activity?.application as? App)?.calibrationValue1!!)
             } else if (valve == 2) {
@@ -110,7 +110,7 @@ class AddPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
             }
             for (i in 0..(sizeWateringElementList - 1)) {
                 sharedViewModel.tempWateringElementList[i].water =
-                    sharedViewModel.tempWateringElementList[i].water * 13.33 / calibrationValue
+                    sharedViewModel.tempWateringElementList[i].water * 13.3333 / calibrationValue
             }
 
             //Variablen in die Datenklasse Plant einfügen und Pflanze speichern

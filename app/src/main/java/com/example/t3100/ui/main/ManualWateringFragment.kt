@@ -241,7 +241,7 @@ class ManualWateringFragment : Fragment() {
 
                     //Manuelle Ventilsteuerung (Ventil1)
                     binding.btnValve1.setOnClickListener {
-                        //Wenn Ventil aktuell geschlossen
+                        //Wenn Ventil aktuell geschlossen wird es geöffnet
                         if (valve1 == 0) {
                             valve1 = 1
                             manualWateringElements = ParsedDataManual(

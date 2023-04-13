@@ -38,7 +38,7 @@ class EditPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
 
     private val args: EditPlantFragmentArgs by navArgs()
 
-    var oldCalibrationValue = 13.33
+    var oldCalibrationValue = 13.3333
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -154,7 +154,7 @@ class EditPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
             if (oldValve == (binding.spinnerValve.selectedItemPosition + 1)) {
                 savePlant()
             } else {
-                var newCalibrationValue = 13.33
+                var newCalibrationValue = 13.3333
 
                 if (sharedViewModel.plantList[args.position].valve == 1) {
                     newCalibrationValue = ((activity?.application as? App)?.calibrationValue1!!)

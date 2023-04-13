@@ -5,9 +5,9 @@ import android.content.Context
 
 class App : Application() {
     val DEFAULT_PREF = "Default"
-    var calibrationValue1: Double = 13.33 //Wert laut Datenblatt
-    var calibrationValue2: Double = 13.33 //Wert laut Datenblatt
-    var calibrationValue3: Double = 13.33 //Wert laut Datenblatt
+    var calibrationValue1: Double = 13.3333 //Wert laut Datenblatt
+    var calibrationValue2: Double = 13.3333 //Wert laut Datenblatt
+    var calibrationValue3: Double = 13.3333 //Wert laut Datenblatt
 
     override fun onCreate() {
         super.onCreate()
@@ -56,20 +56,20 @@ class App : Application() {
         val sharedPref =
             applicationContext?.getSharedPreferences(DEFAULT_PREF, Context.MODE_PRIVATE)
         calibrationValue1 =
-            sharedPref?.getString("calibrationValue1", "")?.toDoubleOrNull() ?: 13.33
+            sharedPref?.getString("calibrationValue1", "")?.toDoubleOrNull() ?: 13.3333
     }
 
     private fun getSavedCalibrationValue2() {
         val sharedPref =
             applicationContext?.getSharedPreferences(DEFAULT_PREF, Context.MODE_PRIVATE)
         calibrationValue2 =
-            sharedPref?.getString("calibrationValue2", "")?.toDoubleOrNull() ?: 13.33
+            sharedPref?.getString("calibrationValue2", "")?.toDoubleOrNull() ?: 13.3333
     }
 
     private fun getSavedCalibrationValue3() {
         val sharedPref =
             applicationContext?.getSharedPreferences(DEFAULT_PREF, Context.MODE_PRIVATE)
         calibrationValue3 =
-            sharedPref?.getString("calibrationValue3", "")?.toDoubleOrNull() ?: 13.33
+            sharedPref?.getString("calibrationValue3", "")?.toDoubleOrNull() ?: 13.3333
     }
 }
