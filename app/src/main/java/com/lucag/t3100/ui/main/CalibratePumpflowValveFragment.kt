@@ -79,20 +79,20 @@ class CalibratePumpflowValveFragment : Fragment() {
                 if (args.valve == 1){
                     oldCalibrationValue = ((activity?.application as? App)?.calibrationValue1!!)
                     newCalibrationValue = (binding.etWaterAmount.text.toString()
-                        .toDouble()) / 10000
+                        .toDouble()) / 30000
                     //Wert global speichern
                     (activity?.application as? App)?.setNewCalibrationValue1(newCalibrationValue)
                 }
                 else if(args.valve == 2){
                     oldCalibrationValue = ((activity?.application as? App)?.calibrationValue2!!)
                     newCalibrationValue = (binding.etWaterAmount.text.toString()
-                        .toDouble()) / 10000
+                        .toDouble()) / 30000
                     (activity?.application as? App)?.setNewCalibrationValue2(newCalibrationValue)
                 }
                 else if(args.valve == 3){
                     oldCalibrationValue = ((activity?.application as? App)?.calibrationValue3!!)
                     newCalibrationValue = (binding.etWaterAmount.text.toString()
-                        .toDouble()) / 10000
+                        .toDouble()) / 30000
                     (activity?.application as? App)?.setNewCalibrationValue3(newCalibrationValue)
                 }
 

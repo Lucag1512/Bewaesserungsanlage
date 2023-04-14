@@ -86,16 +86,16 @@ class EditPlantFragment : Fragment(), WateringTimesAdapter.ItemClickListener {
         // Name
         binding.etNewPlantName.setText(sharedViewModel.plantList[args.position].name)
 
-        //Ventil
-        binding.spinnerValve.setSelection((sharedViewModel.plantList[args.position].valve) - 1)
-        //Ende aktuelle Werte übernehmen
-
         //Festlegen der auszuwählenden Ventile
         binding.spinnerValve.adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_dropdown_item,
             arrayOf("Ventil 1", "Ventil 2", "Ventil 3")
         )
+
+        //Ventil
+        binding.spinnerValve.setSelection((sharedViewModel.plantList[args.position].valve) - 1)
+        //Ende aktuelle Werte übernehmen
 
         //Bewässerungszeitpunkt hinzufügen
         binding.btnAddWateringElement.setOnClickListener {
