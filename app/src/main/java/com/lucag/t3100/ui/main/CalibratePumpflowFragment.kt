@@ -99,7 +99,7 @@ class CalibratePumpflowFragment : Fragment() {
                 AlertDialog.Builder(requireContext()).create().apply {
                     setTitle("Hinweis")
                     setMessage(
-                        "Nach Auswahl des entsprechenden Ventils wird das Ventil für 10s " +
+                        "Nach Auswahl des entsprechenden Ventils wird das Ventil für 30s " +
                                 "angesteuert. Anschließend bitte gesamt geflossene Menge Wasser eintragen"
                     )
                     setButton(AlertDialog.BUTTON_POSITIVE, "OK") { dialog, p1 ->
