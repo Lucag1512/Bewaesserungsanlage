@@ -4,10 +4,11 @@ import android.app.Application
 import android.content.Context
 
 class App : Application() {
-    val DEFAULT_PREF = "Default"
     var calibrationValue1: Double = 0.013333 //Wert laut Datenblatt
     var calibrationValue2: Double = 0.013333 //Wert laut Datenblatt
     var calibrationValue3: Double = 0.013333 //Wert laut Datenblatt
+
+    val DEFAULT_PREF = "Default"
 
     override fun onCreate() {
         super.onCreate()
@@ -19,12 +20,14 @@ class App : Application() {
     fun setNewCalibrationValue1(newCalibrationValue: Double) {
         val sharedPref =
             applicationContext?.getSharedPreferences(DEFAULT_PREF, Context.MODE_PRIVATE)
+        //Wert auf dem Handy speichern
         sharedPref?.let { storage ->
             with(storage.edit()) {
                 putString("calibrationValue1", newCalibrationValue.toString())
                 apply()
             }
         }
+        //Globalen Wert anpassen
         calibrationValue1 = newCalibrationValue
     }
 
@@ -55,6 +58,7 @@ class App : Application() {
     private fun getSavedCalibrationValue1() {
         val sharedPref =
             applicationContext?.getSharedPreferences(DEFAULT_PREF, Context.MODE_PRIVATE)
+        //Wert von Handyspeicher laden
         calibrationValue1 =
             sharedPref?.getString("calibrationValue1", "")?.toDoubleOrNull() ?: 0.013333
     }
