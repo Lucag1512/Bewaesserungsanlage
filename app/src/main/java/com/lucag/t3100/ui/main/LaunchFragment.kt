@@ -153,7 +153,6 @@ class LaunchFragment : Fragment() {
             ).show()
             return
         }
-
         launchBTCheck()
     }
 
